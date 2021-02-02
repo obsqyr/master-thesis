@@ -5,42 +5,44 @@ from ase.lattice.cubic import FaceCenteredCubic
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.md.verlet import VelocityVerlet
 from ase import units
-
-# Use Asap for a huge performance increase if it is installed
-use_asap = True
-
-if use_asap:
-    from asap3 import EMT
-    size = 10
-else:
-    from ase.calculators.emt import EMT
-    size = 3
+from asap3 import LennardJones
+from asap3 import EMT
+import properties as pr
 
 # Set up a crystal
+size = 10
 atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-                          symbol="Cu",
+                          symbol="Ar",
                           size=(size, size, size),
                           pbc=True)
+N = len(atoms.get_chemical_symbols())
 
 # Describe the interatomic interactions with the Effective Medium Theory
-atoms.calc = EMT()
+#atoms.calc = EMT()
+# Describe the interatomic interactions with Lennard Jones potential
+atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
 
 # Set the momenta corresponding to T=300K
-MaxwellBoltzmannDistribution(atoms, 300*units.kB)
+MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
 
 # We want to run MD with constant energy using the VelocityVerlet algorithm.
 dyn = VelocityVerlet(atoms, 5 * units.fs)  # 5 fs time step.
 
-
-def printenergy(a=atoms):  # store a reference to atoms in the definition.
+temperatures = []
+def printenergy(t=temperatures, a=atoms):  # store a reference to atoms in the definition.
     """Function to print the potential, kinetic and total energy."""
     epot = a.get_potential_energy() / len(a)
     ekin = a.get_kinetic_energy() / len(a)
+    t.append(ekin / (1.5 * units.kB))
     print('Energy per atom: Epot = %.3feV  Ekin = %.3feV (T=%3.0fK)  '
           'Etot = %.3feV' % (epot, ekin, ekin / (1.5 * units.kB), epot + ekin))
 
 
 # Now run the dynamics
 dyn.attach(printenergy, interval=10)
-printenergy()
-dyn.run(200)
+print(printenergy())
+dyn.run(2000)
+
+# calculate specific heat
+spec_heat = pr.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg
+print ("Specific heat " + str(atoms.symbols) + ": %.4f [kJ/(K*kg)]" % (spec_heat))
