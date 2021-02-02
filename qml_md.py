@@ -7,6 +7,7 @@ from ase.md.verlet import VelocityVerlet
 from ase import units
 from asap3 import LennardJones
 from asap3 import EMT
+from asap3 import Trajectory
 import properties as pr
 
 # Set up a crystal
@@ -26,7 +27,9 @@ atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = Tru
 MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
 
 # We want to run MD with constant energy using the VelocityVerlet algorithm.
+traj = Trajectory(atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
 dyn = VelocityVerlet(atoms, 5 * units.fs)  # 5 fs time step.
+dyn.attach(traj.write, interval=10)
 
 temperatures = []
 def printenergy(t=temperatures, a=atoms):  # store a reference to atoms in the definition.
