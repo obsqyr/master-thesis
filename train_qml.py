@@ -56,7 +56,7 @@ def evaluate_qml_regressor(alpha, sigma):
 
     # calculate a kernel matrix between test and training data, using the same sigma
     Ks = gaussian_kernel(X_test, X_training, sigma)
-
+    print(X_test[0])
     # Make the predictions
     Y_predicted = np.dot(Ks, alpha)
 

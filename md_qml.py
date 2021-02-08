@@ -11,6 +11,7 @@ from asap3 import Trajectory
 import properties as pr
 import qml
 import numpy as np
+import qml_calculator as qml_calc
 
 def generate_qml_potential():
     alpha = np.loadtxt("machine.txt")
@@ -27,18 +28,21 @@ def run_md():
     # Describe the interatomic interactions with the Effective Medium Theory
     #atoms.calc = EMT()
     # Describe the interatomic interactions with Lennard Jones potential
-    atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
+    #atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
     # Describe the interatomic interactions with QML
+    atoms.calc = qml_calc.qml_calculator()
     generate_qml_potential()
+    x = qml_calc.qml_calculator()
+    #print(x.get_potential_energy())
+    #print(qml_calc.qml_calculator().get_potential_energy())
     
-
     # Set the momenta corresponding to T=300K
     MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
 
     # We want to run MD with constant energy using the VelocityVerlet algorithm.
-    traj = Trajectory(atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
+    #traj = Trajectory(atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
     dyn = VelocityVerlet(atoms, 5 * units.fs)  # 5 fs time step.
-    dyn.attach(traj.write, interval=10)
+    #dyn.attach(traj.write, interval=10)
 
     temperatures = []
     def printenergy(t=temperatures, a=atoms):  # store a reference to atoms in the definition.
@@ -62,4 +66,3 @@ if __name__ == "__main__":
     # calculate specific heat
     spec_heat = pr.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg
     print ("Specific heat " + str(atoms.symbols) + ": %.4f [kJ/(K*kg)]" % (spec_heat))
-
