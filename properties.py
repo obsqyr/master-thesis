@@ -20,6 +20,7 @@ def specific_heat(temp_store, N, atoms, size):
     Returns:
     float: specific heat is returned (J/(K*Kg))
     """
+    
     if len(temp_store) == 0:
         raise ValueError("temp_store is empty, invalid value.")
     steps = len(temp_store)
