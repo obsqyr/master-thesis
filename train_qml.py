@@ -10,11 +10,27 @@ import vasp_parser as vp
 #import maml
 from maml.apps.pes import MTPotential
 
+def train(tr, target):
+    print("training")
+
+    sigma = 4000
+    K = gaussian_kernel(tr, tr, sigma)
+
+    # Add a small lambda to the diagonal of the kernel matrix
+    K[np.diag_indices_from(K)] += 1e-8
+
+    print(len(K), len(target))
+
+    # Use the built-in Cholesky-decomposition to solve
+    alpha = cho_solve(K, target) 
+
+    print("Alphas:")
+    print(alpha)
+    
 def train_qml_regressor():
     print("training QML regressor")
     
     for mol in compounds:
-        print(mol)
         mol.generate_coulomb_matrix(size=23, sorting="row-norm")
     # sin matris representation för periodiska system
         #mol.generate_fchl_representation(size=23, cut_off=10.0)
@@ -23,6 +39,7 @@ def train_qml_regressor():
 
     # Make a big 2D array with all the representations
     X = np.array([mol.representation for mol in compounds])
+    print(len(X[0]))
     #print(X)
 
     # Assign 1000 first molecules to the training set
@@ -32,13 +49,14 @@ def train_qml_regressor():
     sigma = 4000
     K = gaussian_kernel(X_training, X_training, sigma)
     #print("Gaussian kernel:")
-    #print(K)
-
+    
     # Add a small lambda to the diagonal of the kernel matrix
     K[np.diag_indices_from(K)] += 1e-8
 
     # Use the built-in Cholesky-decomposition to solve
     alpha = cho_solve(K, Y_training) 
+    #print(len(K), len(Y_training))
+    print(Y_training)
 
     #print("Alphas:")
     #print(alpha)
@@ -78,18 +96,40 @@ def train_MTP():
     # kör train, använd evaluate i ett givet tidsteg för att få
     # ut värden på krafter och energi, implementera en ASE calculator
     # med detta.
-    
+
+def divide_data(data, num_atoms):
+    divided_data = [[] for l in range(num_atoms)]
+
+    for i in range(0, len(data), num_atoms):
+        for j in range(num_atoms):
+            divided_data[j].append(data[i+j])
+
+    return np.array(divided_data)
+
 if __name__ == "__main__":
     # import data from infiles
     forces, positions, potentials = vp.read_infiles()
+
+    # amount of timesteps is equal to length of potentials
+    timesteps = len(potentials)
+    print(timesteps)
+
+    # divide forces and positions into matrices for each atom
+    forces = divide_data(forces, 32)
+    positions = divide_data(positions, 32)
     
     # divide into training and test data
-    train_f = forces[:1600]
-    test_f = forces[1600:]
-    train_pos = positions[:1600]
-    test_pos = positions[1600:]
+    train_f = forces[:,0:50]
+    test_f = forces[:, 50:]
+    
+    train_pos = positions[:,0:50]
+    test_pos = positions[:, 50:]
+    
     train_pot = potentials[:50]
     test_pot = potentials[50:]
+
+    #print(train_pot)
+    #print(test_pot)
     
-    train_qml_regressor()
-    
+    #train_qml_regressor()
+    #train(train_pos, train_f)

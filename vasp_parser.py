@@ -24,35 +24,38 @@ def vasp_read(directory, it):
     for i in range(0, it):
         print(i)
         atoms = [d for d in read_vasp_xml(filename=directory + 'vasprun.xml', index=i)][0]
-        write_atoms_to_infile(atoms)
+        write_atoms_to_infiles(atoms, directory[:-1]+'_infiles/')
         
     #print(vasp_data)
     #print(vasp_data.get_potential_energy())
     
     #print(read_vasp_xdatcar(directory + "XDATCAR")[0])
 
-def write_atoms_to_infile(atoms):
+def write_atoms_to_infiles(atoms, directory):
     '''
     Writes an atom object to files. Writes forces, positions and 
     potential energy.
     '''
-    with open('forces.infile', 'a+') as f:
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
+        
+    with open(directory+'forces.infile', 'a+') as f:
         np.savetxt(f, atoms.get_forces(), fmt='%-1.7f')
-    with open('positions.infile', 'a+') as f:
+    with open(directory+'positions.infile', 'a+') as f:
         np.savetxt(f, atoms.get_positions(), fmt='%-1.7f')
-    with open('potentials.infile', 'a+') as f:
+    with open(directory+'potentials.infile', 'a+') as f:
         f.write(str(atoms.get_potential_energy()) + '\n')
         #np.savetxt(f, atoms.get_potential_energy(), fmt='%-1.7f')
 
-def clear_infiles():
+def clear_infiles(directory):
     '''
-    Delete current infiles.
+    Delete current infiles in directory
     '''
     #infiles = ['forces.infile', 'positions.infile', 'potentials.infile']
     for f in infiles:
-        if os.path.exists(f):
-            print("deleting " + f)
-            os.remove(f)
+        if os.path.exists(directory[:-1]+'_infiles/'+f):
+            print("deleting " + directory[:-1]+'_infiles/'+f)
+            os.remove(directory[:-1]+'_infiles/'+f)
     
 def read_infiles():
     forces = np.loadtxt('forces.infile')
@@ -66,7 +69,7 @@ def read_infiles():
     return forces, positions, np.array(potentials)
 
 if __name__ == "__main__":
-    clear_infiles()
+    clear_infiles("Al_300K/")
     vasp_read("Al_300K/", 100)
     #f, pos, pot = read_infiles()
     
