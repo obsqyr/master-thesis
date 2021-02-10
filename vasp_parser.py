@@ -25,13 +25,9 @@ def vasp_read(directory, it):
         print(i)
         atoms = [d for d in read_vasp_xml(filename=directory + 'vasprun.xml', index=i)][0]
         write_atoms_to_infiles(atoms, directory[:-1]+'_infiles/')
-        
-    #print(vasp_data)
-    #print(vasp_data.get_potential_energy())
+    write_atoms_to_infiles(atoms, directory[:-1]+'_infiles/', True)     
     
-    #print(read_vasp_xdatcar(directory + "XDATCAR")[0])
-
-def write_atoms_to_infiles(atoms, directory):
+def write_atoms_to_infiles(atoms, directory, num=False):
     '''
     Writes an atom object to files. Writes forces, positions and 
     potential energy.
@@ -39,13 +35,16 @@ def write_atoms_to_infiles(atoms, directory):
     if not os.path.isdir(directory):
         os.mkdir(directory)
         
-    with open(directory+'forces.infile', 'a+') as f:
-        np.savetxt(f, atoms.get_forces(), fmt='%-1.7f')
-    with open(directory+'positions.infile', 'a+') as f:
-        np.savetxt(f, atoms.get_positions(), fmt='%-1.7f')
-    with open(directory+'potentials.infile', 'a+') as f:
-        f.write(str(atoms.get_potential_energy()) + '\n')
-        #np.savetxt(f, atoms.get_potential_energy(), fmt='%-1.7f')
+    if not num:
+        with open(directory+'forces.infile', 'a+') as f:
+            np.savetxt(f, atoms.get_forces(), fmt='%-1.7f')
+        with open(directory+'positions.infile', 'a+') as f:
+            np.savetxt(f, atoms.get_positions(), fmt='%-1.7f')
+        with open(directory+'potentials.infile', 'a+') as f:
+            f.write(str(atoms.get_potential_energy()) + '\n')
+    else:
+        with open(directory+'numatoms.infile', 'a+') as f:
+            f.write(str(len(atoms.get_chemical_symbols())))
 
 def clear_infiles(directory):
     '''
@@ -57,19 +56,24 @@ def clear_infiles(directory):
             print("deleting " + directory[:-1]+'_infiles/'+f)
             os.remove(directory[:-1]+'_infiles/'+f)
     
-def read_infiles():
-    forces = np.loadtxt('forces.infile')
-    positions = np.loadtxt('positions.infile')
+def read_infiles(directory):
+    dir = directory[:-1]+'_infiles/'
+    
+    forces = np.loadtxt(dir+'forces.infile')
+    positions = np.loadtxt(dir+'positions.infile')
     
     potentials = []
-    with open('potentials.infile', 'r') as f:
+    with open(dir+'potentials.infile', 'r') as f:
         for line in f:
             potentials.append(float(line))
+    
+    with open(dir+'numatoms.infile', 'r') as f:
+        num_atoms = int(f.read())
 
-    return forces, positions, np.array(potentials)
+    return forces, positions, np.array(potentials), num_atoms
 
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
-    vasp_read("Al_300K/", 100)
-    #f, pos, pot = read_infiles()
+    #clear_infiles("Al_300K/")
+    #vasp_read("Al_300K/", 100)
+    f, pos, pot, num = read_infiles("Al_300K/")
     
