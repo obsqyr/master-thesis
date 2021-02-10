@@ -4,30 +4,17 @@ from qml.kernels import gaussian_kernel
 from tutorial_data import energy_pbe0
 from qml.math import cho_solve
 import numpy as np
-from ase.io.vasp import *
+
+import vasp_parser as vp
 
 #import maml
 from maml.apps.pes import MTPotential
 
-def vasp_read(directory):
-    '''
-    Reads from a VASP directory and produces a data set of
-    positions and forces (eventually more).
-
-    Parameters:
-    directory (str): name of the targeted directory
-    '''
-
-    print("reading VASP")
-    #print(read_vasp(directory + "POSCAR"))
-    #print(directory + "OUTCAR")
-    read_vasp_out(directory + "OUTCAR", index=0)
-    #print(read_vasp_xdatcar(directory + "XDATCAR")[0])
-
 def train_qml_regressor():
-    print("training")
+    print("training QML regressor")
     
     for mol in compounds:
+        print(mol)
         mol.generate_coulomb_matrix(size=23, sorting="row-norm")
     # sin matris representation för periodiska system
         #mol.generate_fchl_representation(size=23, cut_off=10.0)
@@ -85,7 +72,6 @@ def evaluate_qml_regressor(alpha, sigma):
     # Calculate mean-absolute-error (MAE):
     print (np.mean(np.abs(Y_predicted - Y_test)))
 
-
 def train_MTP():
     print("Training MTP")
     mtp = MTPotential()
@@ -94,7 +80,16 @@ def train_MTP():
     # med detta.
     
 if __name__ == "__main__":
-    #alpha, sigma = train_qml_regressor()
-    #evaluate_qml_regressor(alpha, sigma)
-    #train_MTP()
-    vasp_read("Al_300K/")
+    # import data from infiles
+    forces, positions, potentials = vp.read_infiles()
+    
+    # divide into training and test data
+    train_f = forces[:1600]
+    test_f = forces[1600:]
+    train_pos = positions[:1600]
+    test_pos = positions[1600:]
+    train_pot = potentials[:50]
+    test_pot = potentials[50:]
+    
+    train_qml_regressor()
+    
