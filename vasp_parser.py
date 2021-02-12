@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 # Global variables
-infiles = ['forces.infile', 'positions.infile', 'potentials.infile']
+infiles = ['forces.infile', 'positions.infile', 'potentials.infile', 'numatoms.infile']
     
 def vasp_read(directory, it):
     '''
@@ -29,8 +29,8 @@ def vasp_read(directory, it):
     
 def write_atoms_to_infiles(atoms, directory, num=False):
     '''
-    Writes an atom object to files. Writes forces, positions and 
-    potential energy.
+    Writes an atom object to files. Writes forces, positions, 
+    potential energy for each timestep and finally number of atoms.
     '''
     if not os.path.isdir(directory):
         os.mkdir(directory)
@@ -73,7 +73,6 @@ def read_infiles(directory):
     return forces, positions, np.array(potentials), num_atoms
 
 if __name__ == "__main__":
-    #clear_infiles("Al_300K/")
-    #vasp_read("Al_300K/", 100)
-    f, pos, pot, num = read_infiles("Al_300K/")
-    
+    clear_infiles("Al_300K/")
+    vasp_read("Al_300K/", 500)
+    #f, pos, pot, num = read_infiles("Al_300K/")
