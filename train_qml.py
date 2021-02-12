@@ -152,6 +152,9 @@ if __name__ == "__main__":
     # divide forces and positions into matrices for each atom
     forces = divide_data(forces, num_atoms)
     positions = divide_data(positions, num_atoms)
+
+    # write function that converts data into representaionts
+    # generate_representation(forces, 'cm')
     
     # divide into training and test data
     train_f = forces[:,0:50]
