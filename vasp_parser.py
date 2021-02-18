@@ -61,15 +61,9 @@ def read_infiles(directory):
     
     forces = np.loadtxt(dir+'forces.infile')
     positions = np.loadtxt(dir+'positions.infile')
+    potentials = np.loadtxt(dir+'potentials.infile')
+    num_atoms = np.loadtxt(dir+'numatoms.infile')
     
-    potentials = []
-    with open(dir+'potentials.infile', 'r') as f:
-        for line in f:
-            potentials.append(float(line))
-    
-    with open(dir+'numatoms.infile', 'r') as f:
-        num_atoms = int(f.read())
-
     return forces, positions, np.array(potentials), num_atoms
 
 if __name__ == "__main__":

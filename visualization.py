@@ -16,4 +16,14 @@ if __name__ == "__main__":
     plt.plot(timesteps, MAE)
 
     plt.savefig('figures/MAE_pos-pot.png')
-    
+    plt.show()
+
+    # håll separata tränings- och evalueringsdataset
+    # säg håll ett test
+
+    # träna explicit för simulering, mata in säg 10 observerade värden?
+    # när vi tränar, optimera för att mata in modellens egna prediktioner
+    # och komma så nära det riktiga datat som möjligt
+    # formulera om som ett tidsserie problem? autoregressiv modell?
+    # börja med enkel KRR, jämför med detta? parallelt jämföra med MTP
+    # också?

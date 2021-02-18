@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-from tutorial_data import compounds
+#from tutorial_data import compounds
 from qml.kernels import gaussian_kernel
-from tutorial_data import energy_pbe0
+#from tutorial_data import energy_pbe0
 from qml.math import cho_solve
 import numpy as np
 from qml.representations import *
 
+from dscribe.descriptors import SineMatrix
+
 import vasp_parser as vp
 
 #import maml
-from maml.apps.pes import MTPotential
+#from maml.apps.pes import MTPotential
 
 def train(X_train, Y_train):
     '''
@@ -43,6 +45,7 @@ def train(X_train, Y_train):
 
 def evaluate(alpha, sigma, X_train, X_test, Y_test):
     print("evaluating")
+
     Ks = gaussian_kernel(X_test, X_train, sigma)
 
     Y_pred = np.dot(Ks, alpha)
@@ -172,9 +175,12 @@ def generate_representations(data, num_atoms, timesteps, nuclear_charge):
     # create represenation for each timestep
     representations = []
     nuclear_charges = np.array([nuclear_charge]*num_atoms)
+    # högre ordnings, mata in säg 10 tidsteg, prediktera
     for pos in positions:
         representations.append(generate_coulomb_matrix(nuclear_charges, pos, size=32, sorting="row-norm"))
-
+        #representations.append(SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True))
+        print(representations[0])
+    
     return np.array(representations)
 
 if __name__ == "__main__":
@@ -193,6 +199,8 @@ if __name__ == "__main__":
     # generate_representation(forces, 'cm')
     X_pos = generate_representations(positions, num_atoms, timesteps, 13)
 
+    # consider randomising, evaluate on other data
+    # time series, transformer model? samla in mycket data
     # divide into training and test data
     X_pos_train = X_pos[:250]
     X_pos_test = X_pos[250:]
