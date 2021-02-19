@@ -15,19 +15,20 @@ def vasp_read(directory, it):
     directory (str): name of the targeted directory
     it (int): number of timesteps to be included
     '''
-
     print("reading VASP")
-    #print(read_vasp(directory + "POSCAR"))
-    #print(directory + "OUTCAR")
-    #read_vasp_out(directory + "OUTCAR", index=0)
-
-    for i in range(0, it):
-        print(i)
-        atoms = [d for d in read_vasp_xml(filename=directory + 'vasprun.xml', index=i)][0]
-        write_atoms_to_infiles(atoms, directory[:-1]+'_infiles/')
-    write_atoms_to_infiles(atoms, directory[:-1]+'_infiles/', True)     
     
-def write_atoms_to_infiles(atoms, directory, num=False):
+    sl = slice(0, None)
+    atoms = list(read_vasp_xml(filename=directory + 'vasprun.xml', index=sl))
+    first = True
+    for i, atom in enumerate(atoms):
+        if first:
+            write_atom_to_infiles(atom, directory[:-1]+'_infiles/', True)
+            first = False
+        else:
+            write_atom_to_infiles(atom, directory[:-1]+'_infiles/')
+            
+            
+def write_atom_to_infiles(atoms, directory, num=False):
     '''
     Writes an atom object to files. Writes forces, positions, 
     potential energy for each timestep and finally number of atoms.
@@ -44,7 +45,9 @@ def write_atoms_to_infiles(atoms, directory, num=False):
             f.write(str(atoms.get_potential_energy()) + '\n')
     else:
         with open(directory+'numatoms.infile', 'a+') as f:
-            f.write(str(len(atoms.get_chemical_symbols())))
+            f.write(str(len(atoms.get_chemical_symbols()))+'\n')
+            f.write(str(atoms.get_atomic_numbers()[0]))
+            
 
 def clear_infiles(directory):
     '''
@@ -68,5 +71,5 @@ def read_infiles(directory):
 
 if __name__ == "__main__":
     clear_infiles("Al_300K/")
-    vasp_read("Al_300K/", 500)
+    vasp_read("Al_300K/")
     #f, pos, pot, num = read_infiles("Al_300K/")
