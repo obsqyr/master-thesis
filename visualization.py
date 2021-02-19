@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 
+def scatter_plot(x, y, f):
+    print("scatter plot")
+    
+    plt.title("MAE against timesteps")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE, total system [eV]')
+    plt.scatter(x, y)
+    plt.plot(x, y)
+
+    plt.savefig(f)
+    plt.show()
+
 if __name__ == "__main__":
     print("plotting")
     
@@ -11,7 +23,7 @@ if __name__ == "__main__":
 
     plt.title("MAE against timesteps (divided into training/test by 50/50)")
     plt.xlabel('timesteps')
-    plt.ylabel('MAE')
+    plt.ylabel('MAE, total system [eV]')
     plt.scatter(timesteps, MAE)
     plt.plot(timesteps, MAE)
 

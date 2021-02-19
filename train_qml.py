@@ -5,13 +5,16 @@ from qml.kernels import gaussian_kernel
 from qml.math import cho_solve
 import numpy as np
 from qml.representations import *
+import matplotlib.pyplot as plt
 
 from dscribe.descriptors import SineMatrix
 
-import vasp_parser as vp
+from ase.build import bulk
+from ase.visualize import view
 
-#import maml
-#from maml.apps.pes import MTPotential
+# own modules
+import vasp_parser as vp
+import visualization as vis
 
 def train(X_train, Y_train):
     '''
@@ -52,8 +55,9 @@ def evaluate(alpha, sigma, X_train, X_test, Y_test):
 
     print(len(Y_pred), len(Y_test))
 
-    print("MAE:", np.mean(np.abs(Y_pred - Y_test)))
-
+    MAE = np.mean(np.abs(Y_pred - Y_test))
+    print("MAE:", MAE)
+    return MAE    
     
 def train_qml_regressor():
     print("training QML regressor")
@@ -85,7 +89,7 @@ def train_qml_regressor():
     # Use the built-in Cholesky-decomposition to solve
     alpha = cho_solve(K, Y_training) 
     print(len(K), len(Y_training))
-    print(Y_training)
+    #print(Y_training)
 
     #print("Alphas:")
     #print(alpha)
@@ -165,7 +169,7 @@ def generate_representations(data, num_atoms, timesteps, nuclear_charge):
 
     '''
     print("generating representations")
-
+    
     # generate sublists of the positions for all atoms in the 
     # system at each timestep
     positions = []
@@ -174,18 +178,51 @@ def generate_representations(data, num_atoms, timesteps, nuclear_charge):
     
     # create represenation for each timestep
     representations = []
+    print(type(num_atoms))
     nuclear_charges = np.array([nuclear_charge]*num_atoms)
+    print(nuclear_charges)
     # högre ordnings, mata in säg 10 tidsteg, prediktera
     for pos in positions:
         representations.append(generate_coulomb_matrix(nuclear_charges, pos, size=32, sorting="row-norm"))
         #representations.append(SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True))
-        print(representations[0])
+        #print(representations[0])
     
     return np.array(representations)
+
+
+def generate_sine_matrix(data):
+    print("generating sine matrix representation")
+
+    # generate sublists of the positions for all atoms in the 
+    # system at each timestep
+    positions = []
+    for i in range(timesteps):
+        positions.append(data[:,i])
+
+    #print(positions[0])
+
+    system = []
+    atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    atoms = atom*(2,2,2)
+
+    for pos in positions:
+        atoms.set_positions(pos)
+        system.append(atoms.copy())
+        #print(atoms.get_positions())
+
+    #view(atoms)
+    sm = SineMatrix(n_atoms_max=32, permutation='none', sparse=False, flatten=True)
+    X = sm.create(system)
+    #print((atoms.get_chemical_symbols()))
+    print(len(X[0]))
+    return X
 
 if __name__ == "__main__":
     # import data from infiles
     forces, positions, potentials, num_atoms = vp.read_infiles('Al_300K/')
+
+    # convert np.array to int
+    num_atoms = int(num_atoms)
 
     # amount of timesteps is equal to length of potentials
     timesteps = len(potentials)
@@ -197,31 +234,67 @@ if __name__ == "__main__":
 
     # write function that converts data into representaionts
     # generate_representation(forces, 'cm')
-    X_pos = generate_representations(positions, num_atoms, timesteps, 13)
+    #X_pos = generate_representations(positions, num_atoms, timesteps, 13)
+    X_pos = generate_sine_matrix(positions)
 
     # consider randomising, evaluate on other data
     # time series, transformer model? samla in mycket data
     # divide into training and test data
-    X_pos_train = X_pos[:250]
-    X_pos_test = X_pos[250:]
+    #X_pos_train = X_pos[:250]
+    #X_pos_test = X_pos[250:]
     
-    train_pot = potentials[:250]
-    test_pot = potentials[250:]
+    #train_pot = potentials[:250]
 
+    # reserve last 100 data points for testing
+    test_pot = potentials[400:]
+    X_pos_test = X_pos[400:]
+    
     #print(train_f)
     #train_qml_regressor()
-    alpha, sigma = train(X_pos_train, train_pot)
-    evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot)
+    indeces = [50, 100, 150, 200, 250, 300, 350, 400]
+    MAEs = []
+    for i in indeces:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+
+    print(MAEs)
+    MAEs = [x / 32 for x in MAEs]
+    plt.title("MAE against timesteps")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV/atom]')
+    plt.scatter(indeces, MAEs)
+    plt.plot(indeces, MAEs)
     
-    # 10 ts
-    # MAE: 0.053403660380666906
-    # 100 timesteps
-    # MAE: 2.9544048360212387
-    # 200 timesteps
-    # MAE: 1.2737607237465731
-    # 300 ts
-    # MAE: 1.3170717980190503
-    # 400 ts
-    # MAE: 1.3331982309170984
-    # 500 ts
-    # 1.3232172627262855
+    # reserve last 200 data points for testing
+    test_pot = potentials[300:]
+    X_pos_test = X_pos[300:]
+    
+    #print(train_f)
+    #train_qml_regressor()
+    indeces = [50, 100, 150, 200, 250, 300]
+    MAEs = []
+    for i in indeces:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+
+    print(MAEs)
+    MAEs = [x / 32 for x in MAEs]
+
+    #vis.scatter_plot(indeces, MAEs, "figures/MAE_200pointstest.png")
+
+    plt.scatter(indeces, MAEs)
+    plt.plot(indeces, MAEs)
+    plt.legend(['100 test data points', '200 test data points'])
+
+    plt.savefig("figures/MAE_200pointstest.png")
+    plt.show()
+
+    
