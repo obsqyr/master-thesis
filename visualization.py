@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 
-def scatter_plot(x, y, f):
+def scatter_plot(x, y, filename, title='', xlabel='', ylabel='', legend=''):
     print("scatter plot")
     
-    plt.title("MAE against timesteps")
-    plt.xlabel('timesteps')
-    plt.ylabel('MAE, total system [eV]')
-    plt.scatter(x, y)
-    plt.plot(x, y)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    for a,b in zip(x,y):
+        plt.scatter(a, b)
+        plt.plot(a, b)
 
-    plt.savefig(f)
+    plt.legend(legend)
+    plt.savefig(filename)
     plt.show()
 
 if __name__ == "__main__":

@@ -53,7 +53,7 @@ def evaluate(alpha, sigma, X_train, X_test, Y_test):
 
     Y_pred = np.dot(Ks, alpha)
 
-    print(len(Y_pred), len(Y_test))
+    #print(len(Y_pred), len(Y_test))
 
     MAE = np.mean(np.abs(Y_pred - Y_test))
     print("MAE:", MAE)
@@ -152,23 +152,23 @@ def divide_data(data, num_atoms):
 
     return np.array(divided_data)
 
-def generate_representations(data, num_atoms, timesteps, nuclear_charge):
+def generate_representations(data, timesteps, num_atoms, atomic_num, rep_type = 'sine'):
     '''
     Generates representation for the system at each timestep
-    (currently only coulomb matrix is implemented).
+    (currently only coulomb and sine matrices are implemented).
 
     Parameters:
     data (np.array): np.array of shape (num_atoms, timesteps, 3),
     usually positions.
-    num_atoms (int): number of atoms in the system
     timesteps (int): total amount of timesteps
-    nuclear_charge (int): the nuclear_charge of the atoms in the system
+    num_atoms (int): number of atoms in the system
+    atomic_num (int): the atomic number of the atoms in the system
 
     Returns:
     np.array: an np.array of representations
 
     '''
-    print("generating representations")
+    print("generating " + rep_type +" matrix representations")
     
     # generate sublists of the positions for all atoms in the 
     # system at each timestep
@@ -176,19 +176,35 @@ def generate_representations(data, num_atoms, timesteps, nuclear_charge):
     for i in range(timesteps):
         positions.append(data[:,i])
     
-    # create represenation for each timestep
-    representations = []
-    print(type(num_atoms))
-    nuclear_charges = np.array([nuclear_charge]*num_atoms)
-    print(nuclear_charges)
-    # högre ordnings, mata in säg 10 tidsteg, prediktera
-    for pos in positions:
-        representations.append(generate_coulomb_matrix(nuclear_charges, pos, size=32, sorting="row-norm"))
-        #representations.append(SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True))
-        #print(representations[0])
-    
-    return np.array(representations)
+    if rep_type == 'cm':
+        # create represenation for each timestep
+        representations = []
+        print(type(num_atoms))
+        atomic_numbers = np.array([atomic_num]*num_atoms)
+        #print(nuclear_charges)
+        # högre ordnings, mata in säg 10 tidsteg, prediktera
+        for pos in positions:
+            representations.append(generate_coulomb_matrix(atomic_numbers, pos, size=32, sorting="row-norm"))
+            #representations.append(SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True))
+            #print(representations[0])
+        return np.array(representations)
+    elif rep_type == 'sine':
+        # hur vill jag göra det här? skriv ner atoms objekt i read vasp
+        # eller skapa nytt atoms objekt som nedan?
+        system = []
+        atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+        atoms = atom*(2,2,2)
 
+        # generate list of atoms objects with positions for each timestep
+        for pos in positions:
+            atoms.set_positions(pos)
+            system.append(atoms.copy())
+    
+        # create sine matrix descriptor for system
+        sm = SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True)
+        X = [sm.create(x) for x in system]
+        return np.squeeze(np.array(X))
+    
 def generate_sine_matrix(data, timesteps, num_atoms):
     print("generating sine matrix representation")
 
@@ -198,31 +214,69 @@ def generate_sine_matrix(data, timesteps, num_atoms):
     for i in range(timesteps):
         positions.append(data[:,i])
 
-    #print(positions[0])
-
     # hur vill jag göra det här? skriv ner atoms objekt i read vasp
     # eller skapa nytt atoms objekt som nedan?
     system = []
     atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
     atoms = atom*(2,2,2)
 
-    #print(len(atoms.get_chemical_symbols()))
+    # generate list of atoms objects with positions for each timestep
     for pos in positions:
         atoms.set_positions(pos)
         system.append(atoms.copy())
-        #print(atoms.get_positions())
-
-    print('system', len(system))
-    print(atoms)
-    print(type(system))
     
-    #view(atoms)
+    # create sine matrix descriptor for system
     sm = SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True)
     X = [sm.create(x) for x in system]
-    X = np.squeeze(np.array(X))
-    #X = sm.create()
-    #print((atoms.get_chemical_symbols()))
-    return X
+    return np.squeeze(np.array(X))
+
+def train_and_plot_potentials_machine(X_pos, potentials):
+    # reserve last 1000 data points for testing
+    test_pot = potentials[9000:]
+    X_pos_test = X_pos[9000:]
+    
+    #print(train_f)
+    #train_qml_regressor()
+    indeces = range(0,10000, 1000)
+    print(indeces)
+    MAEs = []
+    for i in indeces[1:]:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+
+    print(MAEs)
+    MAEs = [x / 32 for x in MAEs]
+    x = []
+    y = []
+    x.append(indeces[1:])
+    y.append(MAEs)
+    
+    # reserve last 8000 data points for testing
+    test_pot = potentials[8000:]
+    X_pos_test = X_pos[8000:]
+    
+    #print(train_f)
+    #train_qml_regressor()
+    indeces = range(0,9000,1000)
+    MAEs = []
+    for i in indeces[1:]:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+
+    print(MAEs)
+    MAEs = [x / 32 for x in MAEs]
+    x.append(indeces[1:])
+    y.append(MAEs)
+
+    vis.scatter_plot(x, y, "figures/MAE_1000and2000points_Al.png", "MAE against timesteps (sine matrix, Al)", 'timesteps', 'MAE [eV/atom]', ['1000 test data points', '2000 test data points'])
 
 if __name__ == "__main__":
     # import data from infiles
@@ -242,7 +296,7 @@ if __name__ == "__main__":
     # write function that converts data into representaionts
     # generate_representation(forces, 'cm')
     #X_pos = generate_representations(positions, num_atoms, timesteps, 13)
-    X_pos = generate_sine_matrix(positions, timesteps, num_atoms)
+    X_pos = generate_representations(positions, timesteps, num_atoms, atomic_num, 'sine')
 
     # consider randomising, evaluate on other data
     # time series, transformer model? samla in mycket data
@@ -252,54 +306,4 @@ if __name__ == "__main__":
     
     #train_pot = potentials[:250]
 
-    # reserve last 1000 data points for testing
-    test_pot = potentials[9000:]
-    X_pos_test = X_pos[9000:]
-    
-    #print(train_f)
-    #train_qml_regressor()
-    indeces = range(0,10000, 1000)
-    print(indeces)
-    MAEs = []
-    for i in indeces[1:]:
-        X_pos_train = X_pos[:i]
-        train_pot = potentials[:i]
-        print(len(X_pos_train), len(train_pot))
-
-        alpha, sigma = train(X_pos_train, train_pot)
-        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
-
-    print(MAEs)
-    MAEs = [x / 32 for x in MAEs]
-    plt.title("MAE against timesteps (sine matrix)")
-    plt.xlabel('timesteps')
-    plt.ylabel('MAE [eV/atom]')
-    plt.scatter(indeces[1:], MAEs)
-    plt.plot(indeces[1:], MAEs)
-    
-    # reserve last 8000 data points for testing
-    test_pot = potentials[8000:]
-    X_pos_test = X_pos[8000:]
-    
-    #print(train_f)
-    #train_qml_regressor()
-    indeces = range(0,9000,1000)
-    MAEs = []
-    for i in indeces[1:]:
-        X_pos_train = X_pos[:i]
-        train_pot = potentials[:i]
-        
-        alpha, sigma = train(X_pos_train, train_pot)
-        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
-
-    print(MAEs)
-    MAEs = [x / 32 for x in MAEs]
-
-    #vis.scatter_plot(indeces, MAEs, "figures/MAE_200pointstest.png")
-
-    plt.scatter(indeces[1:], MAEs)
-    plt.plot(indeces[1:], MAEs)
-    plt.legend(['1000 test data points', '2000 test data points'])
-
-    plt.savefig("figures/MAE_1000and2000points.png")
-    plt.show()
+    train_and_plot_potentials_machine(X_pos, potentials)

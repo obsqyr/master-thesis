@@ -69,6 +69,8 @@ def read_infiles(directory):
     return forces, positions, np.array(potentials), num_atoms
 
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
-    vasp_read("Al_300K/")
+    #clear_infiles("Al_300K/")
+    #vasp_read("Al_300K/")
     #f, pos, pot, num = read_infiles("Al_300K/")
+    #read_vasp_out("Si_300K/OUTCAR")
+    print(read_vasp_out("Si_300K/OUTCAR", index=0))
