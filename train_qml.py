@@ -38,6 +38,7 @@ def train(X_train, Y_train):
     # Add a small lambda to the diagonal of the kernel matrix
     K[np.diag_indices_from(K)] += 1e-8
 
+    print(X_train.shape, Y_train.shape)
     # Use the built-in Cholesky-decomposition to solve
     alpha = cho_solve(K, Y_train) 
     
@@ -58,6 +59,57 @@ def evaluate(alpha, sigma, X_train, X_test, Y_test):
     MAE = np.mean(np.abs(Y_pred - Y_test))
     print("MAE:", MAE)
     return MAE    
+
+def train_forces(X_train, Y_train):
+    print("training forces machines")
+
+    sigma = 4000
+    K = gaussian_kernel(X_train, X_train, sigma)
+    
+    # Add a small lambda to the diagonal of the kernel matrix
+    K[np.diag_indices_from(K)] += 1e-8
+
+    alphas = []
+    for atom in Y_train:
+        print(atom.shape)
+        alphas_comp = []
+        # go through all three force components
+        for component in range(0,3):
+            y_train = atom[:,component]
+            print(X_train.shape, y_train.shape)
+            # Use the built-in Cholesky-decomposition to solve
+            alpha_comp = cho_solve(K, y_train) 
+            alphas_comp.append(alpha_comp)
+        alphas.append(alphas_comp)
+
+    print('alphas: ', np.array(alphas).shape)
+    #print("Alphas:")
+    #print(alpha)
+
+    return np.array(alphas), sigma
+
+def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
+    print("evaluating forces machines")
+    
+    Ks = gaussian_kernel(X_test, X_train, sigma)
+
+    component_MAEs = []
+    print(Y_test.shape)
+    for i, atom in enumerate(Y_test):
+        print('atom', atom.shape)
+        component_MAE = []
+        for component in range(0,3):
+            print(Ks.shape, alphas[i].shape)
+            Y_pred = np.dot(Ks, alphas[i, component,:])
+
+            y_test = atom[:,component]
+            print(Y_pred.shape, y_test.shape)
+            MAE = np.mean(np.abs(Y_pred - y_test))
+            print("MAE:", MAE)
+            component_MAE.append(MAE)
+        component_MAEs.append(component_MAE)
+
+    return np.array(component_MAEs)
     
 def train_qml_regressor():
     print("training QML regressor")
@@ -278,6 +330,12 @@ def train_and_plot_potentials_machine(X_pos, potentials):
 
     vis.scatter_plot(x, y, "figures/MAE_1000and2000points_Al.png", "MAE against timesteps (sine matrix, Al)", 'timesteps', 'MAE [eV/atom]', ['1000 test data points', '2000 test data points'])
 
+def train_and_evaluate_forces(X_pos, forces):
+    alphas, sigma = train_forces(X_pos[:9000], forces[:,:9000])
+    MAEs = evaluate_forces(alphas, sigma, X_pos[:9000], X_pos[9000:], forces[:,9000:])    
+    print(MAEs.shape)
+    print(MAEs)
+
 if __name__ == "__main__":
     # import data from infiles
     forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
@@ -298,6 +356,9 @@ if __name__ == "__main__":
     #X_pos = generate_representations(positions, num_atoms, timesteps, 13)
     X_pos = generate_representations(positions, timesteps, num_atoms, atomic_num, 'sine')
 
+    #train(X_pos, potentials[:500])
+    train_and_evaluate_forces(X_pos, forces)
+    
     # consider randomising, evaluate on other data
     # time series, transformer model? samla in mycket data
     # divide into training and test data
@@ -306,4 +367,4 @@ if __name__ == "__main__":
     
     #train_pot = potentials[:250]
 
-    train_and_plot_potentials_machine(X_pos, potentials)
+    #train_and_plot_potentials_machine(X_pos, potentials)
