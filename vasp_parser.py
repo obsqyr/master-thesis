@@ -6,7 +6,7 @@ import os
 # Global variables
 infiles = ['forces.infile', 'positions.infile', 'potentials.infile', 'numatoms.infile']
     
-def vasp_read(directory, it):
+def vasp_read(directory):
     '''
     Reads from a VASP directory and produces a data set of
     positions, forces and potentials (eventually more).
@@ -35,15 +35,14 @@ def write_atom_to_infiles(atoms, directory, num=False):
     '''
     if not os.path.isdir(directory):
         os.mkdir(directory)
-        
-    if not num:
-        with open(directory+'forces.infile', 'a+') as f:
-            np.savetxt(f, atoms.get_forces(), fmt='%-1.7f')
-        with open(directory+'positions.infile', 'a+') as f:
-            np.savetxt(f, atoms.get_positions(), fmt='%-1.7f')
-        with open(directory+'potentials.infile', 'a+') as f:
-            f.write(str(atoms.get_potential_energy()) + '\n')
-    else:
+
+    with open(directory+'forces.infile', 'a+') as f:
+        np.savetxt(f, atoms.get_forces(), fmt='%-1.7f')
+    with open(directory+'positions.infile', 'a+') as f:
+        np.savetxt(f, atoms.get_positions(), fmt='%-1.7f')
+    with open(directory+'potentials.infile', 'a+') as f:
+        f.write(str(atoms.get_potential_energy()) + '\n')
+    if num:
         with open(directory+'numatoms.infile', 'a+') as f:
             f.write(str(len(atoms.get_chemical_symbols()))+'\n')
             f.write(str(atoms.get_atomic_numbers()[0]))
