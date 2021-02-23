@@ -34,29 +34,19 @@ if __name__ == "__main__":
     MAEs = np.array(MAEs)
     print(MAEs.shape)
 
-    x = []
-    y = []
-    z = []
-    for i in MAEs:
-        x.append(i[0][0])
-        y.append(i[0][1])
-        z.append(i[0][2])
-    
-    plt.title("First atom, Al, force components MAE against timesteps")
+    plt.title("All atoms, Al, force lengths MAE against timesteps")
     plt.xlabel('timesteps')
-    plt.ylabel('MAE')
+    plt.ylabel('MAE [eV/Å]')
     timesteps = range(1000,10000,1000)
     
-    plt.scatter(timesteps, x)
-    plt.plot(timesteps, x)
-    plt.scatter(timesteps, y)
-    plt.plot(timesteps, y)
-    plt.scatter(timesteps, z)
-    plt.plot(timesteps, z)
-
-    plt.legend(['x', 'y', 'z'])
+    for i in range(32):
+    #print(MAEs[:,0])
+        plt.scatter(timesteps, MAEs[:,i])
+        plt.plot(timesteps, MAEs[:,i])
     
-    plt.savefig('figures/first_atom_force_components.png')
+    #plt.legend(['x', 'y', 'z'])
+    
+    plt.savefig('figures/Al_force_length_MAE.png')
     plt.show()
 
     # håll separata tränings- och evalueringsdataset

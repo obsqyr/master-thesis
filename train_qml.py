@@ -98,17 +98,27 @@ def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
     print(Y_test.shape)
     for i, atom in enumerate(Y_test):
         print('atom', atom.shape)
-        component_MAE = []
+        Y_pred = []
+        y_test = []
         for component in range(0,3):
             print(Ks.shape, alphas[i].shape)
-            Y_pred = np.dot(Ks, alphas[i, component,:])
+            Y_pred_component = np.dot(Ks, alphas[i, component,:])
+            Y_pred.append(Y_pred_component)
             
-            y_test = atom[:,component]
-            print(Y_pred.shape, y_test.shape)
-            MAE = np.mean(np.abs(Y_pred - y_test))
-            print("MAE:", MAE)
-            component_MAE.append(MAE)
-        component_MAEs.append(component_MAE)
+            y_test_component = atom[:,component]
+            y_test.append(y_test_component)
+
+        Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
+        y_test = np.linalg.norm(np.array(y_test), axis=0)
+        #print('before norm', Y_pred.shape, y_test.shape)
+        #Y_pred = np.linalg.norm(Y_pred, axis=0)
+        #y_test = np.linalg.norm(y_test, axis=0)
+        #print('after norm', Y_pred.shape, y_test.shape)
+        #print(Y_pred, y_test)
+
+        MAE = np.mean(np.abs(Y_pred - y_test))
+        print("MAE:", MAE)
+        component_MAEs.append(MAE)
 
     return np.array(component_MAEs)
     
