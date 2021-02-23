@@ -6,6 +6,7 @@ from qml.math import cho_solve
 import numpy as np
 from qml.representations import *
 import matplotlib.pyplot as plt
+from ase.io.trajectory import Trajectory
 
 from dscribe.descriptors import SineMatrix
 
@@ -68,7 +69,7 @@ def train_forces(X_train, Y_train):
     
     # Add a small lambda to the diagonal of the kernel matrix
     K[np.diag_indices_from(K)] += 1e-8
-
+    
     alphas = []
     for atom in Y_train:
         print(atom.shape)
@@ -101,7 +102,7 @@ def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
         for component in range(0,3):
             print(Ks.shape, alphas[i].shape)
             Y_pred = np.dot(Ks, alphas[i, component,:])
-
+            
             y_test = atom[:,component]
             print(Y_pred.shape, y_test.shape)
             MAE = np.mean(np.abs(Y_pred - y_test))
@@ -204,7 +205,7 @@ def divide_data(data, num_atoms):
 
     return np.array(divided_data)
 
-def generate_representations(data, timesteps, num_atoms, atomic_num, rep_type = 'sine'):
+def generate_representations(data, timesteps, atoms, num_atoms, atomic_num, rep_type = 'sine'):
     '''
     Generates representation for the system at each timestep
     (currently only coulomb and sine matrices are implemented).
@@ -240,21 +241,10 @@ def generate_representations(data, timesteps, num_atoms, atomic_num, rep_type = 
             #representations.append(SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True))
             #print(representations[0])
         return np.array(representations)
-    elif rep_type == 'sine':
-        # hur vill jag göra det här? skriv ner atoms objekt i read vasp
-        # eller skapa nytt atoms objekt som nedan?
-        system = []
-        atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
-        atoms = atom*(2,2,2)
-
-        # generate list of atoms objects with positions for each timestep
-        for pos in positions:
-            atoms.set_positions(pos)
-            system.append(atoms.copy())
-    
+    elif rep_type == 'sine':    
         # create sine matrix descriptor for system
         sm = SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True)
-        X = [sm.create(x) for x in system]
+        X = [sm.create(x) for x in atoms]
         return np.squeeze(np.array(X))
     
 def generate_sine_matrix(data, timesteps, num_atoms):
@@ -330,15 +320,20 @@ def train_and_plot_potentials_machine(X_pos, potentials):
 
     vis.scatter_plot(x, y, "figures/MAE_1000and2000points_Al.png", "MAE against timesteps (sine matrix, Al)", 'timesteps', 'MAE [eV/atom]', ['1000 test data points', '2000 test data points'])
 
-def train_and_evaluate_forces(X_pos, forces):
-    alphas, sigma = train_forces(X_pos[:9000], forces[:,:9000])
-    MAEs = evaluate_forces(alphas, sigma, X_pos[:9000], X_pos[9000:], forces[:,9000:])    
-    print(MAEs.shape)
-    print(MAEs)
+def train_and_evaluate_forces(X_pos, forces, indeces):
+    for i in indeces[1:]:
+        alphas, sigma = train_forces(X_pos[:i], forces[:,:i])
+        MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
+        print(MAEs.shape)
+        print(MAEs)
+        np.savetxt("forces_MAEs/" + str(i) + ".txt", MAEs)
 
 if __name__ == "__main__":
     # import data from infiles
     forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
+
+    traj = Trajectory('Al_300K_infiles/Al.traj')
+    atoms = [atom for atom in traj]
 
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
@@ -351,13 +346,12 @@ if __name__ == "__main__":
     forces = divide_data(forces, num_atoms)
     positions = divide_data(positions, num_atoms)
 
-    # write function that converts data into representaionts
-    # generate_representation(forces, 'cm')
-    #X_pos = generate_representations(positions, num_atoms, timesteps, 13)
-    X_pos = generate_representations(positions, timesteps, num_atoms, atomic_num, 'sine')
+    X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
+
+    #print(np.linalg.norm(forces[0]))
 
     #train(X_pos, potentials[:500])
-    train_and_evaluate_forces(X_pos, forces)
+    train_and_evaluate_forces(X_pos, forces, range(0,10000,1000))
     
     # consider randomising, evaluate on other data
     # time series, transformer model? samla in mycket data

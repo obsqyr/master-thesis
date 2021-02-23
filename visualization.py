@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
+import numpy as np
+import os
 
 def scatter_plot(x, y, filename, title='', xlabel='', ylabel='', legend=''):
     print("scatter plot")
@@ -16,20 +18,45 @@ def scatter_plot(x, y, filename, title='', xlabel='', ylabel='', legend=''):
     plt.show()
 
 if __name__ == "__main__":
-    print("plotting")
+    #forces_MAEs = np.loadtxt("forces_MAEs.txt")
+    #print(forces_MAEs)
+    #for i in range(32):
+    #    plt.scatter(i, forces_MAEs[i][0])
     
-    # total amount of timesteps, divided into test/training by
-    # proportion 50/50
-    timesteps = [10, 100, 200, 300, 400, 500]
-    MAE = [0.053403660380666906, 2.9544048360212387, 1.273760723746573, 1.3170717980190503, 1.3331982309170984, 1.3232172627262855]
+    #plt.savefig('figures/forces_x_component.png')
+    
+    filenames = [f for f in os.listdir("forces_MAEs")]
+    filenames = sorted(filenames)
+    MAEs = []
+    for f in filenames:
+        MAEs.append(np.loadtxt("forces_MAEs/"+f))
+        
+    MAEs = np.array(MAEs)
+    print(MAEs.shape)
 
-    plt.title("MAE against timesteps (divided into training/test by 50/50)")
+    x = []
+    y = []
+    z = []
+    for i in MAEs:
+        x.append(i[0][0])
+        y.append(i[0][1])
+        z.append(i[0][2])
+    
+    plt.title("First atom, Al, force components MAE against timesteps")
     plt.xlabel('timesteps')
-    plt.ylabel('MAE, total system [eV]')
-    plt.scatter(timesteps, MAE)
-    plt.plot(timesteps, MAE)
+    plt.ylabel('MAE')
+    timesteps = range(1000,10000,1000)
+    
+    plt.scatter(timesteps, x)
+    plt.plot(timesteps, x)
+    plt.scatter(timesteps, y)
+    plt.plot(timesteps, y)
+    plt.scatter(timesteps, z)
+    plt.plot(timesteps, z)
 
-    plt.savefig('figures/MAE_pos-pot.png')
+    plt.legend(['x', 'y', 'z'])
+    
+    plt.savefig('figures/first_atom_force_components.png')
     plt.show()
 
     # håll separata tränings- och evalueringsdataset
