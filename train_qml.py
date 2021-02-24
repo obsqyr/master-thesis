@@ -342,12 +342,13 @@ if __name__ == "__main__":
     # import data from infiles
     forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
 
-    traj = Trajectory('Al_300K_infiles/Al.traj')
-    atoms = [atom for atom in traj]
-
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
+    
+    # import atoms from trajectory file
+    traj = Trajectory('Al_300K_infiles/Al.traj')
+    atoms = [atom for atom in traj]
     
     # amount of timesteps is equal to length of potentials
     timesteps = len(potentials)
