@@ -61,6 +61,13 @@ def evaluate(alpha, sigma, X_train, X_test, Y_test):
     print("MAE:", MAE)
     return MAE    
 
+def predict_potential(alpha, sigma, X_train, X_test):
+    Ks = gaussian_kernel(X_test, X_train, sigma)
+
+    Y_pred = np.dot(Ks, alpha)
+
+    return Y_pred
+
 def train_forces(X_train, Y_train):
     print("training forces machines")
 
@@ -88,6 +95,11 @@ def train_forces(X_train, Y_train):
     #print(alpha)
 
     return np.array(alphas), sigma
+
+def train_forces_origin(X_train, Y_train):
+    print("training forces machine, atom in origin")
+    # should I implement this?
+    
 
 def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
     print("evaluating forces machines")
@@ -257,29 +269,12 @@ def generate_representations(data, timesteps, atoms, num_atoms, atomic_num, rep_
         X = [sm.create(x) for x in atoms]
         return np.squeeze(np.array(X))
     
-def generate_sine_matrix(data, timesteps, num_atoms):
+def generate_sine_representation(atoms, num_atoms):
     print("generating sine matrix representation")
-
-    # generate sublists of the positions for all atoms in the 
-    # system at each timestep
-    positions = []
-    for i in range(timesteps):
-        positions.append(data[:,i])
-
-    # hur vill jag göra det här? skriv ner atoms objekt i read vasp
-    # eller skapa nytt atoms objekt som nedan?
-    system = []
-    atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
-    atoms = atom*(2,2,2)
-
-    # generate list of atoms objects with positions for each timestep
-    for pos in positions:
-        atoms.set_positions(pos)
-        system.append(atoms.copy())
     
-    # create sine matrix descriptor for system
+    # create sine matrix descriptor for single atoms object
     sm = SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True)
-    X = [sm.create(x) for x in system]
+    X = sm.create(atoms)
     return np.squeeze(np.array(X))
 
 def train_and_plot_potentials_machine(X_pos, potentials):
@@ -338,16 +333,38 @@ def train_and_evaluate_forces(X_pos, forces, indeces):
         print(MAEs)
         np.savetxt("forces_MAEs/" + str(i) + ".txt", MAEs)
 
+def write_potentials_MAEs(X_pos, potentials):
+    # reserve last 1000 data points for testing
+    test_pot = potentials[9000:]
+    X_pos_test = X_pos[9000:]
+    
+    #print(train_f)
+    #train_qml_regressor()
+    indeces = range(0,10000, 1000)
+    print(indeces)
+    MAEs = []
+    for i in indeces[1:]:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+
+    print(MAEs)
+    MAEs = [x / 8 for x in MAEs]
+    np.savetxt('potentials_MAEs_Si.txt', MAEs)
+
 if __name__ == "__main__":
     # import data from infiles
-    forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
+    forces, positions, potentials, atom_prop = vp.read_infiles('Si_300K/')
 
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
     
     # import atoms from trajectory file
-    traj = Trajectory('Al_300K_infiles/Al.traj')
+    traj = Trajectory('Si_300K_infiles/Si.traj')
     atoms = [atom for atom in traj]
     
     # amount of timesteps is equal to length of potentials
@@ -359,10 +376,21 @@ if __name__ == "__main__":
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
-    #print(np.linalg.norm(forces[0]))
+    # train potentials machines
+    indeces = range(1000, 11000, 1000)
+    MAEs = []
+    for i in indeces:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        np.savetxt("machines/KRR/potential/Al/"+str(i)+'.txt', X = alpha, header = "representation: sine, regressor: KRR")
 
+    #write_potentials_MAEs(X_pos, potentials)
+    
     #train(X_pos, potentials[:500])
-    train_and_evaluate_forces(X_pos, forces, range(0,10000,1000))
+    #train_and_evaluate_forces(X_pos, forces, range(0,10000,1000))
     
     # consider randomising, evaluate on other data
     # time series, transformer model? samla in mycket data
