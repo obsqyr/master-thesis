@@ -2,6 +2,7 @@
 qm7
 Al_300K
 Si_300K
+*.out
 
 # emacs files
 *~

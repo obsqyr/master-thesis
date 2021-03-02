@@ -5,24 +5,24 @@ from ase.lattice.cubic import FaceCenteredCubic
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.md.verlet import VelocityVerlet
 from ase import units
+from ase.build import bulk
 from asap3 import LennardJones
 from asap3 import EMT
 from asap3 import Trajectory
 import properties as pr
 import qml
 import numpy as np
-import qml_calculator as qml_calc
+import calculators as calcs
 
 def generate_qml_potential():
     alpha = np.loadtxt("machine.txt")
 
 def run_md():
     # Set up a crystal
+    #atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    #atoms = atom*(2,2,2)
     size = 10
-    atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],
-                              symbol="Ar",
-                              size=(size, size, size),
-                              pbc=True)
+    atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], symbol="Al", size=(size, size, size), pbc=True)
     N = len(atoms.get_chemical_symbols())
 
     # Describe the interatomic interactions with the Effective Medium Theory
@@ -30,9 +30,9 @@ def run_md():
     # Describe the interatomic interactions with Lennard Jones potential
     #atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
     # Describe the interatomic interactions with QML
-    atoms.calc = qml_calc.qml_calculator()
-    generate_qml_potential()
-    x = qml_calc.qml_calculator()
+    atoms.calc = calcs.zero_calculator()
+    #generate_qml_potential()
+    #x = qml_calc.qml_calculator()
     #print(x.get_potential_energy())
     #print(qml_calc.qml_calculator().get_potential_energy())
     
