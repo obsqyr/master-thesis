@@ -56,7 +56,13 @@ def evaluate(alpha, sigma, X_train, X_test, Y_test):
     Y_pred = np.dot(Ks, alpha)
 
     #print(len(Y_pred), len(Y_test))
-
+    print('Y_pred', Y_pred.shape)
+    print('Y_test', Y_test.shape)
+    print('X_train', X_train.shape)
+    print('X_test', X_test.shape)
+    print('Ks', Ks.shape)
+    print(X_test)
+    print(X_test[0])
     MAE = np.mean(np.abs(Y_pred - Y_test))
     print("MAE:", MAE)
     return MAE    
@@ -69,6 +75,11 @@ def predict_potential(alpha, sigma, X_train, X_test):
     return Y_pred
 
 def train_forces(X_train, Y_train):
+    '''
+    Train a forces machine for each atom and for
+    each component. Returns np.array of shape
+    (num_atoms, component, number of training points)
+    '''
     print("training forces machines")
 
     sigma = 4000
@@ -79,12 +90,12 @@ def train_forces(X_train, Y_train):
     
     alphas = []
     for atom in Y_train:
-        print(atom.shape)
+        #print(atom.shape)
         alphas_comp = []
         # go through all three force components
         for component in range(0,3):
             y_train = atom[:,component]
-            print(X_train.shape, y_train.shape)
+            #print(X_train.shape, y_train.shape)
             # Use the built-in Cholesky-decomposition to solve
             alpha_comp = cho_solve(K, y_train) 
             alphas_comp.append(alpha_comp)
@@ -133,6 +144,22 @@ def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
         component_MAEs.append(MAE)
 
     return np.array(component_MAEs)
+
+def predict_forces(alphas, sigma, X_train, X_test):
+    Ks = gaussian_kernel(X_test, X_train, sigma)
+    
+    print(X_test.shape)
+
+    for i, atom in enumerate(X_test):
+        Y_pred = []
+        for component in range(0,3):
+            #print(Ks.shape, alphas[i].shape)
+            Y_pred_component = np.dot(Ks, alphas[i, component,:])
+            Y_pred.append(Y_pred_component)
+            
+        #Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
+        
+    return np.array(Y_pred)
     
 def train_qml_regressor():
     print("training QML regressor")
@@ -263,14 +290,14 @@ def generate_representations(data, timesteps, atoms, num_atoms, atomic_num, rep_
             #representations.append(SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True))
             #print(representations[0])
         return np.array(representations)
-    elif rep_type == 'sine':    
+    elif rep_type == 'sine': 
         # create sine matrix descriptor for system
         sm = SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True)
         X = [sm.create(x) for x in atoms]
         return np.squeeze(np.array(X))
     
 def generate_sine_representation(atoms, num_atoms):
-    print("generating sine matrix representation")
+    #print("generating sine matrix representation")
     
     # create sine matrix descriptor for single atoms object
     sm = SineMatrix(n_atoms_max=num_atoms, permutation='none', sparse=False, flatten=True)
@@ -281,7 +308,7 @@ def train_and_plot_potentials_machine(X_pos, potentials):
     # reserve last 1000 data points for testing
     test_pot = potentials[9000:]
     X_pos_test = X_pos[9000:]
-    
+
     #print(train_f)
     #train_qml_regressor()
     indeces = range(0,10000, 1000)
@@ -294,7 +321,7 @@ def train_and_plot_potentials_machine(X_pos, potentials):
         
         alpha, sigma = train(X_pos_train, train_pot)
         MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
-
+    '''
     print(MAEs)
     MAEs = [x / 32 for x in MAEs]
     x = []
@@ -324,7 +351,7 @@ def train_and_plot_potentials_machine(X_pos, potentials):
     y.append(MAEs)
 
     vis.scatter_plot(x, y, "figures/MAE_1000and2000points_Al.png", "MAE against timesteps (sine matrix, Al)", 'timesteps', 'MAE [eV/atom]', ['1000 test data points', '2000 test data points'])
-
+'''
 def train_and_evaluate_forces(X_pos, forces, indeces):
     for i in indeces[1:]:
         alphas, sigma = train_forces(X_pos[:i], forces[:,:i])
@@ -355,16 +382,29 @@ def write_potentials_MAEs(X_pos, potentials):
     MAEs = [x / 8 for x in MAEs]
     np.savetxt('potentials_MAEs_Si.txt', MAEs)
 
+def write_potential_alphas(X_pos, potentials):
+    # train potentials machines
+    indeces = range(1000, 11000, 1000)
+    MAEs = []
+    for i in indeces:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        np.savetxt("machines/KRR/potential/Al/alpha/"+str(i)+'.txt', X = alpha, header = "representation: sine, regressor: KRR")
+        np.savetxt("machines/KRR/potential/Al/training_data/"+str(i)+".txt", X = X_pos_train)
+
 if __name__ == "__main__":
     # import data from infiles
-    forces, positions, potentials, atom_prop = vp.read_infiles('Si_300K/')
+    forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
 
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
     
     # import atoms from trajectory file
-    traj = Trajectory('Si_300K_infiles/Si.traj')
+    traj = Trajectory('Al_300K_infiles/Al.traj')
     atoms = [atom for atom in traj]
     
     # amount of timesteps is equal to length of potentials
@@ -376,16 +416,13 @@ if __name__ == "__main__":
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
-    # train potentials machines
+    # train and write forces machines
     indeces = range(1000, 11000, 1000)
-    MAEs = []
     for i in indeces:
-        X_pos_train = X_pos[:i]
-        train_pot = potentials[:i]
-        print(len(X_pos_train), len(train_pot))
-        
-        alpha, sigma = train(X_pos_train, train_pot)
-        np.savetxt("machines/KRR/potential/Al/"+str(i)+'.txt', X = alpha, header = "representation: sine, regressor: KRR")
+        alphas, sigma = train_forces(X_pos[:i], forces[:,:i])
+        print(alphas.shape)
+        np.save("machines/KRR/forces/Al/alpha/"+str(i), arr = alphas)
+        np.savetxt("machines/KRR/forces/Al/training_data/"+str(i)+".txt", X = X_pos[:i])
 
     #write_potentials_MAEs(X_pos, potentials)
     

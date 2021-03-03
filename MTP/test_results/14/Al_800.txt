@@ -1,0 +1,50 @@
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+
+ERROR: Cannot open mtps_out/Al_14_pot_800.mtp 
+       Thrown by function Load,
+       source file: /home/x_nicse/exjobb/mlip-2/dev_src/mtpr.cpp,
+       line: 25
+

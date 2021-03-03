@@ -1,0 +1,42 @@
+MTPR from mtps_out/Si_06_pot_300.mtp, Database: cfg_test/Si_test_1000.cfg
+
+		* * * TRAIN ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.00548303
+	Average absolute difference = 0.00189756
+	RMS     absolute difference = 0.00221218
+
+Energy per atom:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.000685378
+	Average absolute difference = 0.000237195
+	RMS     absolute difference = 0.000276523
+
+Forces:
+	Errors checked for 8000 atoms
+	Maximal absolute difference = 0.0931209
+	Average absolute difference = 0.00731478
+	RMS     absolute difference = 0.0144695
+	Max(ForceDiff) / Max(Force) = 0.0369507
+	RMS(ForceDiff) / RMS(Force) = 0.0235785
+
+Stresses (in eV):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.534894
+	Average absolute difference = 0.0287864
+	RMS     absolute difference = 0.0930522
+	Max(StresDiff) / Max(Stres) = 0.128643
+	RMS(StresDiff) / RMS(Stres) = 0.121546
+
+Stresses (in GPa):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.523936
+	Average absolute difference = 0.0281966
+	RMS     absolute difference = 0.0911458
+	Max(StresDiff) / Max(Stres) = 0.128643
+	RMS(StresDiff) / RMS(Stres) = 0.121546
+_______________________________________________
+

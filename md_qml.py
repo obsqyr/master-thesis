@@ -19,10 +19,10 @@ def generate_qml_potential():
 
 def run_md():
     # Set up a crystal
-    #atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
-    #atoms = atom*(2,2,2)
-    size = 10
-    atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], symbol="Al", size=(size, size, size), pbc=True)
+    atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    atoms = atom*(2,2,2)
+    #size = 10
+    #atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], symbol="Al", size=(size, size, size), pbc=True)
     N = len(atoms.get_chemical_symbols())
 
     # Describe the interatomic interactions with the Effective Medium Theory
@@ -30,7 +30,8 @@ def run_md():
     # Describe the interatomic interactions with Lennard Jones potential
     #atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
     # Describe the interatomic interactions with QML
-    atoms.calc = calcs.zero_calculator()
+    #atoms.calc = calcs.zero_calculator()
+    atoms.calc = calcs.KRR_calculator('Al', 1000)
     #generate_qml_potential()
     #x = qml_calc.qml_calculator()
     #print(x.get_potential_energy())
@@ -58,6 +59,7 @@ def run_md():
     print(printenergy())
     dyn.run(2000)
 
+    size = 10
     return temperatures, N, atoms, size
 
 if __name__ == "__main__":

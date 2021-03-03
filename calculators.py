@@ -26,18 +26,27 @@ class KRR_calculator(Calculator):
     def __init__(self, element, timesteps):
         print("Initializing KRR calculator")
         print("Element: " + element + ". Timesteps: " + str(timesteps))
-        alphas_pot = np.loadtxt('machines/KRR/potential/' + element + '/' + str(timesteps) + '.txt')
-        #print(alphas_pot)
+        self.alphas_pot = np.loadtxt('machines/KRR/potential/' + element + '/alpha/' + str(timesteps) + '.txt')
+        self.X_train = np.loadtxt('machines/KRR/potential/' + element + '/training_data/' + str(timesteps) + '.txt')
+        self.alphas_forces = np.load('machines/KRR/forces/' + element + '/alpha/' + str(timesteps) + '.npy')
 
     def get_potential_energy(self, atoms=None, force_consistent=False):
-        print('atoms', atoms)
-        print('atoms len', len(atoms.get_chemical_symbols()))
+        #print('atoms', atoms)
+        #print('atoms len', len(atoms.get_chemical_symbols()))
         N = len(atoms.get_chemical_symbols())
         X = tr.generate_sine_representation(atoms, N)
+        X = np.array([X])
         
-        return 0.0
+        pred = tr.predict_potential(self.alphas_pot, 4000, self.X_train, X)
+        return pred
 
     def get_forces(self, atoms):
+        N = len(atoms.get_chemical_symbols())
+        X = tr.generate_sine_representation(atoms, N)
+        X = np.array([X])
+        pred = tr.predict_forces(self.alphas_forces, 4000, self.X_train, X)
+        print(pred)
+
         return np.zeros((len(atoms), 3))
 
     def get_stress(self, atoms):
@@ -60,4 +69,4 @@ if __name__ == "__main__":
 
     #print(atoms)
     x = KRR_calculator('Al', 1000)
-    print(x.get_potential_energy(atoms=atoms))
+    print(x.get_forces(atoms=atoms))

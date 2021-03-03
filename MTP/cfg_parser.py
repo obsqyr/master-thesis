@@ -51,10 +51,10 @@ def generate_test_cfg(element, num_timesteps):
 
 if __name__ == "__main__":
     print("generating training .cfg files")
-    for i in range(1000,10000,1000):
+    for i in range(100,1000,100):
         generate_train_cfg('Al', i)
         generate_train_cfg('Si', i)
     print("generating testing .cfg files")
-    generate_test_cfg('Al', 1000)
-    generate_test_cfg('Si', 1000)
+    #generate_test_cfg('Al', 1000)
+    #generate_test_cfg('Si', 1000)
 
