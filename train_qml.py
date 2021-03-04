@@ -131,6 +131,9 @@ def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
             y_test_component = atom[:,component]
             y_test.append(y_test_component)
 
+        print('Y_pred', np.array(Y_pred).shape)
+        print(np.array(Y_pred))
+        print(np.array(Y_pred)[0])
         Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
         y_test = np.linalg.norm(np.array(y_test), axis=0)
         #print('before norm', Y_pred.shape, y_test.shape)
@@ -148,18 +151,18 @@ def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
 def predict_forces(alphas, sigma, X_train, X_test):
     Ks = gaussian_kernel(X_test, X_train, sigma)
     
-    print(X_test.shape)
-
-    for i, atom in enumerate(X_test):
+    Y_pred_total = []
+    # loop over each atoms
+    for i in range(alphas.shape[0]):
         Y_pred = []
         for component in range(0,3):
             #print(Ks.shape, alphas[i].shape)
             Y_pred_component = np.dot(Ks, alphas[i, component,:])
             Y_pred.append(Y_pred_component)
-            
+        Y_pred_total.append(Y_pred)
         #Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
-        
-    return np.array(Y_pred)
+    
+    return np.squeeze(np.array(Y_pred_total)) 
     
 def train_qml_regressor():
     print("training QML regressor")
@@ -420,9 +423,10 @@ if __name__ == "__main__":
     indeces = range(1000, 11000, 1000)
     for i in indeces:
         alphas, sigma = train_forces(X_pos[:i], forces[:,:i])
-        print(alphas.shape)
-        np.save("machines/KRR/forces/Al/alpha/"+str(i), arr = alphas)
-        np.savetxt("machines/KRR/forces/Al/training_data/"+str(i)+".txt", X = X_pos[:i])
+        print('alpha', alphas.shape)
+        MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])
+        #np.save("machines/KRR/forces/Al/alpha/"+str(i), arr = alphas)
+        #np.savetxt("machines/KRR/forces/Al/training_data/"+str(i)+".txt", X = X_pos[:i])
 
     #write_potentials_MAEs(X_pos, potentials)
     

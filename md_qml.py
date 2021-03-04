@@ -31,7 +31,7 @@ def run_md():
     #atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
     # Describe the interatomic interactions with QML
     #atoms.calc = calcs.zero_calculator()
-    atoms.calc = calcs.KRR_calculator('Al', 1000)
+    atoms.calc = calcs.KRR_calculator('Al', 10000)
     #generate_qml_potential()
     #x = qml_calc.qml_calculator()
     #print(x.get_potential_energy())
@@ -48,6 +48,7 @@ def run_md():
     temperatures = []
     def printenergy(t=temperatures, a=atoms):  # store a reference to atoms in the definition.
         """Function to print the potential, kinetic and total energy."""
+        #print(atoms)
         epot = a.get_potential_energy() / len(a)
         ekin = a.get_kinetic_energy() / len(a)
         t.append(ekin / (1.5 * units.kB))
@@ -56,8 +57,10 @@ def run_md():
 
     # Now run the dynamics
     dyn.attach(printenergy, interval=10)
-    print(printenergy())
-    dyn.run(2000)
+    #if printenergy() != None:
+    #print(printenergy())
+
+    dyn.run(100)
 
     size = 10
     return temperatures, N, atoms, size

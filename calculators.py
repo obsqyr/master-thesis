@@ -45,8 +45,27 @@ class KRR_calculator(Calculator):
         X = tr.generate_sine_representation(atoms, N)
         X = np.array([X])
         pred = tr.predict_forces(self.alphas_forces, 4000, self.X_train, X)
-        print(pred)
+        return pred
+        #return np.zeros((len(atoms), 3))
 
+    def get_stress(self, atoms):
+        return np.zeros(6)
+
+    def calculation_required(self, atoms, quantities):
+        return False
+
+class MTP_calculator(Calculator):
+    def __init__(self, element, timesteps, mtp):
+        print("Initializing KRR calculator")
+        print("Element: " + element + ". Timesteps: " + str(timesteps))
+        self.alphas_pot = np.loadtxt('machines/KRR/potential/' + element + '/alpha/' + str(timesteps) + '.txt')
+        self.X_train = np.loadtxt('machines/KRR/potential/' + element + '/training_data/' + str(timesteps) + '.txt')
+        self.alphas_forces = np.load('machines/KRR/forces/' + element + '/alpha/' + str(timesteps) + '.npy')
+
+    def get_potential_energy(self, atoms=None, force_consistent=False):
+        return 0.0
+
+    def get_forces(self, atoms):
         return np.zeros((len(atoms), 3))
 
     def get_stress(self, atoms):
