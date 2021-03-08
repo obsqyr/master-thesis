@@ -56,12 +56,11 @@ class KRR_calculator(Calculator):
 
 class MTP_calculator(Calculator):
     def __init__(self, element, timesteps, mtp):
-        print("Initializing KRR calculator")
+        print("Initializing MTP calculator")
         print("Element: " + element + ". Timesteps: " + str(timesteps))
-        self.alphas_pot = np.loadtxt('machines/KRR/potential/' + element + '/alpha/' + str(timesteps) + '.txt')
-        self.X_train = np.loadtxt('machines/KRR/potential/' + element + '/training_data/' + str(timesteps) + '.txt')
-        self.alphas_forces = np.load('machines/KRR/forces/' + element + '/alpha/' + str(timesteps) + '.npy')
 
+        self.mtp_path = 'MTP/mtps_out/' + element + '_' + mtp + '_pot_' + str(timesteps) + '.mtp'
+        
     def get_potential_energy(self, atoms=None, force_consistent=False):
         return 0.0
 
@@ -87,5 +86,5 @@ if __name__ == "__main__":
     atoms = atom*(2,2,2)
 
     #print(atoms)
-    x = KRR_calculator('Al', 1000)
-    print(x.get_forces(atoms=atoms))
+    x = MTP_calculator('Al', 1000, '06')
+    print(x.get_potential_energy(atoms=atoms))

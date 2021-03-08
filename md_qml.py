@@ -42,7 +42,7 @@ def run_md():
 
     # We want to run MD with constant energy using the VelocityVerlet algorithm.
     #traj = Trajectory(atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
-    dyn = VelocityVerlet(atoms, 5 * units.fs)  # 5 fs time step.
+    dyn = VelocityVerlet(atoms, 1 * units.fs)  # 5 fs time step.
     #dyn.attach(traj.write, interval=10)
 
     temperatures = []

@@ -13,6 +13,8 @@ from dscribe.descriptors import SineMatrix
 from ase.build import bulk
 from ase.visualize import view
 
+import math
+
 # own modules
 import vasp_parser as vp
 import visualization as vis
@@ -97,6 +99,7 @@ def train_forces(X_train, Y_train):
             y_train = atom[:,component]
             #print(X_train.shape, y_train.shape)
             # Use the built-in Cholesky-decomposition to solve
+            print(K.shape, y_train.shape)
             alpha_comp = cho_solve(K, y_train) 
             alphas_comp.append(alpha_comp)
         alphas.append(alphas_comp)
@@ -111,8 +114,80 @@ def train_forces_origin(X_train, Y_train):
     print("training forces machine, atom in origin")
     # should I implement this?
     
+def train_forces_spherical_coordinates(X_train, Y_train):
+    print("training forces machines, length and angle")
+
+    sigma = 4000
+    K = gaussian_kernel(X_train, X_train, sigma)
+    
+    # Add a small lambda to the diagonal of the kernel matrix
+    K[np.diag_indices_from(K)] += 1e-8
+    
+    alphas = []
+    for atom in Y_train:
+        alpha = []
+        print('atom', atom.shape)
+        # go through all three force components
+        # and calculate force vector length
+        rs = []
+        thetas = []
+        phis = []
+        for vector in atom:
+            #print('vector', vector)
+            r = np.linalg.norm(vector)
+            rs.append(r)
+            thetas.append(math.atan2(vector[1], vector[0]))
+            phis.append(math.acos(vector[2] / r))
+
+        y_train = np.array([rs, thetas, phis])
+        #print('y_train', y_train.shape, 'K', K.shape)
+        for y in y_train:
+            alpha.append(cho_solve(K, y))
+        alphas.append(alpha)
+        
+        #Y_pred = np.linalg.norm(Y_pred, axis=0)
+        #y_test = np.linalg.norm(y_test, axis=0)
+        
+    print('alphas: ', np.array(alphas).shape)
+    #print("Alphas:")
+    #print(alpha)
+
+    return np.array(alphas), sigma
 
 def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
+    print("evaluating forces machines")
+    
+    Ks = gaussian_kernel(X_test, X_train, sigma)
+
+    component_MAEs = []
+    print(Y_test.shape)
+    for i, atom in enumerate(Y_test):
+        #print('atom', atom.shape)
+        Y_pred = []
+        y_test = []
+        for component in range(0,3):
+            #print(Ks.shape, alphas[i].shape)
+            Y_pred_component = np.dot(Ks, alphas[i, component,:])
+            Y_pred.append(Y_pred_component)
+            
+            y_test_component = atom[:,component]
+            y_test.append(y_test_component)
+
+        Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
+        y_test = np.linalg.norm(np.array(y_test), axis=0)
+        #print('before norm', Y_pred.shape, y_test.shape)
+        #Y_pred = np.linalg.norm(Y_pred, axis=0)
+        #y_test = np.linalg.norm(y_test, axis=0)
+        #print('after norm', Y_pred.shape, y_test.shape)
+        #print(Y_pred, y_test)
+
+        MAE = np.mean(np.abs(Y_pred - y_test))
+        print("MAE:", MAE)
+        component_MAEs.append(MAE)
+
+    return np.array(component_MAEs)
+
+def evaluate_forces_origin(alphas, sigma, X_train, X_test, Y_test):
     print("evaluating forces machines")
     
     Ks = gaussian_kernel(X_test, X_train, sigma)
@@ -131,9 +206,6 @@ def evaluate_forces(alphas, sigma, X_train, X_test, Y_test):
             y_test_component = atom[:,component]
             y_test.append(y_test_component)
 
-        print('Y_pred', np.array(Y_pred).shape)
-        print(np.array(Y_pred))
-        print(np.array(Y_pred)[0])
         Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
         y_test = np.linalg.norm(np.array(y_test), axis=0)
         #print('before norm', Y_pred.shape, y_test.shape)
@@ -163,77 +235,6 @@ def predict_forces(alphas, sigma, X_train, X_test):
         #Y_pred = np.linalg.norm(np.array(Y_pred), axis=0)
     
     return np.squeeze(np.array(Y_pred_total)) 
-    
-def train_qml_regressor():
-    print("training QML regressor")
-    
-    for mol in compounds:
-        mol.generate_coulomb_matrix(size=23, sorting="row-norm")
-    # sin matris representation för periodiska system
-        #mol.generate_fchl_representation(size=23, cut_off=10.0)
-    
-    # dela Al data set i train och test, beräkna MAE
-
-    # Make a big 2D array with all the representations
-    X = np.array([mol.representation for mol in compounds])
-    print(len(X[0]))
-    #print(X)
-
-    # Assign 1000 first molecules to the training set
-    X_training = X[:1000]
-    Y_training = energy_pbe0[:1000]
-   
-    sigma = 4000
-    K = gaussian_kernel(X_training, X_training, sigma)
-    #print("Gaussian kernel:")
-    #print(K)
-    
-    # Add a small lambda to the diagonal of the kernel matrix
-    K[np.diag_indices_from(K)] += 1e-8
-
-    # Use the built-in Cholesky-decomposition to solve
-    alpha = cho_solve(K, Y_training) 
-    print(len(K), len(Y_training))
-    #print(Y_training)
-
-    #print("Alphas:")
-    #print(alpha)
-    # write resulting alphas to file
-    np.savetxt("machine.txt", X = alpha, header = "representation: CM, regressor: KRR")
-    return alpha, sigma
-
-def evaluate_qml_regressor(alpha, sigma):
-    print("evaluating")
-    
-    for mol in compounds:
-        mol.generate_coulomb_matrix(size=23, sorting="row-norm")
-    
-    # Make a big 2D array with all the representations
-    X = np.array([mol.representation for mol in compounds])
-
-    # Assign 1000 last molecules to the test set
-    X_test = X[-1000:]
-    Y_test = energy_pbe0[-1000:]
-
-    # Assign 1000 first molecules to the training set
-    X_training = X[:1000]
-    Y_training = energy_pbe0[:1000]
-
-    # calculate a kernel matrix between test and training data, using the same sigma
-    Ks = gaussian_kernel(X_test, X_training, sigma)
-    print(X_test[0])
-    # Make the predictions
-    Y_predicted = np.dot(Ks, alpha)
-
-    # Calculate mean-absolute-error (MAE):
-    print (np.mean(np.abs(Y_predicted - Y_test)))
-
-def train_MTP():
-    print("Training MTP")
-    mtp = MTPotential()
-    # kör train, använd evaluate i ett givet tidsteg för att få
-    # ut värden på krafter och energi, implementera en ASE calculator
-    # med detta.
 
 def divide_data(data, num_atoms):
     '''
@@ -355,13 +356,14 @@ def train_and_plot_potentials_machine(X_pos, potentials):
 
     vis.scatter_plot(x, y, "figures/MAE_1000and2000points_Al.png", "MAE against timesteps (sine matrix, Al)", 'timesteps', 'MAE [eV/atom]', ['1000 test data points', '2000 test data points'])
 '''
+
 def train_and_evaluate_forces(X_pos, forces, indeces):
-    for i in indeces[1:]:
-        alphas, sigma = train_forces(X_pos[:i], forces[:,:i])
+    for i in indeces:
+        alphas, sigma = train_forces_spherical_coordinates(X_pos[:i], forces[:,:i])
         MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
-        print(MAEs.shape)
-        print(MAEs)
-        np.savetxt("forces_MAEs/" + str(i) + ".txt", MAEs)
+        #print(MAEs.shape)
+        #print(MAEs)
+        #np.savetxt("forces_MAEs/" + str(i) + ".txt", MAEs)
 
 def write_potentials_MAEs(X_pos, potentials):
     # reserve last 1000 data points for testing
@@ -419,6 +421,12 @@ if __name__ == "__main__":
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
+    indeces = range(1000, 2000, 1000)
+    
+    train_and_evaluate_forces(X_pos, forces, indeces)
+
+
+    '''
     # train and write forces machines
     indeces = range(1000, 11000, 1000)
     for i in indeces:
@@ -427,7 +435,7 @@ if __name__ == "__main__":
         MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])
         #np.save("machines/KRR/forces/Al/alpha/"+str(i), arr = alphas)
         #np.savetxt("machines/KRR/forces/Al/training_data/"+str(i)+".txt", X = X_pos[:i])
-
+    '''
     #write_potentials_MAEs(X_pos, potentials)
     
     #train(X_pos, potentials[:500])

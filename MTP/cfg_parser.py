@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 
+from ase.io.cfg import *
+
 # allowed elements
 elements = ['Al', 'Si']
 
+def atoms_to_cfg(atoms):
+    '''
+    Function that writes atoms to .cfg format appropriate for MTP
+    '''
+    print("converting atoms to cfg")
+    write_cfg('test.cfg', atoms)
+        
 def generate_train_cfg(element, num_timesteps):
     if element not in elements:
         raise ValueError("Element " + element + " not allowed.")
