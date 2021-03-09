@@ -160,31 +160,42 @@ def plot_forces():
     
     filenames = [f for f in os.listdir("forces_MAEs")]
     filenames = sorted(filenames)
+    filenames_sphere = filenames[9:18]
+    filenames = filenames[0:9]
+    print(filenames)
+    print(filenames_sphere)
     MAEs = []
     for f in filenames:
         MAEs.append(np.loadtxt("forces_MAEs/"+f))
         
+    MAEs_s = []
+    for f in filenames_sphere:
+        MAEs_s.append(np.loadtxt("forces_MAEs/"+f))
+    
     MAEs = np.array(MAEs)
-    print(MAEs.shape)
+    MAEs_s = np.array(MAEs_s)
+    print('MAEs', MAEs.shape, 'MAEs_s', MAEs_s.shape)
 
-    plt.title("All atoms, Al, force lengths MAE against timesteps")
+    plt.title("All atoms, Al, force MAE against timesteps")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV/Å]')
     timesteps = range(1000,10000,1000)
     
     for i in range(32):
     #print(MAEs[:,0])
-        plt.scatter(timesteps, MAEs[:,i])
-        plt.plot(timesteps, MAEs[:,i])
+        plt.scatter(timesteps, MAEs[:,i], color='r')
+        plt.plot(timesteps, MAEs[:,i], color='r')
+        plt.scatter(timesteps, MAEs_s[:,i], color='b')
+        plt.plot(timesteps, MAEs_s[:,i], color='b')
+
+    plt.legend(['cartesian', 'spherical'])
     
-    #plt.legend(['x', 'y', 'z'])
-    
-    plt.savefig('figures/Al_force_length_MAE.png')
+    plt.savefig('figures/Al_force_length_MAE_sphere.png')
     plt.show()
 
 if __name__ == "__main__":
-    #plot_forces()
-    plot_energies()
+    plot_forces()
+    #plot_energies()
 
 
     # håll separata tränings- och evalueringsdataset

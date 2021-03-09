@@ -220,6 +220,44 @@ def evaluate_forces_origin(alphas, sigma, X_train, X_test, Y_test):
 
     return np.array(component_MAEs)
 
+def evaluate_forces_spherical_coordinates(alphas, sigma, X_train, X_test, Y_test):
+    print("evaluating forces machines")
+    
+    Ks = gaussian_kernel(X_test, X_train, sigma)
+
+    component_MAEs = []
+    print(Y_test.shape)
+    for i, atom in enumerate(Y_test):
+        print('atom', atom.shape)
+        Y_pred = []
+        y_test = []
+            
+        rs = []
+        thetas = []
+        phis = []
+        for vector in atom:
+            #print('vector', vector)
+            r = np.linalg.norm(vector)
+            rs.append(r)
+            thetas.append(math.atan2(vector[1], vector[0]))
+            phis.append(math.acos(vector[2] / r))
+
+        y_test = np.array([rs, thetas, phis])
+
+        for component in range(0,3):
+            print('alpha', alphas.shape)
+            #print(Ks.shape, alphas[i].shape)
+            Y_pred_component = np.dot(Ks, alphas[i, component,:])
+            Y_pred.append(Y_pred_component)
+            
+        #print('Y_pred', np.array(Y_pred).shape, 'y_test', np.array(y_test).shape)
+        MAE = np.mean(np.abs(Y_pred - y_test))
+        print("MAE:", MAE)
+        component_MAEs.append(MAE)
+        
+    #print(np.array(component_MAEs).shape)
+    return np.array(component_MAEs)
+       
 def predict_forces(alphas, sigma, X_train, X_test):
     Ks = gaussian_kernel(X_test, X_train, sigma)
     
@@ -360,10 +398,10 @@ def train_and_plot_potentials_machine(X_pos, potentials):
 def train_and_evaluate_forces(X_pos, forces, indeces):
     for i in indeces:
         alphas, sigma = train_forces_spherical_coordinates(X_pos[:i], forces[:,:i])
-        MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
-        #print(MAEs.shape)
-        #print(MAEs)
-        #np.savetxt("forces_MAEs/" + str(i) + ".txt", MAEs)
+        MAEs = evaluate_forces_spherical_coordinates(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
+        print(MAEs.shape)
+        print(MAEs)
+        np.savetxt("forces_MAEs/sphere" + str(i) + ".txt", MAEs)
 
 def write_potentials_MAEs(X_pos, potentials):
     # reserve last 1000 data points for testing
@@ -421,7 +459,7 @@ if __name__ == "__main__":
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
-    indeces = range(1000, 2000, 1000)
+    indeces = range(1000, 10000, 1000)
     
     train_and_evaluate_forces(X_pos, forces, indeces)
 
