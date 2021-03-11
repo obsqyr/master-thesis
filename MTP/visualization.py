@@ -109,14 +109,18 @@ def plot_mtp_closer_to_zero():
         filenames_al_small.append([i for i in filename if not i[19:23].isdecimal()]) 
     
     #print(filenames_al)
-    #print(filenames_al_small)
+    print(len(filenames_al_small))
     #print(filenames_si)
 
     filenames_si_small = []
     for filename in filenames_si:
         filenames_si_small.append([i for i in filename if not i[19:23].isdecimal()])
 
-    print('filenames_si', filenames_si_small)
+    #print('filenames_si', filenames_si_small)
+    #filenames_al = [i[9:18] for i in filenames_al]
+    #filenames_si = [i[9:18] for i in filenames_si]
+    #print(filenames_al)
+    #print(len(filenames_si[1]))
 
     # Aluminum
     data_al_small = []
@@ -130,7 +134,7 @@ def plot_mtp_closer_to_zero():
     MAEs_al = []
     for d in data_al_small:
         MAEs_al.append([extract_MAE(x) for x in d])
-    print(len(MAEs_al[2]))
+    #print(len(MAEs_al[2]))
     #MAEs_al.append(MAEs_al[0])
     del MAEs_al[0]
     #del MAEs_al[1]

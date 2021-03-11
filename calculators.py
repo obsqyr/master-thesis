@@ -7,7 +7,9 @@ import numpy as np
 import qml
 from qml.representations import *
 
+# -- own modules --
 import train_qml as tr
+import MTP.cfg_parser as cfg_parser
 
 class zero_calculator(Calculator):
     def get_potential_energy(self, atoms=None, force_consistent=False):
@@ -62,6 +64,7 @@ class MTP_calculator(Calculator):
         self.mtp_path = 'MTP/mtps_out/' + element + '_' + mtp + '_pot_' + str(timesteps) + '.mtp'
         
     def get_potential_energy(self, atoms=None, force_consistent=False):
+        cfg_parser.atoms_to_cfg(atoms, 'atom.cfg')
         return 0.0
 
     def get_forces(self, atoms):

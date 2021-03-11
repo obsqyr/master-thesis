@@ -135,6 +135,7 @@ def train_forces_spherical_coordinates(X_train, Y_train):
         for vector in atom:
             #print('vector', vector)
             r = np.linalg.norm(vector)
+            #print('r', r)
             rs.append(r)
             thetas.append(math.atan2(vector[1], vector[0]))
             phis.append(math.acos(vector[2] / r))
@@ -142,6 +143,7 @@ def train_forces_spherical_coordinates(X_train, Y_train):
         y_train = np.array([rs, thetas, phis])
         #print('y_train', y_train.shape, 'K', K.shape)
         for y in y_train:
+            #print('y', y.shape)
             alpha.append(cho_solve(K, y))
         alphas.append(alpha)
         
@@ -191,7 +193,7 @@ def evaluate_forces_origin(alphas, sigma, X_train, X_test, Y_test):
     print("evaluating forces machines")
     
     Ks = gaussian_kernel(X_test, X_train, sigma)
-
+    
     component_MAEs = []
     print(Y_test.shape)
     for i, atom in enumerate(Y_test):
@@ -221,7 +223,7 @@ def evaluate_forces_origin(alphas, sigma, X_train, X_test, Y_test):
     return np.array(component_MAEs)
 
 def evaluate_forces_spherical_coordinates(alphas, sigma, X_train, X_test, Y_test):
-    print("evaluating forces machines")
+    print("evaluating forces machines, spherical coordinates")
     
     Ks = gaussian_kernel(X_test, X_train, sigma)
 
@@ -244,11 +246,12 @@ def evaluate_forces_spherical_coordinates(alphas, sigma, X_train, X_test, Y_test
 
         y_test = np.array([rs, thetas, phis])
 
-        for component in range(0,3):
-            print('alpha', alphas.shape)
-            #print(Ks.shape, alphas[i].shape)
-            Y_pred_component = np.dot(Ks, alphas[i, component,:])
-            Y_pred.append(Y_pred_component)
+        # calculate MAE for radial component
+        #for component in range(0,3):
+        print('alpha', alphas.shape)
+        #print(Ks.shape, alphas[i].shape)
+        Y_pred_component = np.dot(Ks, alphas[i, 0,:])
+        Y_pred.append(Y_pred_component)
             
         #print('Y_pred', np.array(Y_pred).shape, 'y_test', np.array(y_test).shape)
         MAE = np.mean(np.abs(Y_pred - y_test))
@@ -401,7 +404,7 @@ def train_and_evaluate_forces(X_pos, forces, indeces):
         MAEs = evaluate_forces_spherical_coordinates(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
         print(MAEs.shape)
         print(MAEs)
-        np.savetxt("forces_MAEs/sphere" + str(i) + ".txt", MAEs)
+        #np.savetxt("forces_MAEs/sphere" + str(i) + ".txt", MAEs)
 
 def write_potentials_MAEs(X_pos, potentials):
     # reserve last 1000 data points for testing
@@ -459,7 +462,7 @@ if __name__ == "__main__":
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
-    indeces = range(1000, 10000, 1000)
+    indeces = range(1000, 2000, 1000)
     
     train_and_evaluate_forces(X_pos, forces, indeces)
 

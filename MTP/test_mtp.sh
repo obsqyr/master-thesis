@@ -11,7 +11,7 @@ ELEMENT=Si
 
 # Body
 # This converts OUTCAR to the internal format .cfg
-for i in 100 200 300 400 500 600 700 800 900
+for i in 10 20 30 40 50 60 70 80 90
 do
     $MLP_EXE calc-errors mtps_out/${ELEMENT}_${NUM_POT}_pot_${i}.mtp cfg_test/${ELEMENT}_test_1000.cfg > test_results/${NUM_POT}/${ELEMENT}_${i}.txt
 done

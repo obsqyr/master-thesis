@@ -176,7 +176,7 @@ def plot_forces():
     MAEs_s = np.array(MAEs_s)
     print('MAEs', MAEs.shape, 'MAEs_s', MAEs_s.shape)
 
-    plt.title("All atoms, Al, force MAE against timesteps")
+    plt.title("All atoms, Al, force length MAE against timesteps")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV/Å]')
     timesteps = range(1000,10000,1000)
