@@ -13,5 +13,5 @@ ELEMENT=Si
 # This converts OUTCAR to the internal format .cfg
 for i in 10 20 30 40 50 60 70 80 90 100
 do
-    $MLP_EXE train untrained_mtps/${NUM_POT}.mtp cfg_cv/train/${ELEMENT}_traincv_${i}.cfg --trained-pot-name=cfg_cv/mtps_trained/${ELEMENT}_${NUM_POT}_pot_${i}.mtp --max-iter=100
+    $MLP_EXE calc-errors cfg_cv/mtps_trained/${ELEMENT}_${NUM_POT}_pot_${i}.mtp cfg_cv/test/${ELEMENT}_test_${i}.cfg > cfg_cv/results/${NUM_POT}/${ELEMENT}_${i}.txt
 done

@@ -1,0 +1,42 @@
+MTPR from cfg_cv/mtps_trained/Si_10_pot_90.mtp, Database: cfg_cv/test/Si_test_90.cfg
+
+		* * * TRAIN ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 10 configurations
+	Maximal absolute difference = 0.00280936
+	Average absolute difference = 0.00252648
+	RMS     absolute difference = 0.00253816
+
+Energy per atom:
+	Errors checked for 10 configurations
+	Maximal absolute difference = 0.00035117
+	Average absolute difference = 0.00031581
+	RMS     absolute difference = 0.00031727
+
+Forces:
+	Errors checked for 80 atoms
+	Maximal absolute difference = 0.0445475
+	Average absolute difference = 0.00790988
+	RMS     absolute difference = 0.0144934
+	Max(ForceDiff) / Max(Force) = 0.0169464
+	RMS(ForceDiff) / RMS(Force) = 0.0139811
+
+Stresses (in eV):
+	Errors checked for 10 configurations
+	Maximal absolute difference = 0.425863
+	Average absolute difference = 0.0460033
+	RMS     absolute difference = 0.138079
+	Max(StresDiff) / Max(Stres) = 0.0694739
+	RMS(StresDiff) / RMS(Stres) = 0.0746513
+
+Stresses (in GPa):
+	Errors checked for 10 configurations
+	Maximal absolute difference = 0.417138
+	Average absolute difference = 0.0450609
+	RMS     absolute difference = 0.13525
+	Max(StresDiff) / Max(Stres) = 0.0694739
+	RMS(StresDiff) / RMS(Stres) = 0.0746513
+_______________________________________________
+
