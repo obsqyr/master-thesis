@@ -47,6 +47,7 @@ class KRR_calculator(Calculator):
         X = tr.generate_sine_representation(atoms, N)
         X = np.array([X])
         pred = tr.predict_forces(self.alphas_forces, 4000, self.X_train, X)
+        #print(pred.shape)
         return pred
         #return np.zeros((len(atoms), 3))
 

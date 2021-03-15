@@ -47,9 +47,10 @@ def atoms_to_cfg(atoms, fn):
     # write energy
     s += ' Energy\n' + '        0\n' 
     # write stress
-    s += ' PlusStress:'+'  '+ 'xx'+ '          ' + 'yy' +'          '+ 'zz ' + '         '+ 'yz'+ '          ' + 'xz'+ '          '+ 'xy' +'\n\n'
+    s += ' PlusStress:'+'  '+ 'xx'+ '          ' + 'yy' +'          '+ 'zz ' + '         '+ 'yz'+ '          ' + 'xz'+ '          '+ 'xy' +'\n'
+    s += '         ' + '{:.5f}'.format(0) + '     ' + '{:.5f}'.format(0) + '     ' + '{:.5f}'.format(0) + '     ' + '{:.5f}'.format(0) + '     ' + '{:.5f}'.format(0) + '     ' + '{:.5f}'.format(0) +'\n'
     # write feature
-    s += ' Feature\n'
+    s += ' Feature   EFS_by\tVASP\n'
     s += 'END_CFG\n'
 
     with open(fn, 'w+') as f:
