@@ -9,9 +9,10 @@ from ase.build import bulk
 from asap3 import LennardJones
 from asap3 import EMT
 from asap3 import Trajectory
-import properties as pr
 import qml
 import numpy as np
+
+import properties as pr
 import calculators as calcs
 
 def generate_qml_potential():
@@ -31,7 +32,7 @@ def run_md():
     #atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
     # Describe the interatomic interactions with QML
     #atoms.calc = calcs.zero_calculator()
-    atoms.calc = calcs.KRR_calculator('Al', 10000)
+    atoms.calc = calcs.MTP_calculator('Al', 100, '06')
     #generate_qml_potential()
     #x = qml_calc.qml_calculator()
     #print(x.get_potential_energy())

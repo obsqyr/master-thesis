@@ -27,10 +27,16 @@ def extract_MAE(data):
             MAE.append(float(line.strip().split('=')[1][1:]))
     return MAE
 
-def get_MTP_MAEs():
+def get_MTP_MAEs(size='big'):
+    '''
+    size: 
+        'big' - MAEs for timesteps 1000, 2000, ... , 9000
+        'small' - MAEs for timesteps 100, 200, ... , 900
+        'smaller' - MAEs for timesteps 10, 20, ... , 90
+    '''
     dirs = [x[0] for x in os.walk('MTP/test_results')]
     dirs.remove('MTP/test_results')
-    print(dirs)
+    #print(dirs)
 
     filenames = []
     for dir in dirs:
@@ -38,17 +44,52 @@ def get_MTP_MAEs():
         f = sorted(f)
         filenames.append(f)
 
-    #print(filenames)
     # this could be automated
     #filenames_al = [filenames[0][0:9], filenames[1][0:9]]
     #filenames_si = [filenames[0][9:18], filenames[1][9:18]]
+    # extract all filenames
     filenames_al = []
     filenames_si = []
     for filename in filenames:
         filenames_al.append([f for f in filename if 'Al' in f])
         filenames_si.append([f for f in filename if 'Si' in f])
-    #print(filenames_al)
+    #print('filenames_al', filenames_al)
     #print(filenames_si)
+
+    # resize all filenames to chosen size
+    if size == 'big':
+        temp_al = []
+        for filename in filenames_al:
+            #print(filename)
+            temp_al.append([i for i in filename if i[23:27].isdecimal()])
+        filenames_al = temp_al
+        temp_si = []
+        for filename in filenames_si:
+            #print(filename)
+            temp_si.append([i for i in filename if i[23:27].isdecimal()])
+        filenames_si = temp_al
+    elif size == 'small':
+        temp_al = []
+        for filename in filenames_al:
+            #print(filename)
+            temp_al.append([i for i in filename if i[23:26].isdecimal() and not i[23:27].isdecimal()])
+        filenames_al = temp_al
+        temp_si = []
+        for filename in filenames_si:
+            #print(filename)
+            temp_si.append([i for i in filename if i[23:26].isdecimal() and not i[23:27].isdecimal()])
+        filenames_si = temp_si
+    elif size == 'smaller':
+        temp_al = []
+        for filename in filenames_al:
+            #print(filename)
+            temp_al.append([i for i in filename if i[23:25].isdecimal() and not i[23:26].isdecimal()])
+        filenames_al = temp_al
+        temp_si = []
+        for filename in filenames_si:
+            #print(filename)
+            temp_si.append([i for i in filename if i[23:25].isdecimal() and not i[23:26].isdecimal()])
+        filenames_si = temp_si
 
     # Aluminum
     data_al = []
@@ -63,7 +104,7 @@ def get_MTP_MAEs():
     for d in data_al:
         MAEs_al.append([extract_MAE(x) for x in d])
     print(len(MAEs_al[0]))
-
+    
     # Silicon
     data_si = []
     for filename in filenames_si:
@@ -94,9 +135,9 @@ def scatter_plot(x, y, filename, title='', xlabel='', ylabel='', legend=''):
     plt.savefig(filename)
     plt.show()
 
-def plot_energies():
+def plot_energies(size='big'):
     print("plotting energies")
-    MAEs_al, MAEs_si = get_MTP_MAEs()
+    MAEs_al, MAEs_si = get_MTP_MAEs(size)
     
     # remove incomplete 14.mtp from both data sets
     del MAEs_si[0]
@@ -107,7 +148,13 @@ def plot_energies():
     plt.title("Energy / atom MAE, Al")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV]')
-    timesteps = range(1000,10000,1000)
+    # this depends on size
+    if size == 'big':
+        timesteps = range(1000,10000,1000)
+    elif size == 'small':
+        timesteps = range(100, 1000, 100)
+    elif size == 'smaller':
+        timesteps = range(10, 100, 10)
 
     # energy
     for pot in MAEs_al:
@@ -117,20 +164,19 @@ def plot_energies():
         plt.scatter(timesteps, MAE)
         plt.plot(timesteps, MAE)
         
-    qml_MAEs_al = np.loadtxt('potentials_MAEs_al.txt')
+    qml_MAEs_al = np.loadtxt('potentials_MAEs/Al_' + size + '.txt')
     plt.scatter(timesteps, qml_MAEs_al)
     plt.plot(timesteps, qml_MAEs_al)
 
     plt.legend(['06.mtp', '10.mtp', 'KRR'])
-    plt.savefig('figures/Al_energy_per_atom_MAE_all.png')
-    #plt.show()
+    plt.savefig('figures/Al_energy_per_atom_MAE_all_' + size + '.png')
+    plt.show()
 
     # plot Si energy
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Si")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV]')
-    timesteps = range(1000,10000,1000)
 
     # energy
     for pot in MAEs_si:
@@ -140,17 +186,77 @@ def plot_energies():
         plt.scatter(timesteps, MAE)
         plt.plot(timesteps, MAE)
 
-    qml_MAEs_si = np.loadtxt('potentials_MAEs_Si.txt')
+    qml_MAEs_si = np.loadtxt('potentials_MAEs/Si_' + size + '.txt')
     plt.scatter(timesteps, qml_MAEs_si)
     plt.plot(timesteps, qml_MAEs_si)
 
     plt.legend(['06.mtp', '10.mtp', 'KRR'])
 
-    plt.savefig('figures/Si_energy_per_atom_MAE_all.png')
+    plt.savefig('figures/Si_energy_per_atom_MAE_all_' + size + '.png')
     #plt.show()
 
+def plot_forces(size='big'):
+    print("plotting forces")
+    MAEs_al, MAEs_si = get_MTP_MAEs(size)
     
-def plot_forces():
+    # remove incomplete 14.mtp from both data sets
+    del MAEs_si[0]
+    del MAEs_al[0]
+
+    # plot Al forces
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Average force length, Al")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV/ Å]')
+    # this depends on size
+    if size == 'big':
+        timesteps = range(1000,10000,1000)
+    elif size == 'small':
+        timesteps = range(100, 1000, 100)
+    elif size == 'smaller':
+        timesteps = range(10, 100, 10)
+
+    # forces
+    for pot in MAEs_al:
+        MAE = [m[2] for m in pot]
+        print(MAE)
+        print(len(MAE), len(timesteps))
+        plt.scatter(timesteps, MAE)
+        plt.plot(timesteps, MAE)
+        
+    qml_MAEs_al = np.loadtxt('forces_MAEs/Al_' + size + '.txt')
+    plt.scatter(timesteps, qml_MAEs_al)
+    plt.plot(timesteps, qml_MAEs_al)
+
+    plt.legend(['06.mtp', '10.mtp', 'KRR'])
+    #plt.grid(True)
+    plt.savefig('figures/Al_mean_forces_lengths_MAE_all_' + size + '.png')
+    plt.show()
+
+    # plot Si energy
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Average force length, Si")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV / Å]')
+
+    # forces
+    for pot in MAEs_si:
+        MAE = [m[2] for m in pot]
+        print(MAE)
+        print(len(MAE), len(timesteps))
+        plt.scatter(timesteps, MAE)
+        plt.plot(timesteps, MAE)
+
+    qml_MAEs_si = np.loadtxt('forces_MAEs/Si_' + size + '.txt')
+    plt.scatter(timesteps, qml_MAEs_si)
+    plt.plot(timesteps, qml_MAEs_si)
+
+    plt.legend(['06.mtp', '10.mtp', 'KRR'])
+
+    plt.savefig('figures/Si_mean_forces_lengths_MAE_all_' + size + '.png')
+    #plt.show()
+
+def plot_forces_sphere():
     #forces_MAEs = np.loadtxt("forces_MAEs.txt")
     #print(forces_MAEs)
     #for i in range(32):
@@ -176,28 +282,35 @@ def plot_forces():
     MAEs_s = np.array(MAEs_s)
     print('MAEs', MAEs.shape, 'MAEs_s', MAEs_s.shape)
 
-    plt.title("All atoms, Al, force length MAE against timesteps")
+    plt.title("Mean over all atoms, Al, force length MAE against timesteps")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV/Å]')
     timesteps = range(1000,10000,1000)
     
-    for i in range(32):
-    #print(MAEs[:,0])
-        plt.scatter(timesteps, MAEs[:,i], color='r')
-        plt.plot(timesteps, MAEs[:,i], color='r')
-        plt.scatter(timesteps, MAEs_s[:,i], color='b')
-        plt.plot(timesteps, MAEs_s[:,i], color='b')
+    MAEs = np.mean(MAEs, axis=1)
+    MAEs_s = np.mean(MAEs_s, axis=1)
+
+    print('mean MAEs', MAEs.shape)
+    
+    # for i in range(32):
+    # plt.scatter(timesteps, MAEs[:,i], color='r')
+    # etc ...
+    plt.scatter(timesteps, MAEs, color='r')
+    plt.plot(timesteps, MAEs, color='r')
+    plt.scatter(timesteps, MAEs_s, color='b')
+    plt.plot(timesteps, MAEs_s, color='b')
 
     plt.legend(['cartesian', 'spherical'])
     
-    plt.savefig('figures/Al_force_length_MAE_sphere.png')
+    plt.savefig('figures/Al_average_force_length_MAE_sphere.png')
     plt.show()
 
 if __name__ == "__main__":
-    plot_forces()
-    #plot_energies()
-
-
+    sizes = ['big', 'small', 'smaller']
+    for s in sizes:
+        plot_energies(s)
+        plot_forces(s)
+    
     # håll separata tränings- och evalueringsdataset
     # säg håll ett test
 

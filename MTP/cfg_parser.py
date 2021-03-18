@@ -2,6 +2,7 @@
 
 from ase.io.cfg import *
 from ase.io.vasp import *
+import math
 
 # allowed elements
 elements = ['Al', 'Si']
@@ -13,7 +14,7 @@ def atoms_to_cfg(atoms, fn):
     Restrictions:
     - Can only manage monoatomic materials
     '''
-    print("converting atoms to mtp cfg")
+    #print("converting atoms to mtp cfg")
     write_cfg('test.cfg', atoms)
     #write_vasp(fn, atoms)
     
@@ -42,7 +43,7 @@ def atoms_to_cfg(atoms, fn):
             s += '             ' + str(i+1)
         else:
             s += '            ' + str(i+1)
-        s += '    ' + '0' + '       ' + '{:.6f}'.format(pos[0]) + '      ' + '{:.6f}'.format(pos[1]) + '      '+ '{:.6f}'.format(pos[0])+ '     ' +  '{:.6f}'.format(0) + '    ' + '{:.6f}'.format(0) + '    '+ '{:.6f}'.format(0)+ '\n'
+        s += '    ' + '0' + '       ' + '{:.6f}'.format(pos[0]) + '      ' + '{:.6f}'.format(pos[1]) + '      '+ '{:.6f}'.format(pos[2])+ '     ' +  '{:.6f}'.format(0) + '    ' + '{:.6f}'.format(0) + '    '+ '{:.6f}'.format(0)+ '\n'
             
     # write energy
     s += ' Energy\n' + '        0\n' 
@@ -55,6 +56,43 @@ def atoms_to_cfg(atoms, fn):
 
     with open(fn, 'w+') as f:
         f.write(s)
+
+def read_potential_cfg(fn):
+    '''
+    Read the potential from a mtp cfg file.
+    '''
+    found = False
+    with open(fn, 'r') as f:
+        for i, line in enumerate(f):
+            stripped_line = line.strip()
+            if found:
+                pot = stripped_line
+                found = False
+            if stripped_line == "Energy":
+                found = True
+
+    return float(pot)
+
+def read_forces_cfg(fn, N):
+    '''
+    Read the forces from a mtp cfg file.
+    '''
+    forces = []
+    found = False
+    counter = 0
+    with open(fn, 'r') as f:
+        for i, line in enumerate(f):
+            stripped_line = line.strip()
+            if found and counter < N:
+                l = stripped_line.split()
+                f = [float(l[5]), float(l[6]), float(l[7])]
+                #print(stripped_line.split())
+                forces.append(f)
+                counter +=1 
+            if 'AtomData' in stripped_line:
+                found = True
+
+    return np.array(forces)
    
 def generate_train_cfg(element, num_timesteps):
     if element not in elements:
@@ -62,7 +100,7 @@ def generate_train_cfg(element, num_timesteps):
 
     print("Generating train .cfg for " + element + " with first " + str(num_timesteps) + " timesteps")
     
-    write_f = open('cfg_train/'+element+'_train_'+str(num_timesteps)+'.cfg', 'w+')
+    write_f = open('cfg_train_log/'+element+'_train_'+str(num_timesteps)+'.cfg', 'w+')
 
     num_cfgs = 0
     with open("cfg_out/"+element+"_relax.cfg") as f:
@@ -133,13 +171,17 @@ def generate_test_cfg(element, num_timesteps):
         fout.writelines(data[2:])
 
 if __name__ == "__main__":
+    log = np.logspace(0.1, 2.5, 50)
+    log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
-    #for i in range(10,100,10):
-    #    generate_train_cfg('Al', i)
-    #    generate_train_cfg('Si', i)
+    x = sorted(set(log))
+    for i in x:
+        print(i)
+        #generate_train_cfg('Al', i)
+        #generate_train_cfg('Si', i)
     #generate_train_cfg('Al', 1)
     #print("generating testing .cfg files")
     #generate_test_cfg('Al', 1000)
     #generate_test_cfg('Si', 1000)
 
-    generate_test_cfg_cv('Si', 100, 10)
+    #generate_test_cfg_cv('Si', 100, 10)

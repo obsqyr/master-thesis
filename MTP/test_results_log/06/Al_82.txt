@@ -1,0 +1,42 @@
+MTPR from mtps_out_log/Al_06_pot_82.mtp, Database: cfg_test/Al_test_1000.cfg
+
+		* * * TRAIN ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.0570559
+	Average absolute difference = 0.0171166
+	RMS     absolute difference = 0.0219267
+
+Energy per atom:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.001783
+	Average absolute difference = 0.000534895
+	RMS     absolute difference = 0.00068521
+
+Forces:
+	Errors checked for 32000 atoms
+	Maximal absolute difference = 0.245906
+	Average absolute difference = 0.0254108
+	RMS     absolute difference = 0.0480456
+	Max(ForceDiff) / Max(Force) = 0.137784
+	RMS(ForceDiff) / RMS(Force) = 0.1374
+
+Stresses (in eV):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 3.98374
+	Average absolute difference = 0.208378
+	RMS     absolute difference = 0.658216
+	Max(StresDiff) / Max(Stres) = 0.272308
+	RMS(StresDiff) / RMS(Stres) = 0.173514
+
+Stresses (in GPa):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 1.20977
+	Average absolute difference = 0.0632795
+	RMS     absolute difference = 0.199885
+	Max(StresDiff) / Max(Stres) = 0.272308
+	RMS(StresDiff) / RMS(Stres) = 0.173514
+_______________________________________________
+

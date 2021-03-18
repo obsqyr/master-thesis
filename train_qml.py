@@ -399,12 +399,15 @@ def train_and_plot_potentials_machine(X_pos, potentials):
 '''
 
 def train_and_evaluate_forces(X_pos, forces, indeces):
+    MAEs = []
     for i in indeces:
         alphas, sigma = train_forces_spherical_coordinates(X_pos[:i], forces[:,:i])
-        MAEs = evaluate_forces_spherical_coordinates(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
-        print(MAEs.shape)
-        print(MAEs)
+        MAE = evaluate_forces_spherical_coordinates(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])    
+        print(MAE.shape)
+        print(np.mean(MAE))
+        MAEs.append(np.mean(MAE))
         #np.savetxt("forces_MAEs/sphere" + str(i) + ".txt", MAEs)
+    np.savetxt("forces_MAEs/Si_smaller.txt", MAEs)
 
 def write_potentials_MAEs(X_pos, potentials):
     # reserve last 1000 data points for testing
@@ -413,7 +416,7 @@ def write_potentials_MAEs(X_pos, potentials):
     
     #print(train_f)
     #train_qml_regressor()
-    indeces = range(0,10000, 1000)
+    indeces = range(0, 100, 10)
     print(indeces)
     MAEs = []
     for i in indeces[1:]:
@@ -424,9 +427,8 @@ def write_potentials_MAEs(X_pos, potentials):
         alpha, sigma = train(X_pos_train, train_pot)
         MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
 
-    print(MAEs)
-    MAEs = [x / 8 for x in MAEs]
-    np.savetxt('potentials_MAEs_Si.txt', MAEs)
+    MAEs = [x / 32 for x in MAEs]
+    np.savetxt('potentials_MAEs/Al_smaller.txt', MAEs)
 
 def write_potential_alphas(X_pos, potentials):
     # train potentials machines
@@ -443,14 +445,14 @@ def write_potential_alphas(X_pos, potentials):
 
 if __name__ == "__main__":
     # import data from infiles
-    forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
+    forces, positions, potentials, atom_prop = vp.read_infiles('Si_300K/')
 
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
     
     # import atoms from trajectory file
-    traj = Trajectory('Al_300K_infiles/Al.traj')
+    traj = Trajectory('Si_300K_infiles/Si.traj')
     atoms = [atom for atom in traj]
     
     # amount of timesteps is equal to length of potentials
@@ -462,10 +464,11 @@ if __name__ == "__main__":
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
-    indeces = range(1000, 2000, 1000)
+    indeces = range(10, 100, 10)
     
     train_and_evaluate_forces(X_pos, forces, indeces)
-
+    #write_potentials_MAEs(X_pos, potentials)
+    
 
     '''
     # train and write forces machines

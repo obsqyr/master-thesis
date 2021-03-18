@@ -6,6 +6,8 @@ from ase.build import bulk
 import numpy as np
 import qml
 from qml.representations import *
+import subprocess
+from os import path
 
 # -- own modules --
 import train_qml as tr
@@ -60,16 +62,25 @@ class KRR_calculator(Calculator):
 class MTP_calculator(Calculator):
     def __init__(self, element, timesteps, mtp):
         print("Initializing MTP calculator")
-        print("Element: " + element + ". Timesteps: " + str(timesteps))
-
+        print("Element: " + element + ". Timesteps: " + str(timesteps) + ". Potential: " + mtp)
         self.mtp_path = 'MTP/mtps_out/' + element + '_' + mtp + '_pot_' + str(timesteps) + '.mtp'
+        if not path.exists(self.mtp_path):
+            raise ValueError('Chosen potential does not exist')
         
     def get_potential_energy(self, atoms=None, force_consistent=False):
-        cfg_parser.atoms_to_cfg(atoms, 'atom.cfg')
-        return 0.0
+        cfg_parser.atoms_to_cfg(atoms, 'MTP/atom.cfg')
+        subprocess.call(['MTP/predict_mtp.sh', self.mtp_path])
+        pot = cfg_parser.read_potential_cfg('MTP/pred.cfg')
+        return pot
 
     def get_forces(self, atoms):
-        return np.zeros((len(atoms), 3))
+        cfg_parser.atoms_to_cfg(atoms, 'MTP/atom.cfg')
+        subprocess.call(['MTP/predict_mtp.sh', self.mtp_path])
+        N = len(atoms)
+        forces = cfg_parser.read_forces_cfg('MTP/pred.cfg', N)
+
+        return forces
+        #return np.zeros((len(atoms), 3))
 
     def get_stress(self, atoms):
         return np.zeros(6)
@@ -91,4 +102,4 @@ if __name__ == "__main__":
 
     #print(atoms)
     x = MTP_calculator('Al', 1000, '06')
-    print(x.get_potential_energy(atoms=atoms))
+    print(x.get_forces(atoms=atoms))
