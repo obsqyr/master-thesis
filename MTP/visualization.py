@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
+import matplotlib.lines as mlines
 import numpy as np
 import os
 import math
@@ -80,7 +81,6 @@ def get_MTP_MAEs():
     print(len(MAEs_si[0]))
 
     return MAEs_al, MAEs_si
-
 
 def plot_mtp_log():
     dirs = [x[0] for x in os.walk('test_results_log')]
@@ -208,11 +208,11 @@ def plot_mtp_log():
     #del MAEs_si[0]
     #del MAEs_al[1]
     
-    # plot data_si_small
+    # plot data_si
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Si")
     plt.xlabel('timesteps')
-    plt.ylabel('MAE [eV]')
+    plt.ylabel('MAE [eV/atom]')
     log = np.logspace(0.1, 2.5, 50)
     log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
@@ -226,7 +226,12 @@ def plot_mtp_log():
         plt.scatter(timesteps[:30], MAE[:30])
         plt.plot(timesteps[:30], MAE[:30])
 
-    plt.legend(['06.mtp','10.mtp'])
+    line_06 = mlines.Line2D([], [], color='C0', marker='o', label='06.mtp')
+    line_10 = mlines.Line2D([], [], color='C1', marker='o', label='10.mtp')
+     
+    plt.legend(handles=[line_06, line_10])
+    #plt.legend(['06.mtp','10.mtp'])
+    plt.grid(True)
     plt.savefig('figures/Si_energy_per_atom_MAE_mtp_log.png')
     #plt.show()
 
@@ -247,7 +252,13 @@ def plot_mtp_log():
         plt.scatter(timesteps[:30], MAE[:30])
         plt.plot(timesteps[:30], MAE[:30])
 
-    plt.legend(['06.mtp', '10.mtp'])
+    line_06 = mlines.Line2D([], [], color='C0', marker='o', label='06.mtp')
+    line_10 = mlines.Line2D([], [], color='C1', marker='o', label='10.mtp')
+     
+    plt.legend(handles=[line_06, line_10])
+
+    plt.grid(True)
+    #plt.legend(['06.mtp', '10.mtp'])
     plt.savefig('figures/Si_forces_MAE_mtp_log.png')
     #plt.show()
 
@@ -638,7 +649,7 @@ def plot_mtp_cv():
 
 if __name__ == "__main__":
     #plot_mtp_closer_to_zero()
-    plot_mtp_cv()
-    #plot_mtp_log()
+    #plot_mtp_cv()
+    plot_mtp_log()
 
     

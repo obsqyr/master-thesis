@@ -28,15 +28,13 @@ def run_md():
 
     # Describe the interatomic interactions with the Effective Medium Theory
     #atoms.calc = EMT()
+    
     # Describe the interatomic interactions with Lennard Jones potential
     #atoms.calc = LennardJones([18], [0.010323], [3.40], rCut = 6.625, modified = True)
+
     # Describe the interatomic interactions with QML
     #atoms.calc = calcs.zero_calculator()
     atoms.calc = calcs.MTP_calculator('Al', 100, '06')
-    #generate_qml_potential()
-    #x = qml_calc.qml_calculator()
-    #print(x.get_potential_energy())
-    #print(qml_calc.qml_calculator().get_potential_energy())
     
     # Set the momenta corresponding to T=300K
     MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
