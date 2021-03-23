@@ -42,7 +42,7 @@ class KRR_calculator(Calculator):
         X = np.array([X])
         
         pred = tr.predict_potential(self.alphas_pot, 4000, self.X_train, X)
-        return pred
+        return float(pred)
 
     def get_forces(self, atoms):
         N = len(atoms.get_chemical_symbols())
