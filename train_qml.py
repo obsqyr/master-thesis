@@ -440,13 +440,13 @@ def write_potential_alphas(X_pos, potentials):
         print(len(X_pos_train), len(train_pot))
         
         alpha, sigma = train(X_pos_train, train_pot)
-        np.savetxt("machines/KRR/potential/Al/alpha/"+str(i)+'.txt', X = alpha, header = "representation: sine, regressor: KRR")
-        np.savetxt("machines/KRR/potential/Al/training_data/"+str(i)+".txt", X = X_pos_train)
+        np.savetxt("machines/KRR/potential/Si/alpha/"+str(i)+'.txt', X = alpha, header = "representation: sine, regressor: KRR")
+        np.savetxt("machines/KRR/potential/Si/training_data/"+str(i)+".txt", X = X_pos_train)
 
 if __name__ == "__main__":
     # import data from infiles
     forces, positions, potentials, atom_prop = vp.read_infiles('Si_300K/')
-
+    
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
@@ -466,19 +466,19 @@ if __name__ == "__main__":
 
     indeces = range(10, 100, 10)
     
-    train_and_evaluate_forces(X_pos, forces, indeces)
-    #write_potentials_MAEs(X_pos, potentials)
+    #train_and_evaluate_forces(X_pos, forces, indeces)
+    #write_potential_alphas(X_pos, potentials)
     
-
-    '''
+    
     # train and write forces machines
     indeces = range(1000, 11000, 1000)
     for i in indeces:
         alphas, sigma = train_forces(X_pos[:i], forces[:,:i])
         print('alpha', alphas.shape)
         MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])
-        #np.save("machines/KRR/forces/Al/alpha/"+str(i), arr = alphas)
-        #np.savetxt("machines/KRR/forces/Al/training_data/"+str(i)+".txt", X = X_pos[:i])
+        np.save("machines/KRR/forces/Si/alpha/"+str(i), arr = alphas)
+        np.savetxt("machines/KRR/forces/Si/training_data/"+str(i)+".txt", X = X_pos[:i])
+
     '''
     #write_potentials_MAEs(X_pos, potentials)
     
@@ -494,3 +494,4 @@ if __name__ == "__main__":
     #train_pot = potentials[:250]
 
     #train_and_plot_potentials_machine(X_pos, potentials)
+    '''

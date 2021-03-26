@@ -33,17 +33,8 @@ def specific_heat(temp_store, N, atoms):
     M = (ET2 - ET**2)/ET**2
     settings = read_settings_file()
     N = N / settings['supercell_size']**3
-    #print("M:", M)
-    #print("N:", N)
-    #print("T:", temp_store)
-    #print(sum(np.array(temp_store)**2))
-    #print("ET:", ET)
-    #print("ET2:", ET2)
-    #Cv1 = -9*N*units.kB/(4*N*M-6)/z*units._e * settings['supercell_size']**3 # specific heat J/(K*Kg)
-    Cv2 = ((9*ET**2*N*units._k) / (ET**2 * (6+4*N) - 4*N*ET2)) / z * settings['supercell_size']**3
-    #print("Cv1:", Cv1)
-    #print("Cv2:", Cv2)
-    return Cv2
+    Cv = ((9*ET**2*N*units._k) / (ET**2 * (6+4*N) - 4*N*ET2)) / z * settings['supercell_size']**3
+    return Cv
 
 def distance2(pos1, pos2):
     """Calculates the sqared distance between two atomsx in 3D space"""
@@ -51,7 +42,6 @@ def distance2(pos1, pos2):
 
 def distance(pos1, pos2):
     return math.sqrt(distance2(pos1, pos2))
-
 
 def meansquaredisp(atoms, old_atoms):
     """ Calculates the mean squared displacement
@@ -70,9 +60,11 @@ def meansquaredisp(atoms, old_atoms):
         sys.exit('ERROR')
 
     msd = 0.0
+    msd_np = 0.0
     for atom in range(length):
         msd += distance2(pos[atom], old_pos[atom])
-
+        #msd_np += np.linalg.norm(pos[atom] - old_pos[atom])**2
+    
     return msd/length
 
 def energies_and_temp(a):
@@ -89,7 +81,6 @@ def energies_and_temp(a):
     t = ekin / (1.5 * units.kB)
 
     return epot, ekin, etot, t
-
 
 def lattice_constants(a):
     """ Calculates the lattice constant of a materialself.

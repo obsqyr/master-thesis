@@ -454,7 +454,7 @@ def plot_mtp_cv():
     filenames_al_small[2].append('test_results/10/Al_100.txt')
     filenames_si_small[1].append('test_results/06/Si_100.txt')
     filenames_si_small[2].append('test_results/10/Si_100.txt')
-    print('filenames_al', filenames_al_small)
+    #print('filenames_al', filenames_al_small)
     #filenames_al = [i[9:18] for i in filenames_al]
     #filenames_si = [i[9:18] for i in filenames_si]
     #print(filenames_al)
@@ -496,6 +496,12 @@ def plot_mtp_cv():
     # get cv results
     dirs = [x[0] for x in os.walk('cfg_cv/results')]
     dirs.remove('cfg_cv/results')
+    dirs.remove('cfg_cv/results/06')
+    dirs.remove('cfg_cv/results/10')
+    dirs = sorted(dirs)
+    dirs.remove('cfg_cv/results/06/100')
+    dirs.append('cfg_cv/results/06/100')
+    
     #print(dirs)
 
     filenames = []
@@ -503,8 +509,12 @@ def plot_mtp_cv():
         f = [dir+'/'+f for f in os.listdir(dir)]
         f = sorted(f)
         filenames.append(f)
+    
+    for f in filenames:
+        x = f.pop(1)
+        f.append(x)
         
-    #print(filenames)
+    #print(filenames[1])
     # this could be automated
     #filenames_al = [filenames[0][0:9], filenames[1][0:9]]
     #filenames_si = [filenames[0][9:18], filenames[1][9:18]]
@@ -515,13 +525,7 @@ def plot_mtp_cv():
         filenames_si.append([f for f in filename if 'Si' in f])
     #filenames_al_06 = filenames_al[1]
     #filenames_al_06 = [i for i in filenames_al_06 if not i[19:23].isdecimal()]
-
-    filenames_al[0].append(filenames_al[0].pop(1))
-    filenames_al[1].append(filenames_al[1].pop(1))
-    #print(filenames_al)
-    filenames_si[0].append(filenames_si[0].pop(1))
-    filenames_si[1].append(filenames_si[1].pop(1))
-
+ 
     # Aluminum
     data_al = []
     for filename in filenames_al:
@@ -544,53 +548,63 @@ def plot_mtp_cv():
     # plot data_al
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, 10-fold CV (Al, MTP)")
-    plt.xlabel('timestep used as test data')
+    plt.xlabel('timesteps')
     plt.ylabel('MAE [eV]')
     timesteps = range(10,110,10)
     plt.xticks(timesteps)
     
     # energy
     #for pot in MAEs_al_small:
+    print(MAEs_al_small[0])
     MAE = [m[1] for m in MAEs_al_small[0]]
     print('timesteps', len(timesteps), 'MAE', len(MAE))
     plt.scatter(timesteps, MAE)
     plt.plot(timesteps, MAE)
 
     c = ['blue', 'orange']
-    #for i, pot in enumerate(MAEs_al):
-    MAE = [m[1] for m in MAEs_al[0]]
-    print("Al, pot " + str(0) + " : Mean MAE for energy:", str(sum(MAE)/10))
-    #print(len(MAE), len(timesteps))
-    for m in MAE:
-        plt.scatter(100, m, color=c[0])
-        #plt.plot(timesteps, MAE)
+    for i, pot in enumerate(MAEs_al):
+        i += 1
+        MAE = [m[1] for m in pot]
+        print("Al, pot " + str(i) + " : Mean MAE for energy:", str(sum(MAE)/10))
+        #print(len(MAE), len(timesteps))
+        for m in MAE:
+            j = i*10
+            plt.scatter(j, m, color=c[1])
+            #plt.plot(timesteps, MAE)
         
     plt.legend(['06.mtp'])
     plt.savefig('figures/Al_energy_cv.png')
     #plt.show()
-
+    
     # forces
     plt.clf()
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Forces MAE, 10-fold CV (Al, MTP)")
-    plt.xlabel('timestep used as test data')
+    plt.xlabel('timestep')
     plt.xticks(timesteps)
     plt.ylabel('MAE [eV/Å]')
     
     #MAE = []
     #MAE = [m[2] for m in MAEs]
     #print(MAE)
+    MAE = [m[2] for m in MAEs_al_small[0]]
+    print('timesteps', len(timesteps), 'MAE', len(MAE))
+    plt.scatter(timesteps, MAE)
+    plt.plot(timesteps, MAE)
+
     for i, pot in enumerate(MAEs_al):
+        i += 1
         MAE = [m[2] for m in pot]
         print("Al, pot " + str(i) +" : Mean MAE for forces:", str(sum(MAE)/10))
-        print(len(MAE), len(timesteps))
-        plt.scatter(timesteps, MAE)
-        plt.plot(timesteps, MAE)
+        for m in MAE:
+            j = i*10
+            plt.scatter(j, m, color=c[1])
 
-    plt.legend(['06.mtp', '10.mpt'])
+    plt.legend(['06.mtp'])
     plt.savefig('figures/Al_forces_cv.png')
     #plt.show()
-    
+
+    '''
     # Silicon
     data_si = []
     for filename in filenames_si:
@@ -645,11 +659,224 @@ def plot_mtp_cv():
     plt.legend(['06.mtp', '10.mtp'])
     plt.savefig('figures/Si_forces_MAE_cv.png')
     #plt.show()
-   
+    '''
+def plot_learning_curves_log():
+    dirs_te = [x[0] for x in os.walk('test_results_log')]
+    dirs_tr = [x[0] for x in os.walk('train_results_log')]
+    #print(dirs)
+    dirs_te.remove('test_results_log')
+    dirs_tr.remove('train_results_log')
+    #print(dirs)
+
+    filenames_te = []
+    for dir in dirs_te:
+        f = [dir+'/'+f for f in os.listdir(dir)]
+        f = sorted(f)
+        filenames_te.append(f)
+
+    filenames_tr = []
+    for dir in dirs_tr:
+        f = [dir+'/'+f for f in os.listdir(dir)]
+        f = sorted(f)
+        filenames_tr.append(f)
+
+    #print(filenames_tr)
+
+    # this could be automated
+    #filenames_al = [filenames[0][0:9], filenames[1][0:9]]
+    #filenames_si = [filenames[0][9:18], filenames[1][9:18]]
+    #filenames_al = []
+    filenames_si_te = []
+    filenames_si_tr = []
+    for filename in filenames_te:
+        #filenames_al.append([f for f in filename if 'Al' in f])
+        filenames_si_te.append([f for f in filename if 'Si' in f])
+
+    for filename in filenames_tr:
+        #filenames_al.append([f for f in filename if 'Al' in f])
+        filenames_si_tr.append([f for f in filename if 'Si' in f])
+    
+    '''
+    for i, pot in enumerate(filenames_al):
+        tuples_al = []
+        for f in pot:
+            if f[23:27].isdecimal():
+                tuples_al.append((f, int(f[23:27])))
+            elif f[23:26].isdecimal():
+                tuples_al.append((f, int(f[23:26])))
+            elif f[23:25].isdecimal():
+                tuples_al.append((f, int(f[23:25])))
+            elif f[23:24].isdecimal():
+                tuples_al.append((f, int(f[23:24])))
+        
+            tuples_al = sorted(tuples_al, key=lambda x: x[1])
+            filenames_al[i] = [i[0] for i in tuples_al]
+    '''
+    
+    for i, pot in enumerate(filenames_si_te):
+        tuples_si = []
+        for f in pot:
+            if f[23:27].isdecimal():
+                tuples_si.append((f, int(f[23:27])))
+            elif f[23:26].isdecimal():
+                tuples_si.append((f, int(f[23:26])))
+            elif f[23:25].isdecimal():
+                tuples_si.append((f, int(f[23:25])))
+            elif f[23:24].isdecimal():
+                tuples_si.append((f, int(f[23:24])))
+        
+            tuples_si = sorted(tuples_si, key=lambda x: x[1])
+            filenames_si_te[i] = [i[0] for i in tuples_si]
+
+    #print(filenames_si_te)
+            
+    '''
+    # Aluminum
+    data_al = []
+    for filename in filenames_al:
+        d = []
+        for f in filename:
+            with open(f, 'r') as f:
+                d.append(f.read())
+        data_al.append(d)
+
+    MAEs_al = []
+    for d in data_al:
+        MAEs_al.append([extract_MAE(x) for x in d])
+#    del MAEs_al[0]
+    
+    # plot data_al
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Energy / atom MAE, Al")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV]')
+    log = np.logspace(0.1, 2.5, 50)
+    log = [math.ceil(i) for i in log]
+    #print("generating training .cfg files")
+    timesteps = sorted(set(log))
+    #timesteps = range(100,1000,100)
+
+    # energy
+    for pot in MAEs_al:
+        MAE = [m[1] for m in pot]
+        print(MAE)
+        print(len(MAE), len(timesteps))
+        plt.scatter(timesteps[:10], MAE[:10])
+        plt.plot(timesteps[:10], MAE[:10])
+
+    plt.legend(['06.mtp', '10.mtp'])
+    plt.savefig('figures/Al_energy_per_atom_MAE_mtp_log.png')
+    #plt.show()
+
+    # forces
+    plt.clf()
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Forces MAE, Al")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV/Å]')
+    
+    #MAE = []
+    #MAE = [m[2] for m in MAEs]
+    #print(MAE)
+    for pot in MAEs_al:
+        MAE = [m[2] for m in pot]
+        print(MAE)
+        print(len(MAE), len(timesteps))
+        plt.scatter(timesteps[:10], MAE[:10])
+        plt.plot(timesteps[:10], MAE[:10])
+
+    plt.legend(['06.mtp', '10.mtp'])
+    plt.savefig('figures/Al_forces_MAE_mtp_log.png')
+    #plt.show()
+    '''
+    # Silicon
+    data_si_te = []
+    for filename in filenames_si_te:
+        d = []
+        for f in filename:
+            with open(f, 'r') as f:
+                d.append(f.read())
+        data_si_te.append(d)
+    
+    data_si_tr = []
+    for filename in filenames_si_tr:
+        d = []
+        for f in filename:
+            with open(f, 'r') as f:
+                d.append(f.read())
+        data_si_tr.append(d)
+
+    MAEs_si_te = []
+    for d in data_si_te:
+        MAEs_si_te.append([extract_MAE(x) for x in d])
+    MAEs_si_tr = []
+    for d in data_si_tr:
+        MAEs_si_tr.append([extract_MAE(x) for x in d])
+    
+    #print('MAEs_si_te', MAEs_si_tr)
+    #del MAEs_si[0]
+    #del MAEs_al[1]
+    
+    # plot data_si
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Energy / atom MAE (Si, 06.mtp)")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV/atom]')
+    log = np.logspace(0.1, 2.5, 50)
+    log = [math.ceil(i) for i in log]
+    #print("generating training .cfg files")
+    timesteps = sorted(set(log))
+    
+    # energy
+    #for pot in MAEs_si:
+    MAE_te = [m[1] for m in MAEs_si_te[0]]
+    MAE_tr = [m[1] for m in MAEs_si_tr[0]]
+    #print(MAE)
+    #print(len(MAE), len(timesteps))
+    plt.scatter(timesteps[:30], MAE_te[:30])
+    plt.plot(timesteps[:30], MAE_te[:30])
+    plt.scatter(timesteps[:30], MAE_tr[:30])
+    plt.plot(timesteps[:30], MAE_tr[:30])
+
+    line_te = mlines.Line2D([], [], color='C0', marker='o', label='test')
+    line_tr = mlines.Line2D([], [], color='C1', marker='o', label='train')
+     
+    plt.legend(handles=[line_te, line_tr])
+    #plt.legend(['06.mtp','10.mtp'])
+    plt.grid(True)
+    plt.savefig('figures/Si_energy_per_atom_learning_curves.png')
+    #plt.show()
+    
+    # forces
+    plt.clf()
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Forces MAE (Si, 06.mtp)")
+    plt.xlabel('timesteps')
+    plt.ylabel('MAE [eV/Å]')
+    
+    #MAE = []
+    #MAE = [m[2] for m in MAEs]
+    #print(MAE)
+    #for pot in MAEs_si:
+    MAE_te = [m[2] for m in MAEs_si_te[0]]
+    MAE_tr = [m[2] for m in MAEs_si_tr[0]]
+    #print(MAE)
+    #print(len(MAE), len(timesteps))
+    plt.scatter(timesteps[:30], MAE_te[:30])
+    plt.plot(timesteps[:30], MAE_te[:30])
+    plt.scatter(timesteps[:30], MAE_tr[:30])
+    plt.plot(timesteps[:30], MAE_tr[:30])
+     
+    plt.legend(handles=[line_te, line_tr])
+
+    plt.grid(True)
+    #plt.legend(['06.mtp', '10.mtp'])
+    plt.savefig('figures/Si_forces_MAE_learning_curves.png')
+    #plt.show()
 
 if __name__ == "__main__":
     #plot_mtp_closer_to_zero()
-    #plot_mtp_cv()
-    plot_mtp_log()
-
+    plot_mtp_cv()
+    #plot_mtp_log()
+    #plot_learning_curves_log()
     

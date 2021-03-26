@@ -20,21 +20,28 @@ from read_settings import read_settings_file
 def generate_qml_potential():
     alpha = np.loadtxt("machine.txt")
 
-def run_md(calculator, timesteps, mtp='06', element='Al'):
+def run_md(calculator, timesteps, element='Al', mtp='06' ):
     # Read settings
     settings = read_settings_file('settings.json')
     # Scale atoms object, cubic
     size = settings['supercell_size']
-    atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    if element == 'Al':
+        atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    elif element == 'Si':
+        atom = bulk('Si', 'fcc', a=5.4310)
+    else:
+        raise ValueError("Invalid element chosen")
+        
     initial_unitcell_atoms = copy.deepcopy(atom)
     atoms = atom * size * (1,1,1)
-    
+
     # Set up a crystal
     # Al crystal, 32 atoms
     #atoms = atom*(2,2,2)
     #size = 10
     #atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], symbol="Al", size=(size, size, size), pbc=True)
     N = len(atoms.get_chemical_symbols())
+    print('N', N)
     
     # Create a copy of the initial atoms object for future reference
     old_atoms = copy.deepcopy(atoms)
@@ -49,6 +56,7 @@ def run_md(calculator, timesteps, mtp='06', element='Al'):
     else:
         raise ValueError('Invalid calculator chosen')
 
+    #atoms.calc = calcs.zero_calculator()
     # Set the momenta corresponding to T=300K
     MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
 
@@ -74,7 +82,10 @@ def run_md(calculator, timesteps, mtp='06', element='Al'):
 
     # Calculation and writing of properties
     # element + calculator as id
-    id = element + '_' + calculator
+    if calculator == 'MTP':
+        id = element + '_' + calculator + '_' + mtp + '_' + str(timesteps)
+    elif calculator == 'KRR':
+        id = element + '_' + calculator + '_' + str(timesteps)
     pr.initialize_properties_file(atoms, initial_unitcell_atoms, id, decimals, monoatomic)
     dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic)
 
@@ -99,7 +110,7 @@ def run_md(calculator, timesteps, mtp='06', element='Al'):
     #return temperatures, N, atoms, size
 
 if __name__ == "__main__":
-    run_md('MTP', 100)
+    run_md('MTP', 1000, 'Si')
 
     ## calculate specific heat
     #spec_heat = properties.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg

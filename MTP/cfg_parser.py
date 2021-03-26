@@ -135,7 +135,7 @@ def generate_test_cfg_cv(element, num_timesteps, fold):
             if line.strip() == "END_CFG":
                 num_cfgs += 1
                 if num_cfgs % timesteps == 0:
-                    write_f = open('cfg_cv/test/'+element+'_test_'+str(fold_counter * timesteps)+'.cfg', 'w+')
+                    write_f = open('cfg_cv/test/'+str(num_timesteps)+'/'+element+'_test_'+str(fold_counter * timesteps)+'.cfg', 'w+')
                     write_f.write(data)
                     data = ""
                     fold_counter += 1
@@ -171,12 +171,12 @@ def generate_test_cfg(element, num_timesteps):
         fout.writelines(data[2:])
 
 if __name__ == "__main__":
-    log = np.logspace(0.1, 2.5, 50)
-    log = [math.ceil(i) for i in log]
+    #log = np.logspace(0.1, 2.5, 50)
+    #log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
-    x = sorted(set(log))
-    for i in x:
-        print(i)
+    #x = sorted(set(log))
+    #for i in x:
+    #    print(i)
         #generate_train_cfg('Al', i)
         #generate_train_cfg('Si', i)
     #generate_train_cfg('Al', 1)
@@ -184,4 +184,4 @@ if __name__ == "__main__":
     #generate_test_cfg('Al', 1000)
     #generate_test_cfg('Si', 1000)
 
-    #generate_test_cfg_cv('Si', 100, 10)
+    generate_test_cfg_cv('Al', 10, 10)
