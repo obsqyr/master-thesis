@@ -100,7 +100,7 @@ def generate_train_cfg(element, num_timesteps):
 
     print("Generating train .cfg for " + element + " with first " + str(num_timesteps) + " timesteps")
     
-    write_f = open('cfg_train_log/'+element+'_train_'+str(num_timesteps)+'.cfg', 'w+')
+    write_f = open('cfg_train/'+element+'_train_'+str(num_timesteps)+'.cfg', 'w+')
 
     num_cfgs = 0
     with open("cfg_out/"+element+"_relax.cfg") as f:
@@ -175,13 +175,14 @@ if __name__ == "__main__":
     #log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
     #x = sorted(set(log))
-    #for i in x:
+    x = range(1, 10, 1)
+    for i in x:
     #    print(i)
-        #generate_train_cfg('Al', i)
-        #generate_train_cfg('Si', i)
+        generate_train_cfg('Al', i)
+        generate_train_cfg('Si', i)
     #generate_train_cfg('Al', 1)
     #print("generating testing .cfg files")
     #generate_test_cfg('Al', 1000)
     #generate_test_cfg('Si', 1000)
 
-    generate_test_cfg_cv('Al', 10, 10)
+    #generate_test_cfg_cv('Al', 10, 10)

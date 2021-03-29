@@ -407,7 +407,7 @@ def train_and_evaluate_forces(X_pos, forces, indeces):
         print(np.mean(MAE))
         MAEs.append(np.mean(MAE))
         #np.savetxt("forces_MAEs/sphere" + str(i) + ".txt", MAEs)
-    np.savetxt("forces_MAEs/Si_smaller.txt", MAEs)
+    np.savetxt("forces_MAEs/Si_smallest.txt", MAEs)
 
 def write_potentials_MAEs(X_pos, potentials):
     # reserve last 1000 data points for testing
@@ -417,7 +417,7 @@ def write_potentials_MAEs(X_pos, potentials):
     #print(train_f)
     #train_qml_regressor()
     # flatten list
-    indeces = range(0, 100, 10)
+    indeces = range(0, 10, 1)
     print(indeces)
     MAEs = []
     for i in indeces[1:]:
@@ -428,8 +428,8 @@ def write_potentials_MAEs(X_pos, potentials):
         alpha, sigma = train(X_pos_train, train_pot)
         MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
 
-    MAEs = [x / 32 for x in MAEs]
-    np.savetxt('potentials_MAEs/Al_smaller.txt', MAEs)
+    MAEs = [x / 8 for x in MAEs]
+    np.savetxt('potentials_MAEs/Si_smallest.txt', MAEs)
 
 def write_potential_alphas(X_pos, potentials):
     # train potentials machines
@@ -458,19 +458,18 @@ if __name__ == "__main__":
     
     # amount of timesteps is equal to length of potentials
     timesteps = len(potentials)
-
+    
     # divide forces and positions into matrices for each atom
     forces = divide_data(forces, num_atoms)
     positions = divide_data(positions, num_atoms)
 
     X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
-    indeces = range(10, 100, 10)
-    
+    indeces = range(1, 10, 1)
+    write_potentials_MAEs(X_pos, potentials)
     #train_and_evaluate_forces(X_pos, forces, indeces)
     #write_potential_alphas(X_pos, potentials)
-    
-    
+    '''
     # train and write forces machines
     indeces = range(1000, 11000, 1000)
     for i in indeces:
@@ -479,10 +478,10 @@ if __name__ == "__main__":
         MAEs = evaluate_forces(alphas, sigma, X_pos[:i], X_pos[9000:], forces[:,9000:])
         np.save("machines/KRR/forces/Si/alpha/"+str(i), arr = alphas)
         np.savetxt("machines/KRR/forces/Si/training_data/"+str(i)+".txt", X = X_pos[:i])
-
+    '''
     '''
     #write_potentials_MAEs(X_pos, potentials)
-    
+
     #train(X_pos, potentials[:500])
     #train_and_evaluate_forces(X_pos, forces, range(0,10000,1000))
     

@@ -114,11 +114,11 @@ def calculate_properties_vasp(element):
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
 if __name__ == "__main__":
-    #clear_infiles("Al_300K/")
+    clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    #vasp_read("Al_300K/", "xml")
+    vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
-    calculate_properties_vasp('Al')
+    #calculate_properties_vasp('Al')
