@@ -4,6 +4,7 @@ Al_300K
 Si_300K
 *.out
 machines
+*.traj
 
 # emacs files
 *~

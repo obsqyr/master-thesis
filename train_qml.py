@@ -416,6 +416,7 @@ def write_potentials_MAEs(X_pos, potentials):
     
     #print(train_f)
     #train_qml_regressor()
+    # flatten list
     indeces = range(0, 100, 10)
     print(indeces)
     MAEs = []

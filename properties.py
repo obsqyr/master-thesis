@@ -79,7 +79,6 @@ def energies_and_temp(a):
     ekin = a.get_kinetic_energy() / len(a)
     etot = epot + ekin
     t = ekin / (1.5 * units.kB)
-
     return epot, ekin, etot, t
 
 def lattice_constants(a):
@@ -150,7 +149,6 @@ def self_diff(a, msd, time):
     else:
         sd = msd/(6*time)
     return sd * 10 # units: mm^2 / s
-
 
 def initialize_properties_file(a, ai, id, d, ma):
     """Initializes a file over properties with correct titles and main structure
@@ -265,7 +263,7 @@ def calc_properties(a_old, a, id, d, ma):
     file.close()
     return
 
-def finalize_properties_file(a, id, d, ma):
+def finalize_properties_file(a, id, d, ma, dft=False):
     """ Calculates and records the properties of a material.
     Parameters:
     a (obj): Atoms object form ase.
@@ -273,6 +271,8 @@ def finalize_properties_file(a, id, d, ma):
     d (int): a number for the formatting of file. Give a correct appending
             for strings.
     ma (boolean): ma is a boolean, for True the system is monoatomic.
+    dft (boolean): dft is True if a properties file from DFT data is to 
+             be finalized.
     Returns: None
     """
     epot = []
@@ -288,8 +288,13 @@ def finalize_properties_file(a, id, d, ma):
     settings = read_settings_file()
     f=open("property_calculations/properties_"+id+".txt", "r")
     f_lines = f.readlines()
-    steps = math.floor(settings['max_steps'] / settings['interval'])
+    if dft:
+        steps = int(10000/100)
+    else:
+        steps = math.floor(settings['max_steps'] / settings['interval'])
+    #print('steps', steps)
     for line in f_lines[-steps:]:
+        #print('line', line)
         epot.append(float(line.split()[1]))
         ekin.append(float(line.split()[2]))
         etot.append(float(line.split()[3]))

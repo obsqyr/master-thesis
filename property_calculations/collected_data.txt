@@ -1,2 +1,0 @@
- Material ID     Material        Cohesive energy MSD             Self_diff       Specific heat   Lattice const a Lattice const b Lattice const c Interp LC a     Interp LC b     Interp LC c     Bulk modulus    Debye        Lindemann      
-                                 eV/atom         Å^2             mm^2/s          J/(K*Kg)        Å               Å               Å               Å               Å               Å               Pa              K            1              

@@ -3,6 +3,9 @@ from ase.io.vasp import *
 import numpy as np
 import os
 from ase.io.trajectory import Trajectory
+import properties as pr
+from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
+
 
 # Global variables
 infiles = ['forces.infile', 'positions.infile', 'potentials.infile', 'numatoms.infile']
@@ -81,11 +84,41 @@ def read_infiles(directory):
     
     return forces, positions, np.array(potentials), num_atoms
 
-if __name__ == "__main__":
-    clear_infiles("Al_300K/")
-    clear_infiles("Si_300K/")
+
+def calculate_properties_vasp(element):
+    '''
+    Calculates properties of atoms trajectory objects. Requires
+    that the trajectory file has been read from vasp. 
+    '''
+    # generate trajectory file, reading from vasp data
     
-    vasp_read("Al_300K/", "xml")
-    vasp_read("Si_300K/", "OUTCAR")
+    # import atoms from trajectory file
+    traj = Trajectory(element +'_300K_infiles/'+ element +'.traj')
+    atoms = [atom for atom in traj]
+    id = str(element)+'_'+'DFT'
+    
+    # delete old DFT properties file, it it exists
+    if os.path.exists('property_calculations/properties_' + id + '.txt'):
+        os.remove('property_calculations/properties_' + id + '.txt')
+
+    pr.initialize_properties_file(atoms[1], atoms[0][:4], id, 5, True) 
+    #for atom in atoms:
+    print('atoms', atoms[0])
+    for atom in atoms:
+        MaxwellBoltzmannDistribution(atom, temperature_K = 300)
+    for i, atom in enumerate(atoms):
+        #print(atom.get_forces())
+        if i % 100 == 0:
+            print(i)
+            pr.calc_properties(atoms[i-1], atoms[i], id, 5, True)
+    pr.finalize_properties_file(atoms[-1], id, 5, True, True)
+
+if __name__ == "__main__":
+    #clear_infiles("Al_300K/")
+    #clear_infiles("Si_300K/")
+    
+    #vasp_read("Al_300K/", "xml")
+    #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
+    calculate_properties_vasp('Al')

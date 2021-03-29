@@ -58,6 +58,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
 
     #atoms.calc = calcs.zero_calculator()
     # Set the momenta corresponding to T=300K
+    print('atoms', atoms)
     MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
 
     # Select integrator
@@ -98,7 +99,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
         t.append(ekin / (1.5 * units.kB))
         print('Energy per atom: Epot = %.3feV  Ekin = %.3feV (T=%3.0fK)  '
               'Etot = %.3feV' % (epot, ekin, ekin / (1.5 * units.kB), epot + ekin))
-
+    
     # Now run the dynamics
     dyn.attach(printenergy, interval=10)
     #dyn.attach(printenergy, interval=settings['interval'])
@@ -110,7 +111,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
     #return temperatures, N, atoms, size
 
 if __name__ == "__main__":
-    run_md('MTP', 1000, 'Si')
+    run_md('MTP', 1000, 'Al')
 
     ## calculate specific heat
     #spec_heat = properties.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg

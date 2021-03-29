@@ -29,7 +29,8 @@ def extract_MAE(data):
 
 def get_MTP_MAEs(size='big'):
     '''
-    size: 
+    size:
+        'all' - MAEs for timesteps 10, 20, ..., 100, 200, ..., 9000
         'big' - MAEs for timesteps 1000, 2000, ... , 9000
         'small' - MAEs for timesteps 100, 200, ... , 900
         'smaller' - MAEs for timesteps 10, 20, ... , 90
@@ -67,7 +68,7 @@ def get_MTP_MAEs(size='big'):
         for filename in filenames_si:
             #print(filename)
             temp_si.append([i for i in filename if i[23:27].isdecimal()])
-        filenames_si = temp_al
+        filenames_si = temp_si
     elif size == 'small':
         temp_al = []
         for filename in filenames_al:
@@ -90,7 +91,39 @@ def get_MTP_MAEs(size='big'):
             #print(filename)
             temp_si.append([i for i in filename if i[23:25].isdecimal() and not i[23:26].isdecimal()])
         filenames_si = temp_si
-
+    elif size == 'all':
+        temp_al = []
+        big = []
+        small = []
+        smaller = []
+        for filename in filenames_al:
+            #print(filename)
+            big.append([i for i in filename if i[23:27].isdecimal()])
+            small.append([i for i in filename if i[23:26].isdecimal() and not i[23:27].isdecimal()])
+            smaller.append([i for i in filename if i[23:25].isdecimal() and not i[23:26].isdecimal()])
+        #print('smaller', smaller)
+        for i, element in enumerate(big):
+            l = [smaller[i], small[i], big[i]]
+            l = [item for sublist in l for item in sublist]
+            temp_al.append(l)
+        filenames_al = temp_al
+        temp_si = []
+        big = []
+        small = []
+        smaller = []
+        for filename in filenames_si:
+            #print(filename)
+            big.append([i for i in filename if i[23:27].isdecimal()])
+            small.append([i for i in filename if i[23:26].isdecimal() and not i[23:27].isdecimal()])
+            smaller.append([i for i in filename if i[23:25].isdecimal() and not i[23:26].isdecimal()])
+        for i, element in enumerate(big):
+            l = [smaller[i], small[i], big[i]]
+            l = [item for sublist in l for item in sublist]
+            temp_si.append(l)
+        filenames_si = temp_si
+    
+    print('filenames_si', filenames_si)
+    
     # Aluminum
     data_al = []
     for filename in filenames_al:
@@ -144,10 +177,11 @@ def plot_energies(size='big'):
     del MAEs_al[0]
 
     # plot Al energy
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    fig = figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Al")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV]')
+    plt.xscale('log')
     # this depends on size
     if size == 'big':
         timesteps = range(1000,10000,1000)
@@ -155,7 +189,14 @@ def plot_energies(size='big'):
         timesteps = range(100, 1000, 100)
     elif size == 'smaller':
         timesteps = range(10, 100, 10)
-
+    elif size == 'all':
+        t1 = list(range(10, 100, 10))
+        t2 = list(range(100, 1000, 100))
+        t3 = list(range(1000, 10000, 1000))
+        timesteps = [t1, t2, t3]
+        # flatten list
+        timesteps = [item for sublist in timesteps for item in sublist]
+    
     # energy
     for pot in MAEs_al:
         MAE = [m[1] for m in pot]
@@ -169,6 +210,7 @@ def plot_energies(size='big'):
     plt.plot(timesteps, qml_MAEs_al)
 
     plt.legend(['06.mtp', '10.mtp', 'KRR'])
+    #set_xscale('log')
     plt.savefig('figures/Al_energy_per_atom_MAE_all_' + size + '.png')
     plt.show()
 
@@ -177,7 +219,8 @@ def plot_energies(size='big'):
     plt.title("Energy / atom MAE, Si")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV]')
-
+    plt.xscale('log')
+    
     # energy
     for pot in MAEs_si:
         MAE = [m[1] for m in pot]
@@ -208,6 +251,8 @@ def plot_forces(size='big'):
     plt.title("Average force length, Al")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV/ Å]')
+    plt.xscale('log')
+
     # this depends on size
     if size == 'big':
         timesteps = range(1000,10000,1000)
@@ -215,7 +260,14 @@ def plot_forces(size='big'):
         timesteps = range(100, 1000, 100)
     elif size == 'smaller':
         timesteps = range(10, 100, 10)
-
+    elif size == 'all':
+        t1 = list(range(10, 100, 10))
+        t2 = list(range(100, 1000, 100))
+        t3 = list(range(1000, 10000, 1000))
+        timesteps = [t1, t2, t3]
+        # flatten list
+        timesteps = [item for sublist in timesteps for item in sublist]
+    
     # forces
     for pot in MAEs_al:
         MAE = [m[2] for m in pot]
@@ -238,7 +290,8 @@ def plot_forces(size='big'):
     plt.title("Average force length, Si")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV / Å]')
-
+    plt.xscale('log')
+    
     # forces
     for pot in MAEs_si:
         MAE = [m[2] for m in pot]
@@ -306,11 +359,11 @@ def plot_forces_sphere():
     plt.show()
 
 if __name__ == "__main__":
-    sizes = ['big', 'small', 'smaller']
+    sizes = ['all', 'big', 'small', 'smaller']
     for s in sizes:
         plot_energies(s)
         plot_forces(s)
-    
+
     # håll separata tränings- och evalueringsdataset
     # säg håll ett test
 
