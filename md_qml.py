@@ -12,6 +12,7 @@ from asap3 import Trajectory
 import qml
 import numpy as np
 import copy
+import time
 
 import properties as pr
 import calculators as calcs
@@ -111,8 +112,9 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
     #return temperatures, N, atoms, size
 
 if __name__ == "__main__":
-    run_md('MTP', 1000, 'Al')
-
+    start_time = time.time()
+    run_md('MTP', 10, 'Al', '06')
+    print("Ran in %s seconds" % (time.time() - start_time))
     ## calculate specific heat
     #spec_heat = properties.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg
     #print ("Specific heat " + str(atoms.symbols) + ": %.4f [kJ/(K*kg)]" % (spec_heat))

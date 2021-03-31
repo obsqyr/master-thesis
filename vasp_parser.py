@@ -6,7 +6,6 @@ from ase.io.trajectory import Trajectory
 import properties as pr
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 
-
 # Global variables
 infiles = ['forces.infile', 'positions.infile', 'potentials.infile', 'numatoms.infile']
     
@@ -110,15 +109,15 @@ def calculate_properties_vasp(element):
         #print(atom.get_forces())
         if i % 100 == 0:
             print(i)
-            pr.calc_properties(atoms[i-1], atoms[i], id, 5, True)
+            pr.calc_properties(atoms[0], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
+    #clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    vasp_read("Al_300K/", "xml")
+    #vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
-    #calculate_properties_vasp('Al')
+    calculate_properties_vasp('Al')

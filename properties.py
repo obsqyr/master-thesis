@@ -229,7 +229,7 @@ def calc_properties(a_old, a, id, d, ma):
     a (obj): a is an atoms object from clas defined from ase.
             it's the new updated atom obj for MD molecular dyanimcs.
     id (str):
-    d (int):
+d (int):
     ma (boolean):
     Returns: None
     """
@@ -303,10 +303,13 @@ def finalize_properties_file(a, id, d, ma, dft=False):
         selfd.append(line.split()[6])
         pr.append(float(line.split()[11]))
         if ma:
-            debye.append(float(line.split()[12]))
+            if line.split()[12] == 'inf':
+                debye.append(0.0)
+            else:
+                debye.append(float(line.split()[12]))
             linde.append(float(line.split()[13]))
     f.close()
-
+    
     epot_t = sum(epot)/steps
     ekin_t = sum(ekin)/steps
     etot_t = sum(etot)/steps
