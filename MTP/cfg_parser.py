@@ -175,9 +175,9 @@ if __name__ == "__main__":
     #log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
     #x = sorted(set(log))
-    x = range(1, 10, 1)
+    x = range(180, 230, 10)
     for i in x:
-    #    print(i)
+        print(i)
         generate_train_cfg('Al', i)
         generate_train_cfg('Si', i)
     #generate_train_cfg('Al', 1)

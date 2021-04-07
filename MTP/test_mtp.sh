@@ -12,7 +12,7 @@ ELEMENT=Si
 # Body
 # CHECK mtps_out and test_results, WAS USED FOR LOG SCALE
 # This converts OUTCAR to the internal format .cfg
-for i in 1 2 3 4 5 6 7 8 9
+for i in 180 190 200 210 220 
 do
     $MLP_EXE calc-errors mtps_out/${ELEMENT}_${NUM_POT}_pot_${i}.mtp cfg_train/${ELEMENT}_train_${i}.cfg > test_results/${NUM_POT}/${ELEMENT}_${i}.txt
 done
