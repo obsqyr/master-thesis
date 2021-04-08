@@ -1,42 +1,42 @@
-MTPR from mtps_out/Al_10_pot_9.mtp, Database: cfg_train/Al_train_9.cfg
+MTPR from mtps_out/Al_10_pot_9.mtp, Database: cfg_test/Al_test_1000.cfg
 
 		* * * TRAIN ERRORS * * *
 
 _________________Errors report_________________
 Energy:
-	Errors checked for 9 configurations
-	Maximal absolute difference = 0.00177768
-	Average absolute difference = 0.00106603
-	RMS     absolute difference = 0.00115963
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.454266
+	Average absolute difference = 0.166106
+	RMS     absolute difference = 0.192879
 
 Energy per atom:
-	Errors checked for 9 configurations
-	Maximal absolute difference = 5.55527e-05
-	Average absolute difference = 3.33134e-05
-	RMS     absolute difference = 3.62386e-05
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.0141958
+	Average absolute difference = 0.00519082
+	RMS     absolute difference = 0.00602747
 
 Forces:
-	Errors checked for 288 atoms
-	Maximal absolute difference = 0.0527459
-	Average absolute difference = 0.00418207
-	RMS     absolute difference = 0.00893714
-	Max(ForceDiff) / Max(Force) = 0.144197
-	RMS(ForceDiff) / RMS(Force) = 0.171755
+	Errors checked for 32000 atoms
+	Maximal absolute difference = 1.3497
+	Average absolute difference = 0.111767
+	RMS     absolute difference = 0.218536
+	Max(ForceDiff) / Max(Force) = 0.756255
+	RMS(ForceDiff) / RMS(Force) = 0.624965
 
 Stresses (in eV):
-	Errors checked for 9 configurations
-	Maximal absolute difference = 0.596121
-	Average absolute difference = 0.0264426
-	RMS     absolute difference = 0.0962522
-	Max(StresDiff) / Max(Stres) = 0.118767
-	RMS(StresDiff) / RMS(Stres) = 0.0596611
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 22.3322
+	Average absolute difference = 1.1503
+	RMS     absolute difference = 3.7751
+	Max(StresDiff) / Max(Stres) = 1.52651
+	RMS(StresDiff) / RMS(Stres) = 0.995164
 
 Stresses (in GPa):
-	Errors checked for 9 configurations
-	Maximal absolute difference = 0.181028
-	Average absolute difference = 0.00803
-	RMS     absolute difference = 0.0292296
-	Max(StresDiff) / Max(Stres) = 0.118767
-	RMS(StresDiff) / RMS(Stres) = 0.0596611
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 6.78176
+	Average absolute difference = 0.349321
+	RMS     absolute difference = 1.14641
+	Max(StresDiff) / Max(Stres) = 1.52651
+	RMS(StresDiff) / RMS(Stres) = 0.995164
 _______________________________________________
 

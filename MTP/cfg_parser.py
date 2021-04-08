@@ -113,6 +113,25 @@ def generate_train_cfg(element, num_timesteps):
                 break
     write_f.close()
 
+def generate_train_cfg_aftereq(element, num_timesteps, eq):
+    if element not in elements:
+        raise ValueError("Element " + element + " not allowed.")
+
+    print("Generating train .cfg for " + element + " with " + str(num_timesteps) + " timesteps after first " + eq + " initial timesteps.")
+    
+    write_f = open('cfg_train/'+element+'_train_'+str(num_timesteps)+'.cfg', 'w+')
+
+    num_cfgs = 0
+    with open("cfg_out/"+element+"_relax.cfg") as f:
+        for i, line in enumerate(f):
+            stripped_line = line.strip()
+            write_f.write(line)
+            if line.strip() == "END_CFG":
+                num_cfgs += 1
+            if num_cfgs == num_timesteps:
+                break
+    write_f.close()
+
 def generate_test_cfg_cv(element, num_timesteps, fold):
     if element not in elements:
         raise ValueError("Element " + element + " not allowed.")
@@ -175,7 +194,7 @@ if __name__ == "__main__":
     #log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
     #x = sorted(set(log))
-    x = range(180, 230, 10)
+    x = range(1, 11, 1)
     for i in x:
         print(i)
         generate_train_cfg('Al', i)

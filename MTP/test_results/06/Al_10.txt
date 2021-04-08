@@ -5,38 +5,38 @@ MTPR from mtps_out/Al_06_pot_10.mtp, Database: cfg_test/Al_test_1000.cfg
 _________________Errors report_________________
 Energy:
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 0.492418
-	Average absolute difference = 0.125066
-	RMS     absolute difference = 0.166086
+	Maximal absolute difference = 0.895167
+	Average absolute difference = 0.367685
+	RMS     absolute difference = 0.409085
 
 Energy per atom:
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 0.0153881
-	Average absolute difference = 0.00390831
-	RMS     absolute difference = 0.00519017
+	Maximal absolute difference = 0.027974
+	Average absolute difference = 0.0114901
+	RMS     absolute difference = 0.0127839
 
 Forces:
 	Errors checked for 32000 atoms
-	Maximal absolute difference = 1.98116
-	Average absolute difference = 0.0969993
-	RMS     absolute difference = 0.205429
-	Max(ForceDiff) / Max(Force) = 1.11007
-	RMS(ForceDiff) / RMS(Force) = 0.587481
+	Maximal absolute difference = 7.32768
+	Average absolute difference = 0.17584
+	RMS     absolute difference = 0.423009
+	Max(ForceDiff) / Max(Force) = 4.10579
+	RMS(ForceDiff) / RMS(Force) = 1.20971
 
 Stresses (in eV):
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 17.8048
-	Average absolute difference = 0.813047
-	RMS     absolute difference = 2.79169
-	Max(StresDiff) / Max(Stres) = 1.21704
-	RMS(StresDiff) / RMS(Stres) = 0.735926
+	Maximal absolute difference = 78.5978
+	Average absolute difference = 5.8795
+	RMS     absolute difference = 17.9918
+	Max(StresDiff) / Max(Stres) = 5.37255
+	RMS(StresDiff) / RMS(Stres) = 4.74286
 
 Stresses (in GPa):
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 5.40689
-	Average absolute difference = 0.246904
-	RMS     absolute difference = 0.847772
-	Max(StresDiff) / Max(Stres) = 1.21704
-	RMS(StresDiff) / RMS(Stres) = 0.735926
+	Maximal absolute difference = 23.8683
+	Average absolute difference = 1.78547
+	RMS     absolute difference = 5.46368
+	Max(StresDiff) / Max(Stres) = 5.37255
+	RMS(StresDiff) / RMS(Stres) = 4.74286
 _______________________________________________
 

@@ -72,7 +72,7 @@ class MTP_calculator(Calculator):
         subprocess.call(['MTP/predict_mtp.sh', self.mtp_path])
         pot = cfg_parser.read_potential_cfg('MTP/pred.cfg')
         return pot
-
+        
     def get_forces(self, atoms):
         cfg_parser.atoms_to_cfg(atoms, 'MTP/atom.cfg')
         subprocess.call(['MTP/predict_mtp.sh', self.mtp_path])
