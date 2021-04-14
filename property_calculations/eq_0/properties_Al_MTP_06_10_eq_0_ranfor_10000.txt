@@ -1,0 +1,12 @@
+Material ID: Al_MTP_06_10_eq_0_ranfor_10000
+Unit cell composition: Al32
+Material:  Al
+Site positions of initial unit cell:
+ Al          Al          Al          Al         
+ 0.00000     0.00000     2.02395     2.02395    
+ 0.00000     2.02395     0.00000     2.02395    
+ 0.00000     2.02395     2.02395     0.00000    
+Properties:
+ Time        Epot        Ekin        Etot        Temp     MSD         Self_diff   LC_a      LC_b      LC_c      Volume      Pressure    DebyeT   Lindemann 
+ fs          eV/atom     eV/atom     eV/atom     K        Å^2         mm^2/s      Å         Å         Å         Å^3/atom    GPa        K        1          
+ 100         -3.72875    0.04185     -3.6869     323.76   0.0         0.0         4.048     4.048     4.048     16.582    0.0         inf      0.0        

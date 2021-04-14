@@ -105,12 +105,38 @@ def calculate_properties_vasp(element):
     print('atoms', atoms[0])
     for atom in atoms:
         MaxwellBoltzmannDistribution(atom, temperature_K = 300)
+    MSDs = []
+    Cvs = []
+    temps = []
     for i, atom in enumerate(atoms):
         #print(atom.get_forces())
         if i % 100 == 0:
             print(i)
+            _, _, _, t = pr.energies_and_temp(atoms[i])
+            temps.append(t)
+            Cvs.append(pr.specific_heat(temps, len(atoms[i]), atoms[i]))
+            MSDs.append(pr.meansquaredisp(atoms[i], atoms[0]))
             pr.calc_properties(atoms[0], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
+
+    # show whether or not MSD converges
+    MSD_averaged = []
+    MSD = 0
+    for i, m in enumerate(MSDs):
+        if i != 0:
+            MSD += m
+            MSD_averaged.append(MSD / i)
+            #print(MSD/(i), MSD, i)
+    #print(MSD_averaged)
+    
+    # show whether or not specific heat converges
+    Cvs_averaged = []
+    Cv = 0
+    for i, c in enumerate(Cvs):
+        Cv += c
+        Cvs_averaged.append(Cv / (i+1))
+
+    return MSD_averaged, Cvs_averaged
 
 if __name__ == "__main__":
     #clear_infiles("Al_300K/")

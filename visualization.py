@@ -4,6 +4,8 @@ from matplotlib.pyplot import figure
 import numpy as np
 import os
 import train_qml as tr
+import vasp_parser as vp
+import properties as pr
 
 def extract_MAE(data):
     '''
@@ -385,9 +387,71 @@ def plot_forces_sphere():
     plt.savefig('figures/Al_average_force_length_MAE_sphere.png')
     plt.show()
 
+def plot_properties_convergence():
+    # MSD
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("MSD convergence, Al")
+    plt.xlabel('timesteps')
+    plt.ylabel('MSD [Å^2]')
+    #plt.xscale('log')
+    timesteps = range(200,10100, 100)
+    MSDs, Cvs, E_tots = pr.get_averaged_properties('properties_Al_DFT.txt')
+    MSDs_mtp, Cvs_mtp, E_tots_mtp = pr.get_averaged_properties('properties_Al_MTP_06_100_eq_2000_ranfor_10000.txt')
+
+    print('MSDs', len(MSDs), 'timesteps', len(timesteps))
+    plt.scatter(timesteps, MSDs)
+    plt.plot(timesteps, MSDs)
+    print('MSDs_mtp', len(MSDs_mtp), 'timesteps', len(timesteps))
+    plt.scatter(timesteps, MSDs_mtp[:-1])
+    plt.plot(timesteps, MSDs_mtp[:-1])
+
+    plt.legend(['DFT', 'MTP 06, train 100, eq. at 2000, for 10000'])
+    #plt.grid(True)
+    plt.savefig('figures/Al_MSD_convergence.png')
+    plt.show()
+    
+    # specific heat
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Specific heat capacity convergence, Al")
+    plt.xlabel('timesteps')
+    plt.ylabel('Specific heat capacity [J/(K*Kg)]')
+    #plt.xscale('log')
+    timesteps = range(100,10100, 100)
+
+    print(len(timesteps), len(Cvs))
+    plt.scatter(timesteps, Cvs)
+    plt.plot(timesteps, Cvs)
+    plt.scatter(timesteps, Cvs_mtp[:-1])
+    plt.plot(timesteps, Cvs_mtp[:-1])
+    
+    plt.legend(['DFT', 'MTP 06, train 100, eq. at 2000, for 10000'])
+    #plt.grid(True)
+    plt.savefig('figures/Al_Cv_convergence.png')
+    plt.show()
+    
+    # E_tot
+    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Total energy, Al")
+    plt.xlabel('timesteps')
+    plt.ylabel('total energy [eV/atom]')
+    #plt.xscale('log')
+    timesteps = range(100,10100, 100)
+
+    plt.scatter(timesteps, E_tots)
+    plt.plot(timesteps, E_tots)
+    plt.scatter(timesteps, E_tots_mtp[:-1])
+    plt.plot(timesteps, E_tots_mtp[:-1])
+    
+    plt.legend(['DFT', 'MTP 06, train 100, eq. at 2000, for 10000'])
+    #plt.grid(True)
+    plt.savefig('figures/Al_Etot_convergence.png')
+    plt.show()
+
+
 if __name__ == "__main__":
-    plot_forces('all')
-    plot_energies('all')
+    plot_properties_convergence()
+    #plot_forces('all')
+    #plot_energies('all')
     #sizes = ['big', 'small', 'smaller']
     #for s in sizes:
     #    plot_energies(s)

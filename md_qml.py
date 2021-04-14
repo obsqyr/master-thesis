@@ -21,7 +21,7 @@ from read_settings import read_settings_file
 def generate_qml_potential():
     alpha = np.loadtxt("machine.txt")
 
-def run_md(calculator, timesteps, element='Al', mtp='06' ):
+def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     # Read settings
     settings = read_settings_file('settings.json')
     # Scale atoms object, cubic
@@ -51,7 +51,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
     #atoms.calc = calcs.zero_calculator()
 
     if calculator == 'MTP':
-        atoms.calc = calcs.MTP_calculator(element, timesteps, mtp)
+        atoms.calc = calcs.MTP_calculator(element, timesteps, mtp, eq)
     elif calculator == 'KRR':
         atoms.calc = calcs.KRR_calculator(element, timesteps)
     else:
@@ -73,7 +73,6 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
             settings['temperature'] * units.kB, settings['friction'])
 
     # We want to run MD with constant energy using the VelocityVerlet algorithm.
-    #traj = Trajectory(atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
     #dyn = VelocityVerlet(atoms, settings['time_step'] * units.fs)  # 5 fs time step.
     #dyn.attach(traj.write, interval=10)
 
@@ -85,12 +84,16 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
     # Calculation and writing of properties
     # element + calculator as id
     if calculator == 'MTP':
-        id = element + '_' + calculator + '_' + mtp + '_' + str(timesteps)
+        id = element + '_' + calculator + '_' + mtp + '_' + str(timesteps) +'_eq_' + str(eq) + '_ranfor_' + str(settings['max_steps'])
     elif calculator == 'KRR':
         id = element + '_' + calculator + '_' + str(timesteps)
-    pr.initialize_properties_file(atoms, initial_unitcell_atoms, id, decimals, monoatomic)
-    dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic)
+    pr.initialize_properties_file(atoms, initial_unitcell_atoms, id, decimals, monoatomic, dir)
+    dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic, dir)
 
+    # attach trajectory
+    #traj = Trajectory('trajectories/' + atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
+    #dyn.attach(traj.write, interval=100)
+    
     temperatures = []
     def printenergy(t=temperatures, a=atoms):  # store a reference to atoms in the definition.
         """Function to print the potential, kinetic and total energy."""
@@ -108,12 +111,14 @@ def run_md(calculator, timesteps, element='Al', mtp='06' ):
     #print(printenergy())
 
     dyn.run(settings['max_steps'])
-    pr.finalize_properties_file(atoms, id, decimals, monoatomic)
+    pr.finalize_properties_file(atoms, id, decimals, monoatomic, pr, dir)
+    print('id', id)
     #return temperatures, N, atoms, size
+    return id
 
 if __name__ == "__main__":
     start_time = time.time()
-    run_md('MTP', 220, 'Al', '06')
+    run_md('MTP', 100, 'Al', '06', 2000)
     print("Ran in %s seconds" % (time.time() - start_time))
     ## calculate specific heat
     #spec_heat = properties.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg

@@ -117,19 +117,24 @@ def generate_train_cfg_aftereq(element, num_timesteps, eq):
     if element not in elements:
         raise ValueError("Element " + element + " not allowed.")
 
-    print("Generating train .cfg for " + element + " with " + str(num_timesteps) + " timesteps after first " + eq + " initial timesteps.")
+    print("Generating train .cfg for " + element + " with " + str(num_timesteps) + " timesteps after first " + str(eq) + " initial timesteps.")
     
-    write_f = open('cfg_train/'+element+'_train_'+str(num_timesteps)+'.cfg', 'w+')
+    write_f = open('cfg_train_eq/'+element+'_train_'+str(num_timesteps)+'_eq_'+str(eq)+'.cfg', 'w+')
 
     num_cfgs = 0
+    num_cfgs_eq = 0
     with open("cfg_out/"+element+"_relax.cfg") as f:
         for i, line in enumerate(f):
             stripped_line = line.strip()
-            write_f.write(line)
-            if line.strip() == "END_CFG":
-                num_cfgs += 1
-            if num_cfgs == num_timesteps:
-                break
+            if num_cfgs_eq < eq:
+                if stripped_line == "END_CFG":
+                    num_cfgs_eq += 1
+            else:
+                write_f.write(line)
+                if line.strip() == "END_CFG":
+                    num_cfgs += 1
+                if num_cfgs == num_timesteps:
+                    break
     write_f.close()
 
 def generate_test_cfg_cv(element, num_timesteps, fold):
@@ -190,15 +195,17 @@ def generate_test_cfg(element, num_timesteps):
         fout.writelines(data[2:])
 
 if __name__ == "__main__":
+    for i in range(10, 110, 10):
+        generate_train_cfg_aftereq('Al', i, 2000)
     #log = np.logspace(0.1, 2.5, 50)
     #log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")
     #x = sorted(set(log))
-    x = range(1, 11, 1)
-    for i in x:
-        print(i)
-        generate_train_cfg('Al', i)
-        generate_train_cfg('Si', i)
+    #x = range(1, 11, 1)
+    #for i in x:
+    #    print(i)
+    #    generate_train_cfg('Al', i)
+    #    generate_train_cfg('Si', i)
     #generate_train_cfg('Al', 1)
     #print("generating testing .cfg files")
     #generate_test_cfg('Al', 1000)

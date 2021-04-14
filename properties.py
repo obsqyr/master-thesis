@@ -6,6 +6,7 @@ from ase import units
 import numpy as np
 import os
 import chemparse
+from ase.build import bulk
 
 from read_settings import read_settings_file
 
@@ -150,7 +151,7 @@ def self_diff(a, msd, time):
         sd = msd/(6*time)
     return sd * 10 # units: mm^2 / s
 
-def initialize_properties_file(a, ai, id, d, ma):
+def initialize_properties_file(a, ai, id, d, ma, dir=""):
     """Initializes a file over properties with correct titles and main structure
         for an material.
     Parameters:
@@ -168,7 +169,7 @@ def initialize_properties_file(a, ai, id, d, ma):
     # Help function for formating
     def lj(str, k = d):
         return " "+str.ljust(k + 6)
-    file = open("property_calculations/properties_" + id + ".txt", "w+")
+    file = open("property_calculations/" + dir + "properties_" + id + ".txt", "w+")
 
     file.write("Material ID: " + id + "\n")
     file.write("Unit cell composition: " + a.get_chemical_formula() + "\n")
@@ -221,7 +222,7 @@ def ss(value, decimals):
         tmp = str(round(value, decimals))
     return " "+tmp.ljust(decimals + 6)
 
-def calc_properties(a_old, a, id, d, ma):
+def calc_properties(a_old, a, id, d, ma, dir=""):
     """Calculates prioperties and writes them in a file.
     Parameters:
     a_old (obj): a_old is an atoms object from clas defined from ase.
@@ -233,7 +234,7 @@ d (int):
     ma (boolean):
     Returns: None
     """
-    f=open("property_calculations/properties_"+id+".txt", "r")
+    f=open("property_calculations/"+ dir +"properties_"+id+".txt", "r")
 
     epot, ekin, etot, temp = energies_and_temp(a)
     msd =  meansquaredisp(a, a_old)
@@ -251,7 +252,7 @@ d (int):
     vol, pr = volume_pressure(a)
     f.close()
 
-    file=open("property_calculations/properties_"+id+".txt", "a+")
+    file=open("property_calculations/"+dir+"properties_"+id+".txt", "a+")
     file.write(ss(time, d)+ss(epot, d)+ss(ekin, d)+ss(etot, d)+ss(temp, 2)+ss(msd, d))
     file.write(ss(selfd, d)+ss(lc[0], 3)+ss(lc[1], 3)+ss(lc[2], 3))
     file.write(ss(vol, 3)+ss(pr, d))
@@ -261,9 +262,9 @@ d (int):
 
     file.write("\n")
     file.close()
-    return
+    return 
 
-def finalize_properties_file(a, id, d, ma, dft=False):
+def finalize_properties_file(a, id, d, ma, dft=False, dir=""):
     """ Calculates and records the properties of a material.
     Parameters:
     a (obj): Atoms object form ase.
@@ -286,7 +287,7 @@ def finalize_properties_file(a, id, d, ma, dft=False):
     linde = []
 
     settings = read_settings_file()
-    f=open("property_calculations/properties_"+id+".txt", "r")
+    f=open("property_calculations/"+dir+"properties_"+id+".txt", "r")
     f_lines = f.readlines()
     if dft:
         steps = int(10000/100)
@@ -325,7 +326,7 @@ def finalize_properties_file(a, id, d, ma, dft=False):
     linde_t = sum(linde)/steps
     Cv = specific_heat(temp, len(a.get_chemical_symbols()), a)
 
-    file=open("property_calculations/properties_"+id+".txt", "a+")
+    file=open("property_calculations/"+dir+"properties_"+id+".txt", "a+")
     file.write("\nTime averages:\n")
 
     # Help function for formating
@@ -379,5 +380,61 @@ def clean_property_calculations():
 
     print(" -- Removed " + str(counter) + " properties files -- ")
 
+def get_averaged_properties(filename):
+    '''
+    Returns averaged properties from a properties file.
+    Currently limited to Al
+    Parameters:
+    filename (str): filename of the properties file to calculate 
+    averages for
+    '''
+    lines = []
+    with open('property_calculations/'+filename, 'r') as f:
+        for i, line in enumerate(f):
+            if i > 10:
+                if line == "Time averages:\n":
+                    #print('break time')
+                    break
+                lines.append(line.split())
+    lines = lines[:-1]
+    print(len(lines))
+
+    # create atoms object
+    atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    atoms = atom * 2 * (1,1,1)
+
+    MSDs = []
+    temps = []
+    E_tots = []
+    Cvs = []
+    for line in lines:
+        MSDs.append(float(line[5]))
+        E_tots.append(float(line[3]))
+        temps.append(float(line[4]))
+        Cvs.append(specific_heat(temps, len(atoms), atoms))
+        
+    MSD_averaged = []
+    MSD = 0
+    for i, m in enumerate(MSDs):
+        if i != 0:
+            MSD += m
+            MSD_averaged.append(MSD / i)
+    #print(MSD_averaged)
+
+    Cvs_averaged = []
+    Cv = 0
+    for i, c in enumerate(Cvs):
+        Cv += c
+        Cvs_averaged.append(Cv / (i+1))
+
+    E_tots_averaged = []
+    E_tot = 0
+    for i, e in enumerate(E_tots):
+        E_tot += e
+        E_tots_averaged.append(E_tot / (i+1))
+
+    return MSD_averaged, Cvs_averaged, E_tots_averaged
+
 if __name__ == "__main__":
-    clean_property_calculations()
+    #clean_property_calculations()
+    get_averaged_properties('properties_Al_DFT.txt')
