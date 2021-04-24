@@ -55,13 +55,15 @@ def meansquaredisp(atoms, old_atoms):
     pos = atoms.get_positions()
     old_pos = old_atoms.get_positions()
     length = len(pos)
-
+    
+    #np.set_printoptions(suppress=True)
+    #print('old_pos', old_pos, 'pos', pos)
     if length != len(old_pos):
         raise TypeError("Number of atoms doesnt match.")
         sys.exit('ERROR')
 
     msd = 0.0
-    msd_np = 0.0
+    #msd_np = 0.0
     for atom in range(length):
         msd += distance2(pos[atom], old_pos[atom])
         #msd_np += np.linalg.norm(pos[atom] - old_pos[atom])**2
@@ -235,9 +237,12 @@ d (int):
     Returns: None
     """
     f=open("property_calculations/"+ dir +"properties_"+id+".txt", "r")
-
+    
+    #print('atoms pos', a.get_positions(), '\n')
+    #print('old_atoms pos', a_old.get_positions())
     epot, ekin, etot, temp = energies_and_temp(a)
     msd =  meansquaredisp(a, a_old)
+    #print('MSD', msd)
     settings = read_settings_file()
     ln = sum(1 for line in f)
     #print(ln)
@@ -290,7 +295,7 @@ def finalize_properties_file(a, id, d, ma, dft=False, dir=""):
     f=open("property_calculations/"+dir+"properties_"+id+".txt", "r")
     f_lines = f.readlines()
     if dft:
-        steps = int(10000/100)
+        steps = int(8000/100)
     else:
         steps = math.floor(settings['max_steps'] / settings['interval'])
     #print('steps', steps)

@@ -195,8 +195,13 @@ def generate_test_cfg(element, num_timesteps):
         fout.writelines(data[2:])
 
 if __name__ == "__main__":
-    for i in range(10, 110, 10):
+    #for i in range(10, 110, 10):
+    index = [1, 10, 100, 1000, 10000]
+    for i in index:
         generate_train_cfg_aftereq('Al', i, 2000)
+        generate_train_cfg('Al', i)
+        generate_train_cfg_aftereq('Si', i, 2000)
+        generate_train_cfg('Si', i)
     #log = np.logspace(0.1, 2.5, 50)
     #log = [math.ceil(i) for i in log]
     #print("generating training .cfg files")

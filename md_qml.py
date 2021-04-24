@@ -68,6 +68,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
         dyn = VelocityVerlet(atoms, settings['time_step'] * units.fs)
         
     elif settings['ensemble'] == "NVT":
+        print('-- Using Langevin, NVT ensamble --')
         from ase.md.langevin import Langevin
         dyn = Langevin(atoms, settings['time_step'] * units.fs,
             settings['temperature'] * units.kB, settings['friction'])
@@ -118,7 +119,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
 
 if __name__ == "__main__":
     start_time = time.time()
-    run_md('MTP', 100, 'Al', '06', 2000)
+    run_md('MTP', 100, 'Si', '06', 0)
     print("Ran in %s seconds" % (time.time() - start_time))
     ## calculate specific heat
     #spec_heat = properties.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg

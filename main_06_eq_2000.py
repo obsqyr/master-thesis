@@ -4,14 +4,18 @@ import time
 import os
 
 if __name__ == "__main__":
-    if os.path.exists('property_calculations/eq_2000/times.txt'):
-        os.remove('property_calculations/eq_2000/times.txt')
-    f = open('property_calculations/eq_2000/times.txt', 'w+')
-    f.write('id\ttime[s]\n')
+    #if os.path.exists('property_calculations/eq_2000/times.txt'):
+    #    os.remove('property_calculations/eq_2000/times.txt')
+    #f = open('property_calculations/eq_2000/times.txt', 'w+')
+    #f.write('id\ttime[s]\n')
 
-    for i in range(10,110,10):
-        start_time = time.time()
-        id = md_qml.run_md('MTP', i, 'Al', '06', 0, 'eq_2000'/')
-        print("Ran in %s seconds" % (time.time() - start_time))
-        f.write(id + '\t' + str(time.time() - start_time) + '\n')
-    f.close()
+    index = [1, 10, 100, 1000, 10000]
+    for i in range(0,10,1):
+        #start_time = time.time()
+        #id = md_qml.run_md('MTP', i, 'Si', '10', 2000, 'eq_2000/')
+        # for training on the same potential iteratively
+        id = md_qml.run_md('MTP', 1000, 'Al', '06', 2000, 'eq_2000_iter_'+str(i)+'/')
+        #print("Ran in %s seconds" % (time.time() - start_time))
+        #f.write(id + '\t' + str(time.time() - start_time) + '\n')
+    #f.close()
+

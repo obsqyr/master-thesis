@@ -387,69 +387,162 @@ def plot_forces_sphere():
     plt.savefig('figures/Al_average_force_length_MAE_sphere.png')
     plt.show()
 
-def plot_properties_convergence():
+def plot_properties_convergence(element, eq, mtp, final=False):
+    '''
+    Plot time averages of properties to check whether or not
+    they converge. 
+    
+    Params:
+    eq (str): at which timestep point equilibrium is assumed to be
+    achieved for MTP potential. 
+    '''
+    # extract eq. timestep
+    eq_ts = int(eq[3:])
+    
     # MSD
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("MSD convergence, Al")
+    plt.title("MSD convergence, " + element + ", " + mtp +" eq. at " + str(eq_ts))
     plt.xlabel('timesteps')
     plt.ylabel('MSD [Å^2]')
     #plt.xscale('log')
     timesteps = range(200,10100, 100)
-    MSDs, Cvs, E_tots = pr.get_averaged_properties('properties_Al_DFT.txt')
-    MSDs_mtp, Cvs_mtp, E_tots_mtp = pr.get_averaged_properties('properties_Al_MTP_06_100_eq_2000_ranfor_10000.txt')
+    MSDs, Cvs, E_tots = pr.get_averaged_properties('properties_'+element+'_DFT_eq_'+ str(eq_ts) +'.txt')
+    MSDs_mtp = []
+    Cvs_mtp = []
+    E_tots_mtp = []
+    
+    if final:
+        if element == 'Al':
+            indeces = [10, 100, 1000, 10000]
+        elif element == 'Si':
+            indeces = [1, 10, 100, 1000, 10000]
+    else:
+        indeces = range(10, 100, 10)
 
-    print('MSDs', len(MSDs), 'timesteps', len(timesteps))
-    plt.scatter(timesteps, MSDs)
-    plt.plot(timesteps, MSDs)
-    print('MSDs_mtp', len(MSDs_mtp), 'timesteps', len(timesteps))
-    plt.scatter(timesteps, MSDs_mtp[:-1])
-    plt.plot(timesteps, MSDs_mtp[:-1])
+    # get averages from indeces
+    for i in indeces:
+        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_ranfor_10000.txt')
+        MSDs_mtp.append(MSD)
+        Cvs_mtp.append(Cv)
+        E_tots_mtp.append(E_tot)
+    
+    # get averages for mtp trained for 100 timesteps many times 
+    MSDs_100 = []
+    Cvs_100 = []
+    E_tots_100 = []
+    for i in range(0,10,1):
+        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_1000_eq_'+str(eq_ts)+'_ranfor_10000.txt')
+        MSDs_100.append(MSD)
+        Cvs_100.append(Cv)
+        E_tots_100.append(E_tot)
 
-    plt.legend(['DFT', 'MTP 06, train 100, eq. at 2000, for 10000'])
+    # MSD
+    # plot DFT data
+    print('MSDs', len(MSDs), 'timesteps', len(timesteps[int(eq_ts/100):]))
+    #plt.scatter(timesteps, MSDs)
+    plt.plot(timesteps[int(eq_ts/100):], MSDs, color='black', linewidth=3)
+
+    # all MTP MSDs
+    for i, MSDs in enumerate(MSDs_mtp):
+        print('MSDs', len(MSDs), 'timesteps', len(timesteps))
+        #plt.scatter(timesteps, MSDs[:-1])
+        if i != 1:
+            plt.plot(timesteps, MSDs[:-1])
+    
     #plt.grid(True)
-    plt.savefig('figures/Al_MSD_convergence.png')
+    if final:
+        if element == 'Al':
+            plt.legend(['DFT', '10', '100', '1000', '10000'])
+        elif element == 'Si':
+            plt.legend(['DFT', '1', '100', '1000', '10000'])
+            
+        plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'_final.png')
+    else:
+        plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
+        plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'.png')
     plt.show()
     
     # specific heat
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Specific heat capacity convergence, Al")
+    plt.title("Specific heat capacity convergence, "+ element +", MTP " +mtp+ " eq. at " + str(eq_ts))
     plt.xlabel('timesteps')
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
+    if element == 'Al':
+        plt.ylim([460, 540])
+    elif element == 'Si':
+        plt.ylim([460, 950])
     #plt.xscale('log')
     timesteps = range(100,10100, 100)
 
-    print(len(timesteps), len(Cvs))
-    plt.scatter(timesteps, Cvs)
-    plt.plot(timesteps, Cvs)
-    plt.scatter(timesteps, Cvs_mtp[:-1])
-    plt.plot(timesteps, Cvs_mtp[:-1])
+    print(len(timesteps[int(eq_ts/100):]), len(Cvs))
+    #plt.scatter(timesteps, Cvs)
+    plt.plot(timesteps[int(eq_ts/100):], Cvs, color='black', linewidth=3)
     
-    plt.legend(['DFT', 'MTP 06, train 100, eq. at 2000, for 10000'])
-    #plt.grid(True)
-    plt.savefig('figures/Al_Cv_convergence.png')
+    for Cv in Cvs_mtp:
+        #plt.scatter(timesteps, Cv[:-1])
+        plt.plot(timesteps, Cv[:-1])
+
+    for Cv in Cvs_100:
+        #plt.scatter(timesteps, Cv[:-1])
+        plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
+
+    if final:
+        if element == 'Al':
+            plt.legend(['DFT', '10', '100', '1000', '10000'])
+        elif element == 'Si':
+            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+
+        plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'_final.png')
+    else:
+        plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
+        plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'.png')
     plt.show()
     
     # E_tot
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Total energy, Al")
+    plt.title("Total energy, " + element + ", MTP " + mtp +" eq. at " + str(eq_ts))
     plt.xlabel('timesteps')
     plt.ylabel('total energy [eV/atom]')
+    if element == 'Al':
+        plt.ylim([-3.70, -3.645])
+    elif element == 'Si':
+        plt.ylim([-8, 4])
     #plt.xscale('log')
     timesteps = range(100,10100, 100)
 
-    plt.scatter(timesteps, E_tots)
-    plt.plot(timesteps, E_tots)
-    plt.scatter(timesteps, E_tots_mtp[:-1])
-    plt.plot(timesteps, E_tots_mtp[:-1])
+    #plt.scatter(timesteps, E_tots)
+    plt.plot(timesteps[int(eq_ts/100):], E_tots, color='black', linewidth=3)
     
-    plt.legend(['DFT', 'MTP 06, train 100, eq. at 2000, for 10000'])
-    #plt.grid(True)
-    plt.savefig('figures/Al_Etot_convergence.png')
+    for E_tot in E_tots_mtp:
+        #plt.scatter(timesteps, E_tot[:-1])
+        plt.plot(timesteps, E_tot[:-1])
+
+    for E_tot in E_tots_100:
+        plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
+
+    if final:
+        if element == 'Al':
+            plt.legend(['DFT', '10', '100', '1000', '10000'])
+        elif element == 'Si':
+            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+            
+        plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'_final.png')
+    else:
+        plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
+        plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'.png')
     plt.show()
 
-
 if __name__ == "__main__":
-    plot_properties_convergence()
+    plot_properties_convergence('Si', 'eq_0', '06', True)
+    '''
+    mtps = ['06', '10']
+    eqs = ['eq_0', 'eq_2000']
+    
+    for mtp in mtps:
+        for eq in eqs:
+            print('mtp: ', mtp, '. eq: ', eq) 
+            plot_properties_convergence('Al', eq, mtp, True)
+    '''
     #plot_forces('all')
     #plot_energies('all')
     #sizes = ['big', 'small', 'smaller']
