@@ -15,8 +15,8 @@ if __name__ == "__main__":
         #start_time = time.time()
         #id = md_qml.run_md('MTP', i, 'Si', '10', 0, 'eq_0/')
         # for training on the same potential iteratively
-        id = md_qml.run_md('MTP', 1000, 'Si', '06', 0, 'eq_0_iter_'+str(i)+'/')
+        id = md_qml.run_md('MTP', 100, 'Al', '10', 0, 'eq_0_iter_'+str(i)+'/')
         #print("Ran in %s seconds" % (time.time() - start_time))
         #f.write(id + '\t' + str(time.time() - start_time) + '\n')
-    #f.close()
+        #f.close()
     

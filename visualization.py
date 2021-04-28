@@ -271,7 +271,7 @@ def plot_forces(size='big'):
 
     # plot Al forces
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Average force length, Al")
+    plt.title("Average force length MAE, Al")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV/ Å]')
     plt.xscale('log')
@@ -315,7 +315,7 @@ def plot_forces(size='big'):
 
     # plot Si energy
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Average force length, Si")
+    plt.title("Average force length MAE, Si")
     plt.xlabel('timesteps')
     plt.ylabel('MAE [eV / Å]')
     plt.xscale('log')
@@ -430,8 +430,12 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     MSDs_100 = []
     Cvs_100 = []
     E_tots_100 = []
+    if element == 'Al':
+        j = '100'
+    elif element == 'Si':
+        j = '1000'
     for i in range(0,10,1):
-        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_1000_eq_'+str(eq_ts)+'_ranfor_10000.txt')
+        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_'+j+'_eq_'+str(eq_ts)+'_ranfor_10000.txt')
         MSDs_100.append(MSD)
         Cvs_100.append(Cv)
         E_tots_100.append(E_tot)
@@ -446,15 +450,35 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     for i, MSDs in enumerate(MSDs_mtp):
         print('MSDs', len(MSDs), 'timesteps', len(timesteps))
         #plt.scatter(timesteps, MSDs[:-1])
-        if i != 1:
-            plt.plot(timesteps, MSDs[:-1])
+        if element == 'Al':
+            if i != 1:
+                plt.plot(timesteps, MSDs[:-1])
+        elif element == 'Si':
+            if mtp == '10' and eq_ts == 2000:
+                if i != 1:
+                    plt.plot(timesteps, MSDs[:-1])
+            else:
+                plt.plot(timesteps, MSDs[:-1])
+            
+    for MSD in MSDs_100:
+        #plt.scatter(timesteps, Cv[:-1])
+        if element == 'Al':
+            plt.plot(timesteps, MSD[:-1], color='orange', alpha=0.3)
+        elif element == 'Si':
+            if mtp == '10' and eq_ts == 2000:
+                plt.plot(timesteps, MSD[:-1], color='green', alpha=0.3)
+            else:
+                plt.plot(timesteps, MSD[:-1], color='red', alpha=0.3)
     
     #plt.grid(True)
     if final:
         if element == 'Al':
             plt.legend(['DFT', '10', '100', '1000', '10000'])
         elif element == 'Si':
-            plt.legend(['DFT', '1', '100', '1000', '10000'])
+            if mtp == '10' and eq_ts == 2000:
+                plt.legend(['DFT', '1', '100', '1000', '10000'])
+            else:
+                plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
             
         plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'_final.png')
     else:
@@ -484,7 +508,10 @@ def plot_properties_convergence(element, eq, mtp, final=False):
 
     for Cv in Cvs_100:
         #plt.scatter(timesteps, Cv[:-1])
-        plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
+        if element == 'Al':
+            plt.plot(timesteps, Cv[:-1], color='orange', alpha=0.3)
+        elif element == 'Si':
+            plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
 
     if final:
         if element == 'Al':
@@ -518,7 +545,11 @@ def plot_properties_convergence(element, eq, mtp, final=False):
         plt.plot(timesteps, E_tot[:-1])
 
     for E_tot in E_tots_100:
-        plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
+        #print('plotting E_tots_100', E_tot[:-1])
+        if element == 'Al':
+            plt.plot(timesteps, E_tot[:-1], color='orange', alpha=0.3)
+        elif element == 'Si':
+            plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
 
     if final:
         if element == 'Al':
@@ -533,16 +564,17 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     plt.show()
 
 if __name__ == "__main__":
-    plot_properties_convergence('Si', 'eq_0', '06', True)
-    '''
+    #plot_properties_convergence('Si', 'eq_2000', '06', True)
+
     mtps = ['06', '10']
     eqs = ['eq_0', 'eq_2000']
     
     for mtp in mtps:
         for eq in eqs:
             print('mtp: ', mtp, '. eq: ', eq) 
-            plot_properties_convergence('Al', eq, mtp, True)
-    '''
+            #plot_properties_convergence('Al', eq, mtp, True)
+            plot_properties_convergence('Si', eq, mtp, True)
+
     #plot_forces('all')
     #plot_energies('all')
     #sizes = ['big', 'small', 'smaller']

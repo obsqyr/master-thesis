@@ -5,7 +5,7 @@
 MLP_EXE=../../mlip-2/bin/mlp
 TMP_DIR=./mtps_out
 mkdir -p $TMP_DIR
-NUM_POT=06
+NUM_POT=10
 ELEMENT=Si
 #NUM_TIMESTEPS=2000
 
