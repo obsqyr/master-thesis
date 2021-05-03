@@ -4,6 +4,7 @@
 from ase.lattice.cubic import FaceCenteredCubic
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.md.verlet import VelocityVerlet
+from ase.md.npt import NPT
 from ase import units
 from ase.build import bulk
 from asap3 import LennardJones
@@ -60,6 +61,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     #atoms.calc = calcs.zero_calculator()
     # Set the momenta corresponding to T=300K
     print('atoms', atoms)
+    # do I need this?
     MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
 
     # Select integrator
@@ -70,9 +72,16 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     elif settings['ensemble'] == "NVT":
         print('-- Using Langevin, NVT ensamble --')
         from ase.md.langevin import Langevin
-        dyn = Langevin(atoms, settings['time_step'] * units.fs,
-            settings['temperature'] * units.kB, settings['friction'])
-
+        dyn = Langevin(atoms, settings['time_step'] * units.fs, settings['temperature'] * units.kB, settings['friction'])
+        #from ase.md.nptberendsen import NPTBerendsen
+        #dyn = NVTBerendsen(atoms, 1 * units.fs, 300, taut=0.5*1000*units.fs)
+        #dyn = NPTBerendsen(atoms, timestep=0.1 * units.fs, temperature_K=300, taut=100 * units.fs, pressure_au=1.01325 * units.bar, taup=1000 * units.fs, compressibility=4.57e-5 / units.bar)
+        
+        #from ase.md.andersen import Andersen
+        #dyn = Andersen(atoms, settings['time_step'] * units.fs, settings['temperature'], 0.1)
+        #print("-- Using Nose-Hoover, 'NTP' ensamble --")
+        #dyn = NPT(atoms, settings['time_step'] * units.fs, settings['temperature'] * units.kB, externalstress = 0, ttime = 25*units.fs, pfactor=(400*units.fs)**2 * 0.6) 
+        
     # We want to run MD with constant energy using the VelocityVerlet algorithm.
     #dyn = VelocityVerlet(atoms, settings['time_step'] * units.fs)  # 5 fs time step.
     #dyn.attach(traj.write, interval=10)
@@ -92,7 +101,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic, dir)
 
     # attach trajectory
-    #traj = Trajectory('trajectories/' + atoms.get_chemical_symbols()[0] + '.traj', 'w', atoms)
+    #traj = Trajectory('trajectories/' + id + '.traj', 'w', atoms)
     #dyn.attach(traj.write, interval=100)
     
     temperatures = []

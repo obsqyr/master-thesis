@@ -56,18 +56,53 @@ def meansquaredisp(atoms, old_atoms):
     old_pos = old_atoms.get_positions()
     length = len(pos)
     
+    # only support for cubic unit cells
+    unit_cell = atoms.get_cell()
+    #print('unit_cell', list(unit_cell)[0][0])
+    l = list(unit_cell)[0][0]
+
+    # convert positions to fractional form
+    #pos = np.array([i/l for i in pos])
+    #old_pos = np.array([i/l for i in old_pos])
+    
     #np.set_printoptions(suppress=True)
     #print('old_pos', old_pos, 'pos', pos)
     if length != len(old_pos):
         raise TypeError("Number of atoms doesnt match.")
         sys.exit('ERROR')
 
+    def normalize_half(vec):
+        '''
+        input:
+        np.array of dimension 3 (position vector)
+        Add/remove an integer +/-N to each element to place it in 
+        the range [-1/2,1/2)
+        This is useful to find the shortest vector C between two 
+        points A, B in a space with periodic boundary conditions [0,1):
+           C = (A-B).normalize_half()
+        '''
+        temp = []
+        for v in vec:
+            if v > 0.5:
+                temp.append(v-1)
+            elif v < -0.5:
+                temp.append(v+1)
+            else:
+                temp.append(v)
+        return np.array(temp)
+
     msd = 0.0
     #msd_np = 0.0
     for atom in range(length):
-        msd += distance2(pos[atom], old_pos[atom])
-        #msd_np += np.linalg.norm(pos[atom] - old_pos[atom])**2
-    
+        #msd += distance2(pos[atom], old_pos[atom])
+        diff = pos[atom] - old_pos[atom]
+        #print(diff)
+        diff = [i/l for i in diff]
+        diff_norm = normalize_half(diff)
+        #print('diff_norm', diff_norm)
+        msd += np.linalg.norm(diff_norm)**2
+        #print(msd)
+        
     return msd/length
 
 def energies_and_temp(a):
@@ -424,7 +459,9 @@ def get_averaged_properties(filename):
         if i != 0:
             MSD += m
             MSD_averaged.append(MSD / i)
-    #print(MSD_averaged)
+        else:
+            MSD_averaged.append(0)
+    #print('MSD averaged', MSD_averaged)
 
     Cvs_averaged = []
     Cv = 0

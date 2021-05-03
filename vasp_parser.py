@@ -30,6 +30,10 @@ def vasp_read(directory, filetype):
     else:
         raise TypeError('Invalid filetype to read')
         
+    # delete trajectory file if it exits
+    if os.path.exists(directory[:-1]+'_infiles/'+atoms[0].get_chemical_symbols()[0]+'.traj'):
+        os.remove(directory[:-1]+'_infiles/'+atoms[0].get_chemical_symbols()[0]+'.traj')
+
     # write atoms to trajectory file
     traj = Trajectory(directory[:-1]+'_infiles/'+atoms[0].get_chemical_symbols()[0]+'.traj',mode='a', atoms=atoms)
 
@@ -83,11 +87,11 @@ def read_infiles(directory):
     
     return forces, positions, np.array(potentials), num_atoms
 
-
 def calculate_properties_vasp(element, eq):
     '''
-    Calculates properties of atoms trajectory objects. Requires
-    that the trajectory file has been read from vasp. 
+    Calculates properties of atoms trajectory objects. Writes to
+    properties file. Requires that the trajectory file has 
+    been read from vasp. 
     '''
     # generate trajectory file, reading from vasp data
     
@@ -184,15 +188,15 @@ def calculate_properties_vasp(element, eq):
         """Calculates the sqared distance between two atomsx in 3D space"""
         return (pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2 + (pos1[2] - pos2[2])**2
 
-    print(x0, x_last)
+    #print(x0, x_last)
     msd = 0
     for i in range(len(x0)): 
-        print('distance^2 np',np.linalg.norm(x0[i] - x_last[i])**2)
+        #print('distance^2 np',np.linalg.norm(x0[i] - x_last[i])**2)
         #print('distance^2 d2', distance2(x0[i], x_last[i]))
         msd += np.linalg.norm(x0[i] - x_last[i])**2
         
-    print('MSD', msd/len(x0))
-    
+    #print('MSD', msd/len(x0))
+
     for i in range(len(atoms) - eq):
         i += eq
         #print(atom.get_forces())
@@ -201,8 +205,8 @@ def calculate_properties_vasp(element, eq):
             _, _, _, t = pr.energies_and_temp(atoms[i])
             temps.append(t)
             Cvs.append(pr.specific_heat(temps, len(atoms[i]), atoms[i]))
-            MSDs.append(pr.meansquaredisp(atoms[i], atoms[0]))
-            pr.calc_properties(atoms[0], atoms[i], id, 5, True)
+            MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
+            pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
     # show whether or not MSD converges
@@ -212,6 +216,7 @@ def calculate_properties_vasp(element, eq):
         if i != 0:
             MSD += m
             MSD_averaged.append(MSD / i)
+            #print('MSD / i', MSD / i)
             #print(MSD/(i), MSD, i)
     print('MSD_averaged', len(MSD_averaged))
     
@@ -233,3 +238,6 @@ if __name__ == "__main__":
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
     calculate_properties_vasp('Si', 0)
+    calculate_properties_vasp('Al', 0)
+    calculate_properties_vasp('Si', 2000)
+    calculate_properties_vasp('Al', 2000)

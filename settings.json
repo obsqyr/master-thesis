@@ -1,5 +1,5 @@
 {
-    "time_step": 1,
+    "time_step": 5,
     "max_steps": 10000,
     "temperature": 300,
     "ensemble": "NVT",

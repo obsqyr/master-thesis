@@ -71,7 +71,7 @@ class MTP_calculator(Calculator):
 
         if not path.exists(self.mtp_path):
             raise ValueError('Chosen potential does not exist')
-        #self.name = "Dingus"
+        self.name = "Dingus"
         
     def get_potential_energy(self, atoms=None, force_consistent=False):
         cfg_parser.atoms_to_cfg(atoms, 'MTP/atom.cfg')
