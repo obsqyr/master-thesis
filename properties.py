@@ -51,7 +51,7 @@ def meansquaredisp(atoms, old_atoms):
     old_atoms (obj):old_atoms is an atom object from the python library.
     Returns:
     float: The mean squared displacement.
-   """
+    """
     pos = atoms.get_positions()
     old_pos = old_atoms.get_positions()
     length = len(pos)
@@ -60,10 +60,15 @@ def meansquaredisp(atoms, old_atoms):
     unit_cell = atoms.get_cell()
     #print('unit_cell', list(unit_cell)[0][0])
     l = list(unit_cell)[0][0]
+    if l == 0:
+        l = list(unit_cell)[0][1]
+    #print('l', l)
 
     # convert positions to fractional form
-    #pos = np.array([i/l for i in pos])
-    #old_pos = np.array([i/l for i in old_pos])
+    pos = np.array([i/l for i in pos])
+    old_pos = np.array([i/l for i in old_pos])
+    #print('pos', pos)
+    #print('old_pos', old_pos)
     
     #np.set_printoptions(suppress=True)
     #print('old_pos', old_pos, 'pos', pos)
@@ -97,12 +102,14 @@ def meansquaredisp(atoms, old_atoms):
         #msd += distance2(pos[atom], old_pos[atom])
         diff = pos[atom] - old_pos[atom]
         #print(diff)
-        diff = [i/l for i in diff]
+        # do I need to do this?
+        #diff = [i/l for i in diff]
         diff_norm = normalize_half(diff)
         #print('diff_norm', diff_norm)
         msd += np.linalg.norm(diff_norm)**2
         #print(msd)
-        
+
+    #print('MSD', msd/length)
     return msd/length
 
 def energies_and_temp(a):

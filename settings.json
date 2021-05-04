@@ -1,9 +1,9 @@
 {
-    "time_step": 5,
+    "time_step": 1,
     "max_steps": 10000,
     "temperature": 300,
     "ensemble": "NVT",
-    "friction": 1,
+    "friction": 0.01,
     "decimals": 5,
     "interval": 100,
     "vol_relax": true,

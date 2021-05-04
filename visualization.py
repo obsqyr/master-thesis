@@ -413,7 +413,7 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     
     if final:
         if element == 'Al':
-            indeces = [10, 100, 1000, 10000]
+            indeces = [1, 10, 100, 1000, 10000]
         elif element == 'Si':
             indeces = [1, 10, 100, 1000, 10000]
     else:
@@ -481,7 +481,7 @@ def plot_properties_convergence(element, eq, mtp, final=False):
             if mtp == '10' and eq_ts == 0:
                 plt.legend(['DFT', '100', '1000', '10000'])
             else:
-                plt.legend(['DFT', '10', '100', '1000', '10000'])
+                plt.legend(['DFT', '1' , '10', '100', '1000', '10000'])
         elif element == 'Si':
             if mtp == '10' and eq_ts == 2000:
                 plt.legend(['DFT', '1', '100', '1000', '10000'])
@@ -510,10 +510,10 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     #plt.scatter(timesteps, Cvs)
     plt.plot(timesteps[int(eq_ts/100):], Cvs, color='black', linewidth=3)
     
-    '''for Cv in Cvs_mtp:
+    for Cv in Cvs_mtp:
         #plt.scatter(timesteps, Cv[:-1])
         plt.plot(timesteps, Cv[:-1])
-
+    '''
     for Cv in Cvs_100:
         #plt.scatter(timesteps, Cv[:-1])
         if element == 'Al':
@@ -527,10 +527,10 @@ def plot_properties_convergence(element, eq, mtp, final=False):
         elif element == 'Si':
             plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
 
-        plt.savefig('figures/convergence/'+element+'_Cv_convergence_DFT_'+mtp+'_'+eq+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
-        plt.savefig('figures/convergence/'+element+'_Cv_convergence_DFT_'+mtp+'_'+eq+'.png')
+        plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'.png')
     plt.show()
     
     # E_tot
@@ -547,11 +547,12 @@ def plot_properties_convergence(element, eq, mtp, final=False):
 
     #plt.scatter(timesteps, E_tots)
     plt.plot(timesteps[int(eq_ts/100):], E_tots, color='black', linewidth=3)
-    '''
+    
     for E_tot in E_tots_mtp:
         #plt.scatter(timesteps, E_tot[:-1])
         plt.plot(timesteps, E_tot[:-1])
-
+    
+    '''
     for E_tot in E_tots_100:
         #print('plotting E_tots_100', E_tot[:-1])
         if element == 'Al':
@@ -565,11 +566,12 @@ def plot_properties_convergence(element, eq, mtp, final=False):
         elif element == 'Si':
             plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
             
-        plt.savefig('figures/convergence/'+element+'_Etot_convergence_DFT_'+mtp+'_'+eq+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
-        plt.savefig('figures/convergence/'+element+'_Etot_convergence_DFT_'+mtp+'_'+eq+'.png')
+        plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'.png')
     plt.show()
+    plt.close('all')
 
 if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
