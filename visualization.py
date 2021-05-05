@@ -453,7 +453,7 @@ def plot_properties_convergence(element, eq, mtp, final=False):
         #plt.scatter(timesteps, MSDs[:-1])
         if element == 'Al':
             if mtp == '10' and eq_ts == 0:
-                if i != 0:
+                if i == 2 or i == 3 or i == 4:
                     plt.plot(timesteps, MSDs[:-1])
             else:
                 plt.plot(timesteps, MSDs[:-1])
@@ -500,7 +500,7 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     plt.xlabel('timesteps')
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
     if element == 'Al':
-        plt.ylim([460, 540])
+        plt.ylim([460, 600])
     elif element == 'Si':
         plt.ylim([460, 950])
     #plt.xscale('log')
@@ -523,7 +523,7 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     '''
     if final:
         if element == 'Al':
-            plt.legend(['DFT', '10', '100', '1000', '10000'])
+            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
         elif element == 'Si':
             plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
 
@@ -562,7 +562,7 @@ def plot_properties_convergence(element, eq, mtp, final=False):
     '''
     if final:
         if element == 'Al':
-            plt.legend(['DFT', '10', '100', '1000', '10000'])
+            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
         elif element == 'Si':
             plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
             
