@@ -22,7 +22,23 @@ from read_settings import read_settings_file
 def generate_qml_potential():
     alpha = np.loadtxt("machine.txt")
 
-def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
+def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0):
+    '''
+    Function for running molecular dynamics.
+
+    Parameters:
+    calculator (str): either 'KRR' or 'MTP', chooses calculator.
+    timesteps (int): specifies how many timesteps the potential is
+        trained on.
+    element (str): either 'Al' or 'Si', chooses simulated element.
+    mtp (str): '06' or '10', chooses which MTP potential is used.
+    eq (int): chooses the potential that has been trained on timesteps
+        starting from eq.
+    dir (str): which directory the resulting properties file should
+        be saved to.
+    offset (int): how long the MD is run before properties are calculated
+    '''
+
     # Read settings
     settings = read_settings_file('settings.json')
     # Scale atoms object, cubic
@@ -43,7 +59,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     #size = 10
     #atoms = FaceCenteredCubic(directions=[[1, 0, 0], [0, 1, 0], [0, 0, 1]], symbol="Al", size=(size, size, size), pbc=True)
     N = len(atoms.get_chemical_symbols())
-    print('N', N)
+    print('N', N, ' offset', offset)
     
     # Create a copy of the initial atoms object for future reference
     old_atoms = copy.deepcopy(atoms)
@@ -94,13 +110,13 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     # Calculation and writing of properties
     # element + calculator as id
     if calculator == 'MTP':
-        id = element + '_' + calculator + '_' + mtp + '_' + str(timesteps) +'_eq_' + str(eq) + '_ranfor_' + str(settings['max_steps'])
+        id = element + '_' + calculator + '_' + mtp + '_' + str(timesteps) +'_eq_' + str(eq) + '_offset_' + str(offset) + '_ranfor_' + str(settings['max_steps'])
     elif calculator == 'KRR':
         id = element + '_' + calculator + '_' + str(timesteps)
-    pr.initialize_properties_file(atoms, initial_unitcell_atoms, id, decimals, monoatomic, dir)
-    dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic, dir)
 
     # attach trajectory
+    # need to implement the whole superclass calculator if I
+    # wish to do this
     #traj = Trajectory('trajectories/' + id + '.traj', 'w', atoms)
     #dyn.attach(traj.write, interval=100)
     
@@ -120,15 +136,27 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir=""):
     #if printenergy() != None:
     #print(printenergy())
 
-    dyn.run(settings['max_steps'])
+    if offset == 0:
+        # initialize the properties file and attach calc_properties to dyn 
+        pr.initialize_properties_file(atoms, initial_unitcell_atoms, id, decimals, monoatomic, dir)
+        dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic, dir)
+        # run dynamics
+        dyn.run(settings['max_steps'])        
+    else:
+        dyn.run(offset)
+        old_atoms = copy.deepcopy(atoms)
+        pr.initialize_properties_file(atoms, initial_unitcell_atoms, id, decimals, monoatomic, dir)
+        dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic, dir)
+        dyn.run(settings['max_steps'] - offset)
+
     pr.finalize_properties_file(atoms, id, decimals, monoatomic, pr, dir)
-    print('id', id)
     #return temperatures, N, atoms, size
+    print('id', id)
     return id
 
 if __name__ == "__main__":
     start_time = time.time()
-    run_md('MTP', 100, 'Si', '06', 0)
+    run_md('MTP', 100, 'Al', '06', 0)
     print("Ran in %s seconds" % (time.time() - start_time))
     ## calculate specific heat
     #spec_heat = properties.specific_heat(temperatures, N, atoms, size) / 1000 # convert to KJ/K*kg

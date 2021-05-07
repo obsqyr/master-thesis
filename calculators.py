@@ -61,7 +61,9 @@ class KRR_calculator(Calculator):
 
 class MTP_calculator(Calculator):
     def __init__(self, element, timesteps, mtp, eq=0):
-        print("Initializing MTP calculator")
+        #print("Initializing MTP calculator")
+        #super(MTP_calculator, self).__init__()
+        #self.implemented_properties = ['energy', 'forces']
         if eq == 0:
             print("Element: " + element + ". Timesteps: " + str(timesteps) + ". Potential: " + mtp)
             self.mtp_path = 'MTP/mtps_out/' + element + '_' + mtp + '_pot_' + str(timesteps) + '.mtp'
@@ -71,7 +73,6 @@ class MTP_calculator(Calculator):
 
         if not path.exists(self.mtp_path):
             raise ValueError('Chosen potential does not exist')
-        self.name = "Dingus"
         
     def get_potential_energy(self, atoms=None, force_consistent=False):
         cfg_parser.atoms_to_cfg(atoms, 'MTP/atom.cfg')

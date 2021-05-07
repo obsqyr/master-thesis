@@ -37,6 +37,29 @@ def specific_heat(temp_store, N, atoms):
     Cv = ((9*ET**2*N*units._k) / (ET**2 * (6+4*N) - 4*N*ET2)) / z * settings['supercell_size']**3
     return Cv
 
+def specific_heat_NVT(energies, N, atoms, T=300):
+    """Calculates the specific heat for a material.
+    energies (list): The list over all intantaneous total energies of a material once MD has been run.
+    N (int): The total number of atoms in the material.
+    Returns:
+    float: specific heat is returned (J/(K*Kg))
+    """
+    if len(energies) == 0:
+        raise ValueError("energies is empty, invalid value.")
+    steps = len(energies)
+    z = sum(atoms.get_masses()) * units._amu # total mass: atomic units to kg
+    # convert energies from eV to J
+    energies = [i*units._e*N for i in energies]
+    
+    EE = sum(energies)/steps
+    EE2 = sum(np.array(energies)**2)/steps
+    settings = read_settings_file()
+    #Cv = ((9*ET**2*N*units._k) / (ET**2 * (6+4*N) - 4*N*ET2)) / z * settings['supercell_size']**3
+    #T = 300 # assume T always 300 K, try instantaneous temperature also
+    settings = read_settings_file()
+    Cv = (EE2 - EE**2) / (units._k * T**2) / z
+    return Cv
+
 def distance2(pos1, pos2):
     """Calculates the sqared distance between two atomsx in 3D space"""
     return (pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2 + (pos1[2] - pos2[2])**2
@@ -427,24 +450,30 @@ def clean_property_calculations():
 
     print(" -- Removed " + str(counter) + " properties files -- ")
 
-def get_averaged_properties(filename):
+def get_averaged_properties(filename, offset=0):
     '''
     Returns averaged properties from a properties file.
-    Currently limited to Al
+    !!CURRENTLY LIMITED TO AL!!
     Parameters:
     filename (str): filename of the properties file to calculate 
     averages for
+    offset (int): an offset for the time averaging; the time average
+    starts at the offset
     '''
+    # convert offset in timesteps to offest in amount of lines
+    # (assuming that properties are calculated each 100 timesteps)
+    offset = int(offset / 100)
+
     lines = []
     with open('property_calculations/'+filename, 'r') as f:
         for i, line in enumerate(f):
-            if i > 10:
+            if i > 10 + offset:
                 if line == "Time averages:\n":
                     #print('break time')
                     break
                 lines.append(line.split())
     lines = lines[:-1]
-    print(len(lines))
+    #print('lines', len(lines))
 
     # create atoms object
     atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
@@ -458,7 +487,7 @@ def get_averaged_properties(filename):
         MSDs.append(float(line[5]))
         E_tots.append(float(line[3]))
         temps.append(float(line[4]))
-        Cvs.append(specific_heat(temps, len(atoms), atoms))
+        Cvs.append(specific_heat_NVT(E_tots, len(atoms), atoms, temps[-1]))
         
     MSD_averaged = []
     MSD = 0
@@ -486,4 +515,4 @@ def get_averaged_properties(filename):
 
 if __name__ == "__main__":
     #clean_property_calculations()
-    get_averaged_properties('properties_Al_DFT.txt')
+    get_averaged_properties('properties_Al_DFT_eq_0.txt', 2000)
