@@ -415,8 +415,12 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     if final:
         if element == 'Al':
             indeces = [1, 10, 100, 1000, 10000]
+            indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
-            indeces = [1, 10, 100, 1000, 10000]
+            indeces = [10, 100, 1000, 10000]
+            indeces_str = [str(i) for i in indeces]
+        legend = ['DFT']
+        legend.extend(indeces_str)
     else:
         indeces = range(10, 100, 10)
 
@@ -445,18 +449,21 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
 
     # MSD
     # plot DFT data
-    print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
+    #print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
     #plt.scatter(timesteps, MSDs)
     plt.plot(timesteps[int(offset/100):], MSDs, color='black', linewidth=3)
 
     #timesteps = range(0, 9900, 100)
     # all MTP MSDs
     for i, MSDs in enumerate(MSDs_mtp):
-        print('MTP MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
+        #print('MTP MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
         #plt.scatter(timesteps, MSDs[:-1])
         if element == 'Al':
             if mtp == '10' and eq_ts == 0:
-                if i == 2 or i == 3 or i == 4:
+                #if i == 2 or i == 3 or i == 4:
+                if offset != 0:
+                    plt.plot(timesteps[int(offset/100):], MSDs)
+                else:
                     plt.plot(timesteps[int(offset/100):], MSDs[:-1])
             else:
                 # why MSDs[-1]?
@@ -469,7 +476,10 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
                 if i != 1:
                     plt.plot(timesteps, MSDs[:-1])
             else:
-                plt.plot(timesteps, MSDs[:-1])
+                if offset != 0:
+                    plt.plot(timesteps[int(offset/100):], MSDs)
+                else:
+                    plt.plot(timesteps[int(offset/100):], MSDs[:-1])
 
     '''
     for MSD in MSDs_100:
@@ -487,20 +497,20 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     if final:
         if element == 'Al':
             if mtp == '10' and eq_ts == 0:
-                plt.legend(['DFT', '100', '1000', '10000'])
+                plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
             else:
-                plt.legend(['DFT', '1' , '10', '100', '1000', '10000'])
+                plt.legend(legend)
         elif element == 'Si':
             if mtp == '10' and eq_ts == 2000:
                 plt.legend(['DFT', '1', '100', '1000', '10000'])
             else:
-                plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+                plt.legend(legend)
             
         plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'.png')
-    plt.show()
+    #plt.show()
     
     # specific heat
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
@@ -511,11 +521,12 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
         print('remember the ylim')
         #plt.ylim([460, 600])
     elif element == 'Si':
-        plt.ylim([460, 950])
+        print('remember the ylim')
+        #plt.ylim([460, 950])
     #plt.xscale('log')
     timesteps = range(100,10100, 100)
 
-    print(len(timesteps[int(offset/100):]), len(Cvs))
+    #print(len(timesteps[int(offset/100):]), len(Cvs))
     #plt.scatter(timesteps, Cvs)
     plt.plot(timesteps[int(offset/100):], Cvs, color='black', linewidth=3)
 
@@ -536,15 +547,15 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     '''
     if final:
         if element == 'Al':
-            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+            plt.legend(legend)
         elif element == 'Si':
-            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+            plt.legend(legend)
 
         plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'.png')
-    plt.show()
+    #plt.show()
     
     # E_tot
     figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
@@ -554,7 +565,8 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     if element == 'Al':
         plt.ylim([-3.70, -3.645])
     elif element == 'Si':
-        plt.ylim([-8, 4])
+        print('ylim,etot')
+        #plt.ylim([-8, 4])
     #plt.xscale('log')
     timesteps = range(100,10100, 100)
 
@@ -578,15 +590,15 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     '''
     if final:
         if element == 'Al':
-            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+            plt.legend(legend)
         elif element == 'Si':
-            plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
+            plt.legend(legend)
             
         plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'.png')
-    plt.show()
+    #plt.show()
     plt.close('all')
 
 def plot_test(element, eq, mtp, final=False):
@@ -644,7 +656,7 @@ def plot_test(element, eq, mtp, final=False):
     timesteps = range(2000, 9900, 100)
     # all MTP MSDs
     for i, MSDs in enumerate(MSDs_mtp):
-        print('MSDs', len(MSDs), 'timesteps', len(timesteps))
+        #print('MSDs', len(MSDs), 'timesteps', len(timesteps))
         #plt.scatter(timesteps, MSDs[:-1])
         if element == 'Al':
             if mtp == '10' and eq_ts == 0:
@@ -682,16 +694,16 @@ if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
 
-    mtps = ['06', '10']
-    eqs = ['eq_0', 'eq_2000']
-    offsets = [0]
+    mtps = ['06']
+    eqs = ['eq_2000']
+    offsets = [2000]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Al', eq, mtp, True, offset)
-                #plot_properties_convergence('Si', eq, mtp, True)
+                #plot_properties_convergence('Al', eq, mtp, True, offset)
+                plot_properties_convergence('Si', eq, mtp, True, offset)
 
     #plot_forces('all')
     #plot_energies('all')
