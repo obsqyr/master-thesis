@@ -417,7 +417,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
             indeces = [1, 10, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
-            indeces = [10, 100, 1000, 10000]
+            indeces = [10, 100, 1000]
             indeces_str = [str(i) for i in indeces]
         legend = ['DFT']
         legend.extend(indeces_str)
@@ -426,7 +426,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
 
     # get averages from indeces
     for i in indeces:
-        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_'+str(offset)+'_ranfor_10000.txt')
+        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_'+str(offset)+'_ranfor_4000.txt')
         MSDs_mtp.append(MSD)
         Cvs_mtp.append(Cv)
         E_tots_mtp.append(E_tot)
@@ -702,8 +702,8 @@ if __name__ == "__main__":
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                #plot_properties_convergence('Al', eq, mtp, True, offset)
-                plot_properties_convergence('Si', eq, mtp, True, offset)
+                plot_properties_convergence('Al', eq, mtp, True, offset)
+                #plot_properties_convergence('Si', eq, mtp, True, offset)
 
     #plot_forces('all')
     #plot_energies('all')

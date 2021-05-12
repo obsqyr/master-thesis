@@ -446,14 +446,14 @@ def write_potential_alphas(X_pos, potentials):
 
 if __name__ == "__main__":
     # import data from infiles
-    forces, positions, potentials, atom_prop = vp.read_infiles('Si_300K/')
+    forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
     
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
     
     # import atoms from trajectory file
-    traj = Trajectory('Si_300K_infiles/Si.traj')
+    traj = Trajectory('Al_300K_infiles/Al.traj')
     atoms = [atom for atom in traj]
     
     # amount of timesteps is equal to length of potentials
@@ -463,10 +463,15 @@ if __name__ == "__main__":
     forces = divide_data(forces, num_atoms)
     positions = divide_data(positions, num_atoms)
 
-    X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
+    pot_mean = np.mean(np.array(potentials[:10]))
+    print(potentials)
+    print(pot_mean)
+    print(pot_mean - potentials[9001])
 
-    indeces = range(1, 10, 1)
-    write_potentials_MAEs(X_pos, potentials)
+    #X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
+
+    #indeces = range(1, 10, 1)
+    #write_potentials_MAEs(X_pos, potentials)
     #train_and_evaluate_forces(X_pos, forces, indeces)
     #write_potential_alphas(X_pos, potentials)
     '''

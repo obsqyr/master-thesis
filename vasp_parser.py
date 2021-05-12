@@ -230,14 +230,14 @@ def calculate_properties_vasp(element, eq):
     return MSD_averaged, Cvs_averaged
     
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
-    clear_infiles("Si_300K/")
+    #clear_infiles("Al_300K/")
+    #clear_infiles("Si_300K/")
     
-    vasp_read("Al_300K/", "xml")
-    vasp_read("Si_300K/", "OUTCAR")
+    #vasp_read("Al_300K/", "xml")
+    #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
-    calculate_properties_vasp('Si', 0)
-    calculate_properties_vasp('Al', 0)
-    calculate_properties_vasp('Si', 2000)
-    calculate_properties_vasp('Al', 2000)
+    #calculate_properties_vasp('Si', 0)
+    #calculate_properties_vasp('Al', 0)
+    #calculate_properties_vasp('Si', 6000)
+    calculate_properties_vasp('Al', 6000)

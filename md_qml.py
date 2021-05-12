@@ -149,7 +149,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
         dyn.attach(pr.calc_properties, 100, old_atoms, atoms, id, decimals, monoatomic, dir)
         dyn.run(settings['max_steps'] - offset)
 
-    pr.finalize_properties_file(atoms, id, decimals, monoatomic, pr, dir)
+    pr.finalize_properties_file(atoms, id, decimals, monoatomic, False, dir)
     #return temperatures, N, atoms, size
     print('id', id)
     return id
