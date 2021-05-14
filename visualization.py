@@ -426,7 +426,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
 
     # get averages from indeces
     for i in indeces:
-        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_'+str(offset)+'_ranfor_4000.txt')
+        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_'+str(offset)+'_ranfor_10000.txt')
         MSDs_mtp.append(MSD)
         Cvs_mtp.append(Cv)
         E_tots_mtp.append(E_tot)
@@ -442,7 +442,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     elif element == 'Si':
         j = '1000'
     for i in range(0,10,1):
-        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_'+j+'_eq_'+str(eq_ts)+'_ranfor_10000.txt')
+        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_'+j+'_eq_'+str(eq_ts)+'_offset_'+str(offset)+'_ranfor_10000.txt')
         MSDs_100.append(MSD)
         Cvs_100.append(Cv)
         E_tots_100.append(E_tot)
@@ -481,17 +481,16 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
                 else:
                     plt.plot(timesteps[int(offset/100):], MSDs[:-1])
 
-    '''
+    
     for MSD in MSDs_100:
         #plt.scatter(timesteps, Cv[:-1])
         if element == 'Al':
-            plt.plot(timesteps, MSD[:-1], color='orange', alpha=0.3)
+            plt.plot(timesteps[int(offset/100):], MSD, color='orange', alpha=0.3)
         elif element == 'Si':
             if mtp == '10' and eq_ts == 2000:
                 plt.plot(timesteps, MSD[:-1], color='green', alpha=0.3)
             else:
                 plt.plot(timesteps, MSD[:-1], color='red', alpha=0.3)
-    '''
     
     #plt.grid(True)
     if final:
@@ -537,14 +536,14 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
         else:
             plt.plot(timesteps[int(offset/100):], Cv[:-1])
 
-    '''
+    
     for Cv in Cvs_100:
         #plt.scatter(timesteps, Cv[:-1])
         if element == 'Al':
-            plt.plot(timesteps, Cv[:-1], color='orange', alpha=0.3)
+            plt.plot(timesteps[int(offset/100):], Cv, color='orange', alpha=0.3)
         elif element == 'Si':
             plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
-    '''
+    
     if final:
         if element == 'Al':
             plt.legend(legend)
@@ -580,14 +579,14 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
         else:
             plt.plot(timesteps[int(offset/100):], E_tot[:-1])
     
-    '''
+    
     for E_tot in E_tots_100:
         #print('plotting E_tots_100', E_tot[:-1])
         if element == 'Al':
-            plt.plot(timesteps, E_tot[:-1], color='orange', alpha=0.3)
+            plt.plot(timesteps[int(offset/100):], E_tot, color='orange', alpha=0.3)
         elif element == 'Si':
             plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
-    '''
+    
     if final:
         if element == 'Al':
             plt.legend(legend)
