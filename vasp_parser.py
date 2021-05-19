@@ -7,7 +7,7 @@ import properties as pr
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 
 # Global variables
-infiles = ['forces.infile', 'positions.infile', 'potentials.infile', 'numatoms.infile']
+infiles = ['forces.infile', 'positions.infile', 'potentials.infile', 'numatoms.infile', 'velocities.npy']
     
 def vasp_read(directory, filetype):
     '''
@@ -39,15 +39,25 @@ def vasp_read(directory, filetype):
 
     # write relevant data to file
     first = True
+    velocities = []
     for i, atom in enumerate(atoms):
         if first:
+            prev_atom = atom
             traj.write(atom)
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/', True)
             first = False
         else:
+            v = atom.get_positions() - prev_atom.get_positions()
+            velocities.append(v)
+            prev_atom = atom
+            
             traj.write(atom)
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/')
-            
+    print(len(velocities))
+    velocities = np.array(velocities)
+    # write velocities to file
+    np.save(directory[:-1]+'_infiles/'+'velocities.npy', velocities)
+        
 def write_atom_to_infiles(atoms, directory, num=False):
     '''
     Writes an atom object to files. Writes forces, positions, 
@@ -107,17 +117,27 @@ def calculate_properties_vasp(element, eq):
     pr.initialize_properties_file(atoms[1], atoms[0][:4], id, 5, True) 
     #for atom in atoms:
     print('atoms', atoms[0])
-    #for atom in atoms:
-        #print('before', atom.get_momenta())
-    #    MaxwellBoltzmannDistribution(atom, temperature_K = 300)
-        #print('after', atom.get_momenta())
+    velocities = np.load(element +'_300K_infiles/velocities.npy')
+    #print(velocities.shape)
+    print(velocities[0])
+    for atom in atoms:
+        #print('before', atom.get_velocities())
+        MaxwellBoltzmannDistribution(atom, temperature_K = 300)
+        print('after', atom.get_velocities())
     MSDs = []
     Cvs = []
     temps = []
     
     for i in range(len(atoms) - eq):
         i += eq
+        # add velocities for all atoms but the last (since the
+        # last atom is not going to be moved)
+        if i != len(atoms) - 1:
+        #    print(i)
+            atoms[i].set_velocities(velocities[i])
         #print(atom.get_forces())
+        #print(atoms[i].get_positions())
+        #print(atoms[i].get_momenta())
         if i % 100 == 0:
             #print(i)
             _, _, _, t = pr.energies_and_temp(atoms[i])
@@ -158,4 +178,4 @@ if __name__ == "__main__":
     #calculate_properties_vasp('Si', 0)
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
-    calculate_properties_vasp('Al', 2000)
+    calculate_properties_vasp('Al', 0)

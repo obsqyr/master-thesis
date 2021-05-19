@@ -387,7 +387,7 @@ def plot_forces_sphere():
     plt.savefig('figures/Al_average_force_length_MAE_sphere.png')
     plt.show()
 
-def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
+def plot_properties_convergence(element, eq, mtp, final=False, offset=0, variance=False):
     '''
     Plot time averages of properties to check whether or not
     they converge. 
@@ -400,7 +400,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     eq_ts = int(eq[3:])
     
     # MSD
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("MSD convergence, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ", offset " + str(offset))
     plt.xlabel('timesteps')
     plt.ylabel('MSD [Å^2]')
@@ -414,7 +414,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     
     if final:
         if element == 'Al':
-            indeces = [1, 10, 100, 1000, 10000]
+            indeces = [1, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
             indeces = [10, 100, 1000]
@@ -434,24 +434,25 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
         
     # get averages for mtp trained for 100 timesteps many times 
     # !! UPDATE THIS TO USE OFFSET !! 
-    MSDs_100 = []
-    Cvs_100 = []
-    E_tots_100 = []
-    if element == 'Al':
-        j = '100'
-    elif element == 'Si':
-        j = '1000'
-    for i in range(0,10,1):
-        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_'+j+'_eq_'+str(eq_ts)+'_offset_'+str(offset)+'_ranfor_10000.txt')
-        MSDs_100.append(MSD)
-        Cvs_100.append(Cv)
-        E_tots_100.append(E_tot)
+    if variance:
+        MSDs_100 = []
+        Cvs_100 = []
+        E_tots_100 = []
+        if element == 'Al':
+            j = '100'
+        elif element == 'Si':
+            j = '1000'
+        for i in range(0,10,1):
+            MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_'+j+'_eq_'+str(eq_ts)+'_offset_'+str(offset)+'_ranfor_10000.txt')
+            MSDs_100.append(MSD)
+            Cvs_100.append(Cv)
+            E_tots_100.append(E_tot)
 
-    # MSD
-    # plot DFT data
-    #print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
-    #plt.scatter(timesteps, MSDs)
-    plt.plot(timesteps[int(offset/100):], MSDs, color='black', linewidth=3)
+        # MSD
+        # plot DFT data
+        #print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
+        #plt.scatter(timesteps, MSDs)
+        plt.plot(timesteps[int(offset/100):], MSDs, color='black', linewidth=3)
 
     #timesteps = range(0, 9900, 100)
     # all MTP MSDs
@@ -481,16 +482,16 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
                 else:
                     plt.plot(timesteps[int(offset/100):], MSDs[:-1])
 
-    
-    for MSD in MSDs_100:
-        #plt.scatter(timesteps, Cv[:-1])
-        if element == 'Al':
-            plt.plot(timesteps[int(offset/100):], MSD, color='orange', alpha=0.3)
-        elif element == 'Si':
-            if mtp == '10' and eq_ts == 2000:
-                plt.plot(timesteps, MSD[:-1], color='green', alpha=0.3)
-            else:
-                plt.plot(timesteps, MSD[:-1], color='red', alpha=0.3)
+    if variance:
+        for MSD in MSDs_100:
+            #plt.scatter(timesteps, Cv[:-1])
+            if element == 'Al':
+                plt.plot(timesteps[int(offset/100):], MSD, color='orange', alpha=0.3)
+            elif element == 'Si':
+                if mtp == '10' and eq_ts == 2000:
+                    plt.plot(timesteps, MSD[:-1], color='green', alpha=0.3)
+                else:
+                    plt.plot(timesteps, MSD[:-1], color='red', alpha=0.3)
     
     #plt.grid(True)
     if final:
@@ -512,7 +513,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     #plt.show()
     
     # specific heat
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Specific heat capacity convergence, "+ element +", MTP " +mtp+ ", eq. at " + str(eq_ts) + ", offset " + str(offset))
     plt.xlabel('timesteps')
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
@@ -536,13 +537,13 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
         else:
             plt.plot(timesteps[int(offset/100):], Cv[:-1])
 
-    
-    for Cv in Cvs_100:
-        #plt.scatter(timesteps, Cv[:-1])
-        if element == 'Al':
-            plt.plot(timesteps[int(offset/100):], Cv, color='orange', alpha=0.3)
-        elif element == 'Si':
-            plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
+    if variance:
+        for Cv in Cvs_100:
+            #plt.scatter(timesteps, Cv[:-1])
+            if element == 'Al':
+                plt.plot(timesteps[int(offset/100):], Cv, color='orange', alpha=0.3)
+            elif element == 'Si':
+                plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
     
     if final:
         if element == 'Al':
@@ -557,7 +558,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
     #plt.show()
     
     # E_tot
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Total energy, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ', offset ' + str(offset))
     plt.xlabel('timesteps')
     plt.ylabel('total energy [eV/atom]')
@@ -579,13 +580,13 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0):
         else:
             plt.plot(timesteps[int(offset/100):], E_tot[:-1])
     
-    
-    for E_tot in E_tots_100:
-        #print('plotting E_tots_100', E_tot[:-1])
-        if element == 'Al':
-            plt.plot(timesteps[int(offset/100):], E_tot, color='orange', alpha=0.3)
-        elif element == 'Si':
-            plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
+    if variance:
+        for E_tot in E_tots_100:
+            #print('plotting E_tots_100', E_tot[:-1])
+            if element == 'Al':
+                plt.plot(timesteps[int(offset/100):], E_tot, color='orange', alpha=0.3)
+            elif element == 'Si':
+                plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
     
     if final:
         if element == 'Al':
@@ -694,14 +695,14 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_2000']
-    offsets = [2000]
+    eqs = ['eq_0']
+    offsets = [0]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Al', eq, mtp, True, offset)
+                plot_properties_convergence('Al', eq, mtp, True, offset, False)
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
 
     #plot_forces('all')

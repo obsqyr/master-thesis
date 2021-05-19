@@ -359,13 +359,13 @@ def finalize_properties_file(a, id, d, ma, dft=False, dir=""):
     settings = read_settings_file()
     f=open("property_calculations/"+dir+"properties_"+id+".txt", "r")
     f_lines = f.readlines()
-    dft = True
+    #dft = True
     if dft:
         steps = int(8000/100)
     else:
         steps = math.floor(settings['max_steps'] / settings['interval'])
-    print('dft', dft)
-    print('steps', steps)
+    print('properties.py: dft', dft)
+    print('properties.py: steps', steps)
     for line in f_lines[-steps:]:
         #print('line', line)
         epot.append(float(line.split()[1]))
