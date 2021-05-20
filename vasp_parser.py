@@ -120,10 +120,10 @@ def calculate_properties_vasp(element, eq):
     velocities = np.load(element +'_300K_infiles/velocities.npy')
     #print(velocities.shape)
     print(velocities[0])
-    for atom in atoms:
+    #for atom in atoms:
         #print('before', atom.get_velocities())
-        MaxwellBoltzmannDistribution(atom, temperature_K = 300)
-        print('after', atom.get_velocities())
+        #MaxwellBoltzmannDistribution(atom, temperature_K = 300)
+        #print('after', atom.get_velocities())
     MSDs = []
     Cvs = []
     temps = []
@@ -132,9 +132,9 @@ def calculate_properties_vasp(element, eq):
         i += eq
         # add velocities for all atoms but the last (since the
         # last atom is not going to be moved)
-        if i != len(atoms) - 1:
+        #if i != len(atoms) - 1:
         #    print(i)
-            atoms[i].set_velocities(velocities[i])
+        #    atoms[i].set_velocities(velocities[i])
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
         #print(atoms[i].get_momenta())
