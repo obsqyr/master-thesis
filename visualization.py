@@ -414,7 +414,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     if final:
         if element == 'Al':
-            indeces = [10, 100, 1000, 10000]
+            indeces = [100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
             indeces = [10, 100, 1000]
@@ -448,11 +448,12 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             Cvs_100.append(Cv)
             E_tots_100.append(E_tot)
 
-        # MSD
-        # plot DFT data
-        #print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
-        #plt.scatter(timesteps, MSDs)
-        plt.plot(timesteps[int(offset/100):], MSDs, color='black', linewidth=3)
+    # MSD
+    # plot DFT data
+    #print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
+    #plt.scatter(timesteps, MSDs)
+    print('MSDs form DFT', MSDs)
+    plt.plot(timesteps[int(offset/100):], MSDs, color='black', linewidth=3)
 
     #timesteps = range(0, 9900, 100)
     # all MTP MSDs
@@ -695,7 +696,7 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_2000']
+    eqs = ['eq_0', 'eq_2000']
     offsets = [0]
     
     for mtp in mtps:

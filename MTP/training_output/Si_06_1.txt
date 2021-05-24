@@ -1,0 +1,179 @@
+MTPR from untrained_mtps/06.mtp, Database: cfg_train/Si_train_1.cfg
+validation set: cfg_test/Si_test_1000.cfg
+Random initialization of radial coefficients
+Rescaling...
+   scaling = 0.833333333333333, condition number = 86.6393174596068
+   scaling = 0.909090909090909, condition number = 97.8435333709888
+   scaling = 1, condition number = 113.510182168914
+   scaling = 1.1, condition number = 132.033692180051
+   scaling = 1.2, condition number = 154.974802332525
+Rescaling to 0.833333333333333... done
+Rescaling...
+   scaling = 0.694444444444445, condition number = 68.3657023272105
+   scaling = 0.757575757575758, condition number = 75.0740595701213
+   scaling = 0.833333333333333, condition number = 87.4032513062311
+   scaling = 0.916666666666667, condition number = 98.4202216341885
+   scaling = 1, condition number = 113.510182169238
+Rescaling to 0.694444444444445... done
+Rescaling...
+   scaling = 0.578703703703704, condition number = 53.958013988739
+   scaling = 0.631313131313131, condition number = 60.5539449879799
+   scaling = 0.694444444444445, condition number = 68.3657023272105
+   scaling = 0.763888888888889, condition number = 76.3108517043691
+   scaling = 0.833333333333333, condition number = 87.4032513062311
+Rescaling to 0.578703703703704... done
+Rescaling...
+   scaling = 0.482253086419753, condition number = 44.5319630206527
+   scaling = 0.526094276094276, condition number = 48.9614164210062
+   scaling = 0.578703703703704, condition number = 53.958013988739
+   scaling = 0.636574074074074, condition number = 60.4348602608121
+   scaling = 0.694444444444445, condition number = 68.3657023272105
+Rescaling to 0.482253086419753... done
+Rescaling...
+   scaling = 0.401877572016461, condition number = 37.4180103293651
+   scaling = 0.43841189674523, condition number = 41.0753880123293
+   scaling = 0.482253086419753, condition number = 44.5319630206527
+   scaling = 0.530478395061729, condition number = 50.0293651475148
+   scaling = 0.578703703703704, condition number = 53.958013988739
+Rescaling to 0.401877572016461... done
+Rescaling...
+   scaling = 0.334897976680384, condition number = 30.5886536820972
+   scaling = 0.365343247287692, condition number = 33.9985942246055
+   scaling = 0.401877572016461, condition number = 37.4180103293651
+   scaling = 0.442065329218107, condition number = 41.4921390314317
+   scaling = 0.482253086419753, condition number = 44.5737480443594
+Rescaling to 0.334897976680384... done
+Rescaling...
+   scaling = 0.279081647233653, condition number = 25.5707888913848
+   scaling = 0.304452706073077, condition number = 28.1655543268091
+   scaling = 0.334897976680384, condition number = 30.5886536820972
+   scaling = 0.368387774348423, condition number = 33.900190625788
+   scaling = 0.401877572016461, condition number = 37.4180103293651
+Rescaling to 0.279081647233653... done
+Rescaling...
+   scaling = 0.232568039361378, condition number = 23.5081318934132
+   scaling = 0.25371058839423, condition number = 23.3558611138392
+   scaling = 0.279081647233653, condition number = 25.5707888913848
+   scaling = 0.306989811957019, condition number = 27.9258552307356
+   scaling = 0.334897976680384, condition number = 30.5886536820972
+Rescaling to 0.25371058839423... done
+Rescaling...
+   scaling = 0.211425490328525, condition number = 28.6994330958629
+   scaling = 0.2306459894493, condition number = 23.9177992773429
+   scaling = 0.25371058839423, condition number = 23.3558611138392
+   scaling = 0.279081647233653, condition number = 25.5707888913848
+   scaling = 0.304452706073076, condition number = 28.2129547722493
+Rescaling to 0.25371058839423... done
+Pre-training started
+MTPR parallel training started
+BFGS iter 0: f=1.30296e-10
+BFGS ended due to small decr. for 1 iteration
+BFGS iter 1: f=1.30296e-10
+MTPR training ended
+Rescaling...
+   scaling = 0.211425490328525, condition number = 28.6443441083428
+   scaling = 0.2306459894493, condition number = 23.8999852207057
+   scaling = 0.25371058839423, condition number = 23.3688473949014
+   scaling = 0.279081647233653, condition number = 25.657460116442
+   scaling = 0.304452706073076, condition number = 28.1256137589747
+Rescaling to 0.25371058839423... done
+Pre-training ended
+BFGS iterations count set to 1000
+BFGS convergence tolerance set to 0.001
+Energy weight: 1
+Force weight: 0.01
+Stress weight: 0.001
+MTPR parallel training started
+BFGS iter 0: f=1.30296e-10
+BFGS ended due to small decr. for 1 iteration
+BFGS iter 1: f=1.30296e-10
+MTPR training ended
+Rescaling...
+   scaling = 0.211425490328525, condition number = 28.6793591748625
+   scaling = 0.2306459894493, condition number = 23.9186094954686
+   scaling = 0.25371058839423, condition number = 23.2672178699357
+   scaling = 0.279081647233653, condition number = 25.634754803304
+   scaling = 0.304452706073076, condition number = 28.2283308223901
+Rescaling to 0.25371058839423... done
+
+		* * * TRAIN ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1 configurations
+	Maximal absolute difference = 3.26139e-12
+	Average absolute difference = 3.26139e-12
+	RMS     absolute difference = 3.26139e-12
+
+Energy per atom:
+	Errors checked for 1 configurations
+	Maximal absolute difference = 4.07674e-13
+	Average absolute difference = 4.07674e-13
+	RMS     absolute difference = 4.07674e-13
+
+Forces:
+	Errors checked for 8 atoms
+	Maximal absolute difference = 5.32635e-05
+	Average absolute difference = 1.23682e-05
+	RMS     absolute difference = 2.25058e-05
+	Max(ForceDiff) / Max(Force) = 1
+	RMS(ForceDiff) / RMS(Force) = 0.994301
+
+Stresses (in eV):
+	Errors checked for 1 configurations
+	Maximal absolute difference = 0.000264323
+	Average absolute difference = 2.93692e-05
+	RMS     absolute difference = 8.81077e-05
+	Max(StresDiff) / Max(Stres) = 0.0122698
+	RMS(StresDiff) / RMS(Stres) = 0.0122698
+
+Stresses (in GPa):
+	Errors checked for 1 configurations
+	Maximal absolute difference = 0.000258908
+	Average absolute difference = 2.87676e-05
+	RMS     absolute difference = 8.63027e-05
+	Max(StresDiff) / Max(Stres) = 0.0122698
+	RMS(StresDiff) / RMS(Stres) = 0.0122698
+_______________________________________________
+
+
+		* * * VALIDATION ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.924026
+	Average absolute difference = 0.478768
+	RMS     absolute difference = 0.511656
+
+Energy per atom:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.115503
+	Average absolute difference = 0.059846
+	RMS     absolute difference = 0.063957
+
+Forces:
+	Errors checked for 8000 atoms
+	Maximal absolute difference = 6.49053
+	Average absolute difference = 0.51619
+	RMS     absolute difference = 1.01383
+	Max(ForceDiff) / Max(Force) = 2.57547
+	RMS(ForceDiff) / RMS(Force) = 1.65206
+
+Stresses (in eV):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 12.3533
+	Average absolute difference = 0.652151
+	RMS     absolute difference = 2.06825
+	Max(StresDiff) / Max(Stres) = 2.97101
+	RMS(StresDiff) / RMS(Stres) = 2.70157
+
+Stresses (in GPa):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 12.1003
+	Average absolute difference = 0.63879
+	RMS     absolute difference = 2.02588
+	Max(StresDiff) / Max(Stres) = 2.97101
+	RMS(StresDiff) / RMS(Stres) = 2.70157
+_______________________________________________
+

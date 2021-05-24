@@ -12,6 +12,26 @@ from read_settings import read_settings_file
 
 # This file contains functions to calculate material properties
 
+def normalize_half(vec):
+    '''
+    input:
+    np.array of dimension 3 (position vector)
+    Add/remove an integer +/-N to each element to place it in 
+    the range [-1/2,1/2)
+    This is useful to find the shortest vector C between two 
+    points A, B in a space with periodic boundary conditions [0,1):
+           C = (A-B).normalize_half()
+    '''
+    temp = []
+    for v in vec:
+        if v > 0.5:
+            temp.append(v-1)
+        elif v < -0.5:
+            temp.append(v+1)
+        else:
+            temp.append(v)
+    return np.array(temp)
+
 def specific_heat(temp_store, N, atoms):
     """Calculates the specific heat for a material.
     Given by the formula: (E[T²] - E[T]²)/ E[T]² = 3*2^-1*N^-1*(1-3*N*Kb*2^-1*Cv^-1).
@@ -98,26 +118,6 @@ def meansquaredisp(atoms, old_atoms):
     if length != len(old_pos):
         raise TypeError("Number of atoms doesnt match.")
         sys.exit('ERROR')
-
-    def normalize_half(vec):
-        '''
-        input:
-        np.array of dimension 3 (position vector)
-        Add/remove an integer +/-N to each element to place it in 
-        the range [-1/2,1/2)
-        This is useful to find the shortest vector C between two 
-        points A, B in a space with periodic boundary conditions [0,1):
-           C = (A-B).normalize_half()
-        '''
-        temp = []
-        for v in vec:
-            if v > 0.5:
-                temp.append(v-1)
-            elif v < -0.5:
-                temp.append(v+1)
-            else:
-                temp.append(v)
-        return np.array(temp)
 
     msd = 0.0
     #msd_np = 0.0

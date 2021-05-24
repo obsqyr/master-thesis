@@ -874,9 +874,45 @@ def plot_learning_curves_log():
     plt.savefig('figures/Si_forces_MAE_learning_curves.png')
     #plt.show()
 
+def plot_mtp_training_and_validation_errors():
+    # ALUMINIUM
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Energy per atom average absolute difference, Al MTP 06")
+    plt.xlabel('timesteps')
+    plt.ylabel('Error [eV]')
+    timesteps = [1, 10, 100, 1000, 8000]
+    tr_er = [3.44613e-13, 2.82733e-05, 0.000246437, 0.000578199, 0.000501822]
+    val_er = [0.208856, 0.0107632, 0.000615748, 0.000662907, 0.000595121]
+    plt.xscale('log')
+    plt.scatter(timesteps, tr_er)
+    plt.scatter(timesteps, val_er)
+    plt.plot(timesteps, tr_er)
+    plt.plot(timesteps, val_er)
+    
+    plt.legend(['training', 'validation'])
+    plt.savefig('figures/Al_errors.png')
+
+    # SILICON
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Energy per atom average absolute difference, Si MTP 06")
+    plt.xlabel('timesteps')
+    plt.ylabel('Error [eV]')
+    timesteps = [1, 10, 100, 1000, 8000]
+    tr_er = [4.16556e-13, 4.4692e-06, ]
+    val_er = [2.61792, 54.5452, ]
+    plt.xscale('log')
+    plt.scatter(timesteps, tr_er)
+    plt.scatter(timesteps, val_er)
+    plt.plot(timesteps, tr_er)
+    plt.plot(timesteps, val_er)
+    
+    plt.legend(['training', 'validation'])
+    plt.savefig('figures/Si_errors.png')
+
 if __name__ == "__main__":
     #plot_mtp_closer_to_zero()
-    plot_mtp_cv()
+    #plot_mtp_cv()
     #plot_mtp_log()
     #plot_learning_curves_log()
-    
+    plot_mtp_training_and_validation_errors()
+        

@@ -47,7 +47,28 @@ def vasp_read(directory, filetype):
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/', True)
             first = False
         else:
-            v = atom.get_positions() - prev_atom.get_positions()
+            # only support for cubic unit cells
+            unit_cell = atom.get_cell()
+            #print('unit_cell', list(unit_cell)[0][0])
+            l = list(unit_cell)[0][0]
+            if l == 0:
+                l = list(unit_cell)[0][1]
+            print('l', l)
+
+            # convert positions to fractional form
+            pos = atom.get_positions()
+            old_pos = prev_atom.get_positions()
+            pos = np.array([i/l for i in pos])
+            old_pos = np.array([i/l for i in old_pos])
+            
+            #v = atom.get_positions() - prev_atom.get_positions()
+            v = pos - old_pos
+            v = [pr.normalize_half(i) for i in v]
+            print('v normalized', v)
+            #print('atom pos', atom.get_positions())
+            #print('prev_atom pos', prev_atom.get_positions())
+            # does this factor of 10 make sense?
+            v = np.array([i*l*10 for i in v])
             velocities.append(v)
             prev_atom = atom
             
@@ -55,6 +76,7 @@ def vasp_read(directory, filetype):
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/')
     print(len(velocities))
     velocities = np.array(velocities)
+    #print(velocities[:10])
     # write velocities to file
     np.save(directory[:-1]+'_infiles/'+'velocities.npy', velocities)
         
@@ -118,12 +140,12 @@ def calculate_properties_vasp(element, eq):
     #for atom in atoms:
     print('atoms', atoms[0])
     velocities = np.load(element +'_300K_infiles/velocities.npy')
-    #print(velocities.shape)
-    print(velocities[0])
+    print(velocities[:10])
+    #print(velocities[0])
     #for atom in atoms:
-        #print('before', atom.get_velocities())
-        #MaxwellBoltzmannDistribution(atom, temperature_K = 300)
-        #print('after', atom.get_velocities())
+    #    print('before', atom.get_velocities())
+    #    MaxwellBoltzmannDistribution(atom, temperature_K = 300)
+    #    print('after', atom.get_velocities())
     MSDs = []
     Cvs = []
     temps = []
@@ -132,9 +154,10 @@ def calculate_properties_vasp(element, eq):
         i += eq
         # add velocities for all atoms but the last (since the
         # last atom is not going to be moved)
-        #if i != len(atoms) - 1:
+        if i != len(atoms) - 1:
         #    print(i)
-        #    atoms[i].set_velocities(velocities[i])
+            atoms[i].set_velocities(velocities[i])
+            print(atoms[i].get_velocities())
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
         #print(atoms[i].get_momenta())
@@ -168,10 +191,10 @@ def calculate_properties_vasp(element, eq):
     return MSD_averaged, Cvs_averaged
     
 if __name__ == "__main__":
-    #clear_infiles("Al_300K/")
+    clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    #vasp_read("Al_300K/", "xml")
+    vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
