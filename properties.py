@@ -174,7 +174,7 @@ def lattice_constants(a):
     """
 
     s = read_settings_file()['supercell_size']
-    lc = list(a.get_cell_lengths_and_angles())
+    lc = a.cell.cellpar()
     return [lc[0]/s, lc[1]/s, lc[2]/s]
 
 def volume_pressure(a):
@@ -202,10 +202,13 @@ def debye_lindemann(a, msd, temp):
     list: list of debye temperature and lindemann criterion.
     """
     s = read_settings_file()
-    debye = math.sqrt(9 * units._hbar**2 * temp / (units._k * a.get_masses()[0] * units._amu * msd) * units.m**2)
+    if msd != 0:
+        debye = math.sqrt(9 * units._hbar**2 * temp / (units._k * a.get_masses()[0] * units._amu * msd) * units.m**2)
+    else:
+        debye = 0
     z = s['supercell_size']
     n = len(a) / z**3
-    lc = a.get_cell_lengths_and_angles()[0:3]
+    lc = a.cell.cellpar()[0:3]
     if n == 1:
         nnd = min(lc)
     elif n == 2:

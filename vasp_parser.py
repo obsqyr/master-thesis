@@ -50,7 +50,7 @@ def vasp_read(directory, filetype):
             # only support for cubic unit cells
             unit_cell = atom.get_cell()
             print('unit_cell', unit_cell)
-            print('masses', atom.get_masses())
+            #print('masses', atom.get_masses())
             #print('unit_cell', list(unit_cell)[0][0])
             l = list(unit_cell)[0][0]
             if l == 0:
@@ -66,12 +66,12 @@ def vasp_read(directory, filetype):
             #v = atom.get_positions() - prev_atom.get_positions()
             v = pos - old_pos # unit: 1 / fs
             v = [pr.normalize_half(i,l) for i in v]
-            print('v normalized', np.array(v))
+            #print('v normalized', np.array(v))
             #print('atom pos', atom.get_positions())
             #print('prev_atom pos', prev_atom.get_positions())
             # does this factor of 10 make sense?
             v = np.array([i*l for i in v]) # unit: Å / fs
-            #print('v in Å', v)
+            print('v in Å', v)
             velocities.append(v)
             prev_atom = atom
             
