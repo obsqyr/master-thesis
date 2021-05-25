@@ -47,39 +47,42 @@ def vasp_read(directory, filetype):
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/', True)
             first = False
         else:
-            # only support for cubic unit cells
+            # get unit cell of atom
             unit_cell = atom.get_cell()
-            print('unit_cell', unit_cell)
-            #print('masses', atom.get_masses())
-            #print('unit_cell', list(unit_cell)[0][0])
             l = list(unit_cell)[0][0]
-            if l == 0:
-                l = list(unit_cell)[0][1]
-            print('l', l)
-
-            # convert positions to fractional form
+            
+            # get positions of current and previous atom
             pos = atom.get_positions()
             old_pos = prev_atom.get_positions()
-            pos = np.array([i/l for i in pos])
-            old_pos = np.array([i/l for i in old_pos])
             
-            #v = atom.get_positions() - prev_atom.get_positions()
+            # convert positions to fractional form
+            pos = unit_cell.scaled_positions(pos) 
+            old_pos = unit_cell.scaled_positions(old_pos)
+            # this is an option for getting scaled positions
+            #print('scaled atom pos', atom.get_scaled_positions())
+            
+            # check if any values in the fractional form pos
+            # matrix is larger than 1. This would mean that an
+            # atom is outside the unit cell.
+            if (np.asarray(pos) > 1).sum() != 0:
+                raise ValueError('Value in fractional form pos matrix is larger than 1, i.e. an atom is outside the unit cell')
+
+            # calculate velocity
             v = pos - old_pos # unit: 1 / fs
-            v = [pr.normalize_half(i,l) for i in v]
-            #print('v normalized', np.array(v))
-            #print('atom pos', atom.get_positions())
-            #print('prev_atom pos', prev_atom.get_positions())
+            v = [pr.normalize_half(i) for i in v]
+            
             # does this factor of 10 make sense?
-            v = np.array([i*l for i in v]) # unit: Å / fs
+            v = unit_cell.cartesian_positions(v) # unit: Å / fs
+            #v = np.array([i*l for i in v]) # unit: Å / fs
+            #print('my v in Å', v)
             print('v in Å', v)
             velocities.append(v)
             prev_atom = atom
             
             traj.write(atom)
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/')
-    print(len(velocities))
+    
     velocities = np.array(velocities)
-    #print(velocities[:10])
     # write velocities to file
     np.save(directory[:-1]+'_infiles/'+'velocities.npy', velocities)
         
@@ -159,7 +162,7 @@ def calculate_properties_vasp(element, eq):
         # last atom is not going to be moved)
         if i != len(atoms) - 1:
         #    print(i)
-            atoms[i].set_velocities(velocities[i])
+            atoms[i].set_velocities(velocities[i]*10)
             #print(atoms[i].get_velocities())
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
@@ -167,8 +170,10 @@ def calculate_properties_vasp(element, eq):
         if i % 100 == 0:
             #print(i)
             _, _, _, t = pr.energies_and_temp(atoms[i])
+            print('get temperature', atoms[i].get_temperature())
+            print('my temperature', t)
             temps.append(t)
-            Cvs.append(pr.specific_heat(temps, len(atoms[i]), atoms[i]))
+            Cvs.append(pr.specific_heat_NVT(temps, len(atoms[i]), atoms[i]))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
@@ -182,7 +187,7 @@ def calculate_properties_vasp(element, eq):
             MSD_averaged.append(MSD / i)
             #print('MSD / i', MSD / i)
             #print(MSD/(i), MSD, i)
-    print('MSD_averaged', len(MSD_averaged))
+    print('MSD_averaged', MSD_averaged)
     
     # show whether or not specific heat converges
     Cvs_averaged = []
@@ -190,14 +195,15 @@ def calculate_properties_vasp(element, eq):
     for i, c in enumerate(Cvs):
         Cv += c
         Cvs_averaged.append(Cv / (i+1))
+    print('Cvs_averaged', Cvs)
 
     return MSD_averaged, Cvs_averaged
     
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
+    #clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    vasp_read("Al_300K/", "xml")
+    #vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    

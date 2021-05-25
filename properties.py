@@ -13,7 +13,7 @@ from read_settings import read_settings_file
 
 # This file contains functions to calculate material properties
 
-def normalize_half(vec, l=1):
+def normalize_half(vec):
     '''
     input:
     np.array of dimension 3 (position vector)
@@ -542,4 +542,4 @@ if __name__ == "__main__":
     vec_1 = np.array([8.0803606, 8.0780096, 8.0762162])
 
     v = vec_0 - vec_1
-    print(normalize_half(v, 8.0804))
+    print(normalize_half(v))
