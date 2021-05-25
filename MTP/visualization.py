@@ -883,13 +883,21 @@ def plot_mtp_training_and_validation_errors():
     timesteps = [1, 10, 100, 1000, 8000]
     tr_er = [3.44613e-13, 2.82733e-05, 0.000246437, 0.000578199, 0.000501822]
     val_er = [0.208856, 0.0107632, 0.000615748, 0.000662907, 0.000595121]
+    tr_er_2 = [1.83409e-13, 2.58173e-05, 0.000436566, 0.000517493, 0.00051914]
+    val_er_2 = [0.0616174, 0.00512976, 0.000632198, 0.000577663, 0.000565452]
     plt.xscale('log')
+    plt.yscale('log')
     plt.scatter(timesteps, tr_er)
     plt.scatter(timesteps, val_er)
     plt.plot(timesteps, tr_er)
     plt.plot(timesteps, val_er)
+
+    plt.scatter(timesteps, tr_er_2)
+    plt.scatter(timesteps, val_er_2)
+    plt.plot(timesteps, tr_er_2)
+    plt.plot(timesteps, val_er_2)
     
-    plt.legend(['training', 'validation'])
+    plt.legend(['training', 'validation', 'training2', 'validation2'])
     plt.savefig('figures/Al_errors.png')
 
     # SILICON
@@ -898,9 +906,10 @@ def plot_mtp_training_and_validation_errors():
     plt.xlabel('timesteps')
     plt.ylabel('Error [eV]')
     timesteps = [1, 10, 100, 1000, 8000]
-    tr_er = [4.16556e-13, 4.4692e-06, ]
-    val_er = [2.61792, 54.5452, ]
+    tr_er = [4.07674e-13, 2.83252e-06, 0.000155095, 0.000143081, 0.000120598]
+    val_er = [0.059846, 0.00117006, 0.000269087, 0.000138267, 0.00010319]
     plt.xscale('log')
+    plt.yscale('log')
     plt.scatter(timesteps, tr_er)
     plt.scatter(timesteps, val_er)
     plt.plot(timesteps, tr_er)

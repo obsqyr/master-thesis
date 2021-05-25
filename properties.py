@@ -7,12 +7,13 @@ import numpy as np
 import os
 import chemparse
 from ase.build import bulk
+import sklearn
 
 from read_settings import read_settings_file
 
 # This file contains functions to calculate material properties
 
-def normalize_half(vec):
+def normalize_half(vec, l=1):
     '''
     input:
     np.array of dimension 3 (position vector)
@@ -21,6 +22,7 @@ def normalize_half(vec):
     This is useful to find the shortest vector C between two 
     points A, B in a space with periodic boundary conditions [0,1):
            C = (A-B).normalize_half()
+    '''
     '''
     temp = []
     for v in vec:
@@ -31,6 +33,20 @@ def normalize_half(vec):
         else:
             temp.append(v)
     return np.array(temp)
+    '''
+    
+    #vec_std = (vec - np.amin(vec)) / (np.amax(vec) - np.amin(vec))
+    
+    #vec_std = (vec - np.amin(vec)) / 
+    #vec_scaled = vec_std * (1/2 - (-1/2)) + -1/2
+
+    #scale = (1/2 - (-1/2)) / (np.amax(vec) - np.amin(vec))
+    #vec_scaled2 = scale * vec + np.amin(vec) - np.amin(vec) * scale
+    #print(vec_scaled)
+    #print(vec_scaled2)
+    #x - (x*2+1)//2
+
+    return vec - (vec*2+1)//2 
 
 def specific_heat(temp_store, N, atoms):
     """Calculates the specific heat for a material.
@@ -517,4 +533,10 @@ def get_averaged_properties(filename, offset=0):
 
 if __name__ == "__main__":
     #clean_property_calculations()
-    get_averaged_properties('properties_Al_DFT_eq_0.txt', 2000)
+    #get_averaged_properties('properties_Al_DFT_eq_0.txt', 2000)
+    
+    vec_0 = np.zeros(3)
+    vec_1 = np.array([8.0803606, 8.0780096, 8.0762162])
+
+    v = vec_0 - vec_1
+    print(normalize_half(v, 8.0804))

@@ -49,6 +49,8 @@ def vasp_read(directory, filetype):
         else:
             # only support for cubic unit cells
             unit_cell = atom.get_cell()
+            print('unit_cell', unit_cell)
+            print('masses', atom.get_masses())
             #print('unit_cell', list(unit_cell)[0][0])
             l = list(unit_cell)[0][0]
             if l == 0:
@@ -62,13 +64,14 @@ def vasp_read(directory, filetype):
             old_pos = np.array([i/l for i in old_pos])
             
             #v = atom.get_positions() - prev_atom.get_positions()
-            v = pos - old_pos
-            v = [pr.normalize_half(i) for i in v]
-            print('v normalized', v)
+            v = pos - old_pos # unit: 1 / fs
+            v = [pr.normalize_half(i,l) for i in v]
+            print('v normalized', np.array(v))
             #print('atom pos', atom.get_positions())
             #print('prev_atom pos', prev_atom.get_positions())
             # does this factor of 10 make sense?
-            v = np.array([i*l*10 for i in v])
+            v = np.array([i*l for i in v]) # unit: Å / fs
+            #print('v in Å', v)
             velocities.append(v)
             prev_atom = atom
             
@@ -140,7 +143,7 @@ def calculate_properties_vasp(element, eq):
     #for atom in atoms:
     print('atoms', atoms[0])
     velocities = np.load(element +'_300K_infiles/velocities.npy')
-    print(velocities[:10])
+    #print(velocities[:10])
     #print(velocities[0])
     #for atom in atoms:
     #    print('before', atom.get_velocities())
@@ -157,7 +160,7 @@ def calculate_properties_vasp(element, eq):
         if i != len(atoms) - 1:
         #    print(i)
             atoms[i].set_velocities(velocities[i])
-            print(atoms[i].get_velocities())
+            #print(atoms[i].get_velocities())
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
         #print(atoms[i].get_momenta())
@@ -202,3 +205,4 @@ if __name__ == "__main__":
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
     calculate_properties_vasp('Al', 0)
+    #calculate_properties_vasp('Al', 2000)

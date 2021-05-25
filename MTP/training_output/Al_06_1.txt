@@ -2,180 +2,131 @@ MTPR from untrained_mtps/06.mtp, Database: cfg_train/Al_train_1.cfg
 validation set: cfg_test/Al_test_1000.cfg
 Random initialization of radial coefficients
 Rescaling...
-   scaling = 0.833333333333333, condition number = 43.2690383135952
-   scaling = 0.909090909090909, condition number = 46.9807488319688
-   scaling = 1, condition number = 51.8021148126811
-   scaling = 1.1, condition number = 56.8665575816745
-   scaling = 1.2, condition number = 61.9806517533168
+   scaling = 0.833333333333333, condition number = 56.3043565436845
+   scaling = 0.909090909090909, condition number = 61.2922760123381
+   scaling = 1, condition number = 67.5309316288965
+   scaling = 1.1, condition number = 73.861837113791
+   scaling = 1.2, condition number = 80.781983144816
 Rescaling to 0.833333333333333... done
 Rescaling...
-   scaling = 0.694444444444445, condition number = 35.9760132205188
-   scaling = 0.757575757575758, condition number = 39.0227826016402
-   scaling = 0.833333333333333, condition number = 43.2181175539431
-   scaling = 0.916666666666667, condition number = 47.3625004830665
-   scaling = 1, condition number = 51.8810451823403
+   scaling = 0.694444444444445, condition number = 46.7184096295881
+   scaling = 0.757575757575758, condition number = 51.0630903587649
+   scaling = 0.833333333333333, condition number = 56.2314576725676
+   scaling = 0.916666666666667, condition number = 61.5625343791859
+   scaling = 1, condition number = 67.5309316288965
 Rescaling to 0.694444444444445... done
 Rescaling...
-   scaling = 0.578703703703704, condition number = 29.9437143580111
-   scaling = 0.631313131313131, condition number = 32.8046183951398
-   scaling = 0.694444444444445, condition number = 35.9760132205188
-   scaling = 0.763888888888889, condition number = 39.3610182197693
-   scaling = 0.833333333333333, condition number = 43.2181175539431
+   scaling = 0.578703703703704, condition number = 39.1301851579288
+   scaling = 0.631313131313131, condition number = 42.3921230820255
+   scaling = 0.694444444444445, condition number = 46.7184096295881
+   scaling = 0.763888888888889, condition number = 51.698313813975
+   scaling = 0.833333333333333, condition number = 56.2314576725676
 Rescaling to 0.578703703703704... done
 Rescaling...
-   scaling = 0.482253086419753, condition number = 25.0766552509799
-   scaling = 0.526094276094276, condition number = 27.3740052859857
-   scaling = 0.578703703703704, condition number = 29.9437143580111
-   scaling = 0.636574074074074, condition number = 33.0221801215665
-   scaling = 0.694444444444445, condition number = 35.9760132205188
+   scaling = 0.482253086419753, condition number = 32.6178568911087
+   scaling = 0.526094276094276, condition number = 35.5769509288456
+   scaling = 0.578703703703704, condition number = 39.1301851579288
+   scaling = 0.636574074074074, condition number = 42.9492841617261
+   scaling = 0.694444444444445, condition number = 46.7184096295881
 Rescaling to 0.482253086419753... done
 Rescaling...
-   scaling = 0.401877572016461, condition number = 20.8892591817376
-   scaling = 0.43841189674523, condition number = 22.7276236550183
-   scaling = 0.482253086419753, condition number = 25.0766552509799
-   scaling = 0.530478395061729, condition number = 27.4480011691311
-   scaling = 0.578703703703704, condition number = 29.9437143580111
+   scaling = 0.401877572016461, condition number = 27.1879975244007
+   scaling = 0.43841189674523, condition number = 29.7052829417262
+   scaling = 0.482253086419753, condition number = 32.6178568911087
+   scaling = 0.530478395061729, condition number = 35.8912358569211
+   scaling = 0.578703703703704, condition number = 39.1301851579288
 Rescaling to 0.401877572016461... done
 Rescaling...
-   scaling = 0.334897976680384, condition number = 17.5110387199468
-   scaling = 0.365343247287692, condition number = 19.0345400887022
-   scaling = 0.401877572016461, condition number = 20.8892591817376
-   scaling = 0.442065329218107, condition number = 23.0382194390766
-   scaling = 0.482253086419753, condition number = 25.0214788343298
+   scaling = 0.334897976680384, condition number = 22.7392962549447
+   scaling = 0.365343247287692, condition number = 24.6595055091748
+   scaling = 0.401877572016461, condition number = 27.1879975244007
+   scaling = 0.442065329218107, condition number = 29.8249969090137
+   scaling = 0.482253086419753, condition number = 32.6162149167886
 Rescaling to 0.334897976680384... done
 Rescaling...
-   scaling = 0.279081647233653, condition number = 14.6247670352795
-   scaling = 0.304452706073077, condition number = 15.9279579935756
-   scaling = 0.334897976680384, condition number = 17.5110387199468
-   scaling = 0.368387774348423, condition number = 19.2013974183967
-   scaling = 0.401877572016461, condition number = 20.8892591817376
+   scaling = 0.279081647233653, condition number = 18.9866347762482
+   scaling = 0.304452706073077, condition number = 20.6945709117643
+   scaling = 0.334897976680384, condition number = 22.7392962549447
+   scaling = 0.368387774348423, condition number = 24.9958605775845
+   scaling = 0.401877572016461, condition number = 27.1879975244007
 Rescaling to 0.279081647233653... done
 Rescaling...
-   scaling = 0.232568039361378, condition number = 12.3157269102872
-   scaling = 0.25371058839423, condition number = 13.3511266179961
-   scaling = 0.279081647233653, condition number = 14.6247670352795
-   scaling = 0.306989811957019, condition number = 16.1050519053899
-   scaling = 0.334897976680384, condition number = 17.5110387199468
+   scaling = 0.232568039361378, condition number = 15.7867478990598
+   scaling = 0.25371058839423, condition number = 17.2694749962926
+   scaling = 0.279081647233653, condition number = 18.9866347762482
+   scaling = 0.306989811957019, condition number = 20.8759220515017
+   scaling = 0.334897976680384, condition number = 22.7392962549447
 Rescaling to 0.232568039361378... done
 Rescaling...
-   scaling = 0.193806699467815, condition number = 10.3805466119603
-   scaling = 0.211425490328525, condition number = 11.2365521421312
-   scaling = 0.232568039361378, condition number = 12.3157269102872
-   scaling = 0.255824843297516, condition number = 13.4683688941577
-   scaling = 0.279081647233653, condition number = 14.6247670352795
+   scaling = 0.193806699467815, condition number = 13.3206051573355
+   scaling = 0.211425490328525, condition number = 14.4317419369244
+   scaling = 0.232568039361378, condition number = 15.7867478990598
+   scaling = 0.255824843297516, condition number = 17.4780944791683
+   scaling = 0.279081647233653, condition number = 18.9866347762482
 Rescaling to 0.193806699467815... done
 Rescaling...
-   scaling = 0.161505582889846, condition number = 8.74916109938495
-   scaling = 0.176187908607104, condition number = 9.47106538613106
-   scaling = 0.193806699467815, condition number = 10.3805466119603
-   scaling = 0.213187369414596, condition number = 11.3378310975589
-   scaling = 0.232568039361378, condition number = 12.3157269102872
+   scaling = 0.161505582889846, condition number = 11.1599951320111
+   scaling = 0.176187908607104, condition number = 12.0802516939153
+   scaling = 0.193806699467815, condition number = 13.3206051573355
+   scaling = 0.213187369414596, condition number = 14.5364713747868
+   scaling = 0.232568039361378, condition number = 15.7867478990598
 Rescaling to 0.161505582889846... done
 Rescaling...
-   scaling = 0.134587985741538, condition number = 7.44444508991661
-   scaling = 0.146823257172587, condition number = 8.05075136161546
-   scaling = 0.161505582889846, condition number = 8.74916109938495
-   scaling = 0.17765614117883, condition number = 9.53585809224514
-   scaling = 0.193806699467815, condition number = 10.3907959107106
+   scaling = 0.134587985741538, condition number = 9.3580043952655
+   scaling = 0.146823257172587, condition number = 10.0841568280025
+   scaling = 0.161505582889846, condition number = 11.1599951320111
+   scaling = 0.17765614117883, condition number = 12.1692838420855
+   scaling = 0.193806699467815, condition number = 13.2389577726322
 Rescaling to 0.134587985741538... done
 Rescaling...
-   scaling = 0.112156654784615, condition number = 6.36249632069239
-   scaling = 0.122352714310489, condition number = 6.84400960676017
-   scaling = 0.134587985741538, condition number = 7.44444508991661
-   scaling = 0.148046784315692, condition number = 8.11132053928111
-   scaling = 0.161505582889846, condition number = 8.74916109938495
+   scaling = 0.112156654784615, condition number = 7.94325781479499
+   scaling = 0.122352714310489, condition number = 8.60323131455659
+   scaling = 0.134587985741538, condition number = 9.3580043952655
+   scaling = 0.148046784315692, condition number = 10.3196052492979
+   scaling = 0.161505582889846, condition number = 11.1599951320111
 Rescaling to 0.112156654784615... done
 Rescaling...
-   scaling = 0.0934638789871793, condition number = 5.48032545595942
-   scaling = 0.101960595258741, condition number = 5.87753595804457
-   scaling = 0.112156654784615, condition number = 6.36249632069239
-   scaling = 0.123372320263077, condition number = 6.90485868668797
-   scaling = 0.134587985741538, condition number = 7.44444508991661
+   scaling = 0.0934638789871793, condition number = 6.76046004076961
+   scaling = 0.101960595258741, condition number = 7.31069718025521
+   scaling = 0.112156654784615, condition number = 7.94325781479499
+   scaling = 0.123372320263077, condition number = 8.61722896416244
+   scaling = 0.134587985741538, condition number = 9.3580043952655
 Rescaling to 0.0934638789871793... done
 Rescaling...
-   scaling = 0.0778865658226494, condition number = 4.80577818754099
-   scaling = 0.0849671627156175, condition number = 5.13595832615738
-   scaling = 0.0934638789871793, condition number = 5.48032545595942
-   scaling = 0.102810266885897, condition number = 5.93116367652324
-   scaling = 0.112156654784615, condition number = 6.36249632069239
+   scaling = 0.0778865658226494, condition number = 5.83193417619456
+   scaling = 0.0849671627156175, condition number = 6.22923132604241
+   scaling = 0.0934638789871793, condition number = 6.76046004076961
+   scaling = 0.102810266885897, condition number = 7.31302925704449
+   scaling = 0.112156654784615, condition number = 7.94325781479499
 Rescaling to 0.0778865658226494... done
 Rescaling...
-   scaling = 0.0649054715188745, condition number = 4.24759315174355
-   scaling = 0.0708059689296813, condition number = 4.50108585530769
-   scaling = 0.0778865658226494, condition number = 4.80577818754099
-   scaling = 0.0856752224049144, condition number = 5.13285414028376
-   scaling = 0.0934638789871793, condition number = 5.47296586447209
+   scaling = 0.0649054715188745, condition number = 4.01443548166836
+   scaling = 0.0708059689296813, condition number = 5.00099065075344
+   scaling = 0.0778865658226494, condition number = 5.83193417619456
+   scaling = 0.0856752224049144, condition number = 6.32421324899597
+   scaling = 0.0934638789871793, condition number = 6.75541635132732
 Rescaling to 0.0649054715188745... done
 Rescaling...
-   scaling = 0.0540878929323954, condition number = 3.82511247302486
-   scaling = 0.0590049741080677, condition number = 4.00586608854836
-   scaling = 0.0649054715188745, condition number = 4.24759315174355
-   scaling = 0.071396018670762, condition number = 4.52949132366416
-   scaling = 0.0778865658226494, condition number = 4.79710701429715
+   scaling = 0.0540878929323954, condition number = 2.58967405433984
+   scaling = 0.0590049741080677, condition number = 3.18853984409674
+   scaling = 0.0649054715188745, condition number = 4.01443548166836
+   scaling = 0.071396018670762, condition number = 5.13129484801568
+   scaling = 0.0778865658226494, condition number = 5.83308679533693
 Rescaling to 0.0540878929323954... done
 Rescaling...
-   scaling = 0.0450732441103295, condition number = 3.45239952017482
-   scaling = 0.0491708117567231, condition number = 3.61041255770877
-   scaling = 0.0540878929323954, condition number = 3.82511247302486
-   scaling = 0.059496682225635, condition number = 4.01583928579019
-   scaling = 0.0649054715188745, condition number = 4.24759315174355
-Rescaling to 0.0450732441103295... done
+   scaling = 0.0450732441103295, condition number = 2.24482254373979
+   scaling = 0.0491708117567231, condition number = 2.23192635968674
+   scaling = 0.0540878929323954, condition number = 2.58967405433984
+   scaling = 0.059496682225635, condition number = 3.24792945830261
+   scaling = 0.0649054715188745, condition number = 4.01443548166836
+Rescaling to 0.0491708117567231... done
 Rescaling...
-   scaling = 0.0375610367586079, condition number = 3.14663603853076
-   scaling = 0.0409756764639359, condition number = 3.28737649876279
-   scaling = 0.0450732441103295, condition number = 3.45239952017482
-   scaling = 0.0495805685213625, condition number = 3.63348997796135
-   scaling = 0.0540878929323954, condition number = 3.81013610119884
-Rescaling to 0.0375610367586079... done
-Rescaling...
-   scaling = 0.0313008639655066, condition number = 2.89078523773912
-   scaling = 0.03414639705328, condition number = 3.00407054175925
-   scaling = 0.0375610367586079, condition number = 3.14663603853076
-   scaling = 0.0413171404344687, condition number = 3.29535542838744
-   scaling = 0.0450732441103295, condition number = 3.45239952017482
-Rescaling to 0.0313008639655066... done
-Rescaling...
-   scaling = 0.0260840533045889, condition number = 2.6632084842287
-   scaling = 0.0284553308777333, condition number = 2.75969050618322
-   scaling = 0.0313008639655066, condition number = 2.89078523773912
-   scaling = 0.0344309503620573, condition number = 3.02340957833871
-   scaling = 0.0375610367586079, condition number = 3.14663603853076
-Rescaling to 0.0260840533045889... done
-Rescaling...
-   scaling = 0.0217367110871574, condition number = 2.48238053037623
-   scaling = 0.0237127757314444, condition number = 2.56142511321278
-   scaling = 0.0260840533045889, condition number = 2.6632084842287
-   scaling = 0.0286924586350477, condition number = 2.77258626924143
-   scaling = 0.0313008639655066, condition number = 2.89078523773912
-Rescaling to 0.0217367110871574... done
-Rescaling...
-   scaling = 0.0181139259059645, condition number = 2.36696761126645
-   scaling = 0.0197606464428703, condition number = 2.41336919235633
-   scaling = 0.0217367110871574, condition number = 2.48238053037623
-   scaling = 0.0239103821958731, condition number = 2.56860367360287
-   scaling = 0.0260840533045889, condition number = 2.6632084842287
-Rescaling to 0.0181139259059645... done
-Rescaling...
-   scaling = 0.0150949382549704, condition number = 2.30253629221099
-   scaling = 0.0164672053690586, condition number = 2.32709993783236
-   scaling = 0.0181139259059645, condition number = 2.36696761126645
-   scaling = 0.0199253184965609, condition number = 2.41808375182729
-   scaling = 0.0217367110871574, condition number = 2.48355681993805
-Rescaling to 0.0150949382549704... done
-Rescaling...
-   scaling = 0.0125791152124753, condition number = 2.28696569275904
-   scaling = 0.0137226711408822, condition number = 2.28872029986163
-   scaling = 0.0150949382549704, condition number = 2.30253629221099
-   scaling = 0.0166044320804674, condition number = 2.33008382136202
-   scaling = 0.0181139259059645, condition number = 2.36696761126645
-Rescaling to 0.0125791152124753... done
-Rescaling...
-   scaling = 0.0104825960103961, condition number = 2.3044610920287
-   scaling = 0.0114355592840685, condition number = 2.292707829489
-   scaling = 0.0125791152124753, condition number = 2.28696569275904
-   scaling = 0.0138370267337229, condition number = 2.28943942863799
-   scaling = 0.0150949382549704, condition number = 2.30253629221099
-Rescaling to 0.0125791152124753... done
+   scaling = 0.0409756764639359, condition number = 2.31468983900719
+   scaling = 0.0447007379606574, condition number = 2.27170161500749
+   scaling = 0.0491708117567231, condition number = 2.23192635968674
+   scaling = 0.0540878929323954, condition number = 2.58967405433984
+   scaling = 0.0590049741080677, condition number = 3.17176774244078
+Rescaling to 0.0491708117567231... done
 Pre-training started
 MTPR parallel training started
 BFGS iter 0: f=9.43296e-11
@@ -183,12 +134,12 @@ BFGS ended due to small decr. for 1 iteration
 BFGS iter 1: f=9.43296e-11
 MTPR training ended
 Rescaling...
-   scaling = 0.0104825960103961, condition number = 2.3060069978081
-   scaling = 0.0114355592840685, condition number = 2.28947825211378
-   scaling = 0.0125791152124753, condition number = 2.286338317205
-   scaling = 0.0138370267337229, condition number = 2.28915831576422
-   scaling = 0.0150949382549704, condition number = 2.30381681171299
-Rescaling to 0.0125791152124753... done
+   scaling = 0.0409756764639359, condition number = 2.31211158046325
+   scaling = 0.0447007379606574, condition number = 2.25385013116224
+   scaling = 0.0491708117567231, condition number = 2.21254427356131
+   scaling = 0.0540878929323954, condition number = 2.61935546509981
+   scaling = 0.0590049741080677, condition number = 3.16732203761427
+Rescaling to 0.0491708117567231... done
 Pre-training ended
 BFGS iterations count set to 1000
 BFGS convergence tolerance set to 0.001
@@ -201,27 +152,27 @@ BFGS ended due to small decr. for 1 iteration
 BFGS iter 1: f=9.43296e-11
 MTPR training ended
 Rescaling...
-   scaling = 0.0104825960103961, condition number = 2.30610323807141
-   scaling = 0.0114355592840685, condition number = 2.29114267744167
-   scaling = 0.0125791152124753, condition number = 2.28617891082424
-   scaling = 0.0138370267337229, condition number = 2.29079178221093
-   scaling = 0.0150949382549704, condition number = 2.30343258477046
-Rescaling to 0.0125791152124753... done
+   scaling = 0.0409756764639359, condition number = 2.32295100439904
+   scaling = 0.0447007379606574, condition number = 2.25013175429569
+   scaling = 0.0491708117567231, condition number = 2.23999410983003
+   scaling = 0.0540878929323954, condition number = 2.60386008807287
+   scaling = 0.0590049741080677, condition number = 3.1626759510011
+Rescaling to 0.0491708117567231... done
 
 		* * * TRAIN ERRORS * * *
 
 _________________Errors report_________________
 Energy:
 	Errors checked for 1 configurations
-	Maximal absolute difference = 1.10276e-11
-	Average absolute difference = 1.10276e-11
-	RMS     absolute difference = 1.10276e-11
+	Maximal absolute difference = 5.86908e-12
+	Average absolute difference = 5.86908e-12
+	RMS     absolute difference = 5.86908e-12
 
 Energy per atom:
 	Errors checked for 1 configurations
-	Maximal absolute difference = 3.44613e-13
-	Average absolute difference = 3.44613e-13
-	RMS     absolute difference = 3.44613e-13
+	Maximal absolute difference = 1.83409e-13
+	Average absolute difference = 1.83409e-13
+	RMS     absolute difference = 1.83409e-13
 
 Forces:
 	Errors checked for 32 atoms
@@ -254,38 +205,38 @@ _______________________________________________
 _________________Errors report_________________
 Energy:
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 8.56498
-	Average absolute difference = 6.68338
-	RMS     absolute difference = 6.7204
+	Maximal absolute difference = 2.88131
+	Average absolute difference = 1.97176
+	RMS     absolute difference = 2.01805
 
 Energy per atom:
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 0.267656
-	Average absolute difference = 0.208856
-	RMS     absolute difference = 0.210012
+	Maximal absolute difference = 0.090041
+	Average absolute difference = 0.0616174
+	RMS     absolute difference = 0.0630639
 
 Forces:
 	Errors checked for 32000 atoms
-	Maximal absolute difference = 6.15587
-	Average absolute difference = 0.855433
-	RMS     absolute difference = 1.57961
-	Max(ForceDiff) / Max(Force) = 3.44921
-	RMS(ForceDiff) / RMS(Force) = 4.51734
+	Maximal absolute difference = 4.21141
+	Average absolute difference = 0.419332
+	RMS     absolute difference = 0.791273
+	Max(ForceDiff) / Max(Force) = 2.3597
+	RMS(ForceDiff) / RMS(Force) = 2.26287
 
 Stresses (in eV):
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 24.1262
-	Average absolute difference = 1.98294
-	RMS     absolute difference = 6.0155
-	Max(StresDiff) / Max(Stres) = 1.64914
-	RMS(StresDiff) / RMS(Stres) = 1.58576
+	Maximal absolute difference = 143.639
+	Average absolute difference = 12.8419
+	RMS     absolute difference = 38.6739
+	Max(StresDiff) / Max(Stres) = 9.81845
+	RMS(StresDiff) / RMS(Stres) = 10.1949
 
 Stresses (in GPa):
 	Errors checked for 1000 configurations
-	Maximal absolute difference = 7.32657
-	Average absolute difference = 0.602173
-	RMS     absolute difference = 1.82677
-	Max(StresDiff) / Max(Stres) = 1.64914
-	RMS(StresDiff) / RMS(Stres) = 1.58576
+	Maximal absolute difference = 43.6199
+	Average absolute difference = 3.89978
+	RMS     absolute difference = 11.7444
+	Max(StresDiff) / Max(Stres) = 9.81845
+	RMS(StresDiff) / RMS(Stres) = 10.1949
 _______________________________________________
 
