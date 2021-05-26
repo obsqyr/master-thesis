@@ -185,27 +185,6 @@ def calculate_properties_vasp(element, eq):
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, False)
-
-    # show whether or not MSD converges
-    MSD_averaged = []
-    MSD = 0
-    for i, m in enumerate(MSDs):
-        if i != 0:
-            MSD += m
-            MSD_averaged.append(MSD / i)
-            #print('MSD / i', MSD / i)
-            #print(MSD/(i), MSD, i)
-    print('MSD_averaged', MSD_averaged)
-    
-    # show whether or not specific heat converges
-    Cvs_averaged = []
-    Cv = 0
-    for i, c in enumerate(Cvs):
-        Cv += c
-        Cvs_averaged.append(Cv / (i+1))
-    print('Cvs_averaged', Cvs)
-
-    return MSD_averaged, Cvs_averaged
     
 if __name__ == "__main__":
     #clear_infiles("Al_300K/")
