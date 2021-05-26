@@ -156,13 +156,21 @@ def calculate_properties_vasp(element, eq):
     Cvs = []
     temps = []
     
+    # set all velocities first
+    for i in range(len(atoms)):
+        if i != len(atoms) - 1:
+        #    print(i)
+            # is this multiplication of 10 physically motivated?
+            atoms[i].set_velocities(velocities[i])
+
     for i in range(len(atoms) - eq):
         i += eq
         # add velocities for all atoms but the last (since the
         # last atom is not going to be moved)
-        if i != len(atoms) - 1:
+        #if i != len(atoms) - 1:
         #    print(i)
-            atoms[i].set_velocities(velocities[i]*10)
+            # is this multiplication of 10 physically motivated?
+            #atoms[i].set_velocities(velocities[i])
             #print(atoms[i].get_velocities())
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
@@ -170,13 +178,13 @@ def calculate_properties_vasp(element, eq):
         if i % 100 == 0:
             #print(i)
             _, _, _, t = pr.energies_and_temp(atoms[i])
-            print('get temperature', atoms[i].get_temperature())
-            print('my temperature', t)
+            #print('get temperature', atoms[i].get_temperature())
+            #print('my temperature', t)
             temps.append(t)
             Cvs.append(pr.specific_heat_NVT(temps, len(atoms[i]), atoms[i]))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
-    pr.finalize_properties_file(atoms[-1], id, 5, True, True)
+    pr.finalize_properties_file(atoms[-1], id, 5, True, False)
 
     # show whether or not MSD converges
     MSD_averaged = []

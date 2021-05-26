@@ -471,7 +471,7 @@ def clean_property_calculations():
 
     print(" -- Removed " + str(counter) + " properties files -- ")
 
-def get_averaged_properties(filename, offset=0):
+def get_averaged_properties(filename, element='Al', offset=0):
     '''
     Returns averaged properties from a properties file.
     !!CURRENTLY LIMITED TO AL!!
@@ -497,8 +497,15 @@ def get_averaged_properties(filename, offset=0):
     #print('lines', len(lines))
 
     # create atoms object
-    atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    if element == 'Al': 
+        atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    elif element == 'Si':
+        atom = bulk('Si', 'fcc', a=5.4310)
+    else:
+        raise ValueError('Unsupported element chosen: ' + element)
+
     atoms = atom * 2 * (1,1,1)
+    print(element, len(atoms))
 
     MSDs = []
     temps = []
@@ -536,10 +543,10 @@ def get_averaged_properties(filename, offset=0):
 
 if __name__ == "__main__":
     #clean_property_calculations()
-    #get_averaged_properties('properties_Al_DFT_eq_0.txt', 2000)
+    get_averaged_properties('properties_Al_DFT_eq_0.txt', 'Si')
     
-    vec_0 = np.zeros(3)
-    vec_1 = np.array([8.0803606, 8.0780096, 8.0762162])
+    #vec_0 = np.zeros(3)
+    #vec_1 = np.array([8.0803606, 8.0780096, 8.0762162])
 
-    v = vec_0 - vec_1
-    print(normalize_half(v))
+    #v = vec_0 - vec_1
+    #print(normalize_half(v))
