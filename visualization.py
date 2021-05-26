@@ -405,6 +405,8 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     plt.xlabel('timesteps')
     plt.ylabel('MSD [Å^2]')
     #plt.xscale('log')
+    plt.grid(True)
+
     timesteps = range(100,10100, 100)
     # get DFT averages
     MSDs, Cvs, E_tots = pr.get_averaged_properties('properties_'+element+'_DFT_eq_'+ str(offset) +'.txt')
@@ -452,7 +454,6 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     # plot DFT data
     #print('DFT MSDs', len(MSDs), 'timesteps', len(timesteps[int(offset/100):]))
     #plt.scatter(timesteps, MSDs)
-    print('MSDs form DFT', MSDs)
     plt.plot(timesteps[int(offset/100):], MSDs, color='black', linewidth=3)
 
     #timesteps = range(0, 9900, 100)
@@ -525,6 +526,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         print('remember the ylim')
         #plt.ylim([460, 950])
     #plt.xscale('log')
+    plt.grid(True)
     timesteps = range(100,10100, 100)
 
     #print(len(timesteps[int(offset/100):]), len(Cvs))
@@ -569,8 +571,9 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         print('ylim,etot')
         #plt.ylim([-8, 4])
     #plt.xscale('log')
+    plt.grid(True)    
     timesteps = range(100,10100, 100)
-
+    
     #plt.scatter(timesteps, E_tots)
     plt.plot(timesteps[int(offset/100):], E_tots, color='black', linewidth=3)
 
@@ -594,7 +597,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             plt.legend(legend)
         elif element == 'Si':
             plt.legend(legend)
-            
+
         plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
@@ -684,7 +687,7 @@ def plot_test(element, eq, mtp, final=False):
                 plt.legend(['DFT', '1', '100', '1000', '10000'])
             else:
                 plt.legend(['DFT', '1', '10', '100', '1000', '10000'])
-            
+
         plt.savefig('figures/convergence/'+element+'_MSD_test.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])

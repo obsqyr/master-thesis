@@ -474,7 +474,7 @@ def clean_property_calculations():
 def get_averaged_properties(filename, element='Al', offset=0):
     '''
     Returns averaged properties from a properties file.
-    !!CURRENTLY LIMITED TO AL!!
+
     Parameters:
     filename (str): filename of the properties file to calculate 
     averages for
@@ -538,14 +538,14 @@ def get_averaged_properties(filename, element='Al', offset=0):
     for i, e in enumerate(E_tots):
         E_tot += e
         E_tots_averaged.append(E_tot / (i+1))
-
+        
     return MSD_averaged, Cvs_averaged, E_tots_averaged
 
 if __name__ == "__main__":
     #clean_property_calculations()
     M, C, E = get_averaged_properties('properties_Al_DFT_eq_0.txt', 'Al')
     
-    print(M)
+    print(C)
     #vec_0 = np.zeros(3)
     #vec_1 = np.array([8.0803606, 8.0780096, 8.0762162])
 

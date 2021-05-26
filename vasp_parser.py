@@ -175,6 +175,7 @@ def calculate_properties_vasp(element, eq):
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
         #print(atoms[i].get_momenta())
+        
         if i % 100 == 0:
             #print(i)
             _, _, _, t = pr.energies_and_temp(atoms[i])
@@ -184,7 +185,7 @@ def calculate_properties_vasp(element, eq):
             Cvs.append(pr.specific_heat_NVT(temps, len(atoms[i]), atoms[i]))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
-    pr.finalize_properties_file(atoms[-1], id, 5, True, False)
+    pr.finalize_properties_file(atoms[-1], id, 5, True, True)
     
 if __name__ == "__main__":
     #clear_infiles("Al_300K/")
@@ -198,4 +199,4 @@ if __name__ == "__main__":
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
     calculate_properties_vasp('Al', 0)
-    #calculate_properties_vasp('Al', 2000)
+    calculate_properties_vasp('Al', 2000)

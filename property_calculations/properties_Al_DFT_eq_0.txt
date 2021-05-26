@@ -113,4 +113,4 @@ Properties:
 Time averages:
              Epot        Ekin        Etot        Temp     MSD         Self_diff   Pressure    Spec_heat   DebyeT   Lindemann  
              eV/atom     eV/atom     eV/atom     K        Å^2         mm^2/s      GPa         J/(K*Kg)    K        1          
-             -3.69194    0.00036     -3.69158    2.81     0.00037     0.0         -1.95043    505.82263   347.67   0.00335    
+             -3.69199    0.00036     -3.69163    2.81     0.00037     0.0         -1.93856    500.40244   351.3    0.00336    

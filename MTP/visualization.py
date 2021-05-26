@@ -875,6 +875,36 @@ def plot_learning_curves_log():
     #plt.show()
 
 def plot_mtp_training_and_validation_errors():
+    # read in iter files
+    dirs = [x[0] for x in os.walk('training_output_iter')]
+    #dirs.remove('test_results')
+    print(dirs)
+
+    filenames = []
+    for dir in dirs:
+        f = [dir+'/'+f for f in os.listdir(dir)]
+        f = sorted(f)
+        filenames.append(f)
+        
+    print(len(filenames))
+
+    MAEs_si = []
+    MAEs_al = []
+    for filename in filenames[0]:
+        print(filename)
+        #print(filename[21:23])
+        f = open(filename)
+        i = f.read()
+        if filename[21:23] == 'Si':
+            MAEs_si.append(extract_MAE(i))
+        elif filename[21:23] == 'Al':
+            MAEs_al.append(extract_MAE(i))
+        else:
+            continue
+
+    print(len(MAEs_si))
+    print(len(MAEs_al))
+
     # ALUMINIUM
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy per atom average absolute difference, Al MTP 06")
@@ -887,17 +917,34 @@ def plot_mtp_training_and_validation_errors():
     val_er_2 = [0.0616174, 0.00512976, 0.000632198, 0.000577663, 0.000565452]
     plt.xscale('log')
     plt.yscale('log')
-    plt.scatter(timesteps, tr_er)
-    plt.scatter(timesteps, val_er)
-    plt.plot(timesteps, tr_er)
-    plt.plot(timesteps, val_er)
-
-    plt.scatter(timesteps, tr_er_2)
-    plt.scatter(timesteps, val_er_2)
-    plt.plot(timesteps, tr_er_2)
-    plt.plot(timesteps, val_er_2)
     
-    plt.legend(['training', 'validation', 'training2', 'validation2'])
+    tr_ers = []
+    val_ers = []
+    for m in MAEs_al:
+        #plt.scatter(timesteps, m[1], color='blue')
+        #plt.scatter(timesteps, m[1], color='blue')
+        #plt.scatter(100, m[1], color='blue', alpha=0.3)
+        #plt.scatter(100, m[6], color='orange', alpha=0.3)
+        tr_ers.append(m[1])
+        val_ers.append(m[6])
+
+    plt.ylim([0.0001, 0.01])
+    tr_std = np.std(tr_ers)
+    val_std = np.std(val_ers)
+
+    plt.scatter(timesteps, tr_er, color='blue')
+    plt.scatter(timesteps, val_er, color='orange')
+    plt.plot(timesteps, tr_er, tr_std, color='blue')
+    plt.plot(timesteps, val_er, val_std, color='orange')
+    plt.errorbar(100, tr_er[2], tr_std, capsize=3)
+    plt.errorbar(100, val_er[2], val_std, capsize=3)
+
+    #plt.scatter(timesteps, tr_er_2)
+    #plt.scatter(timesteps, val_er_2)
+    #plt.plot(timesteps, tr_er_2)
+    #plt.plot(timesteps, val_er_2)
+        
+    plt.legend(['training', 'validation'])
     plt.savefig('figures/Al_errors.png')
 
     # SILICON
@@ -910,13 +957,31 @@ def plot_mtp_training_and_validation_errors():
     val_er = [0.059846, 0.00117006, 0.000269087, 0.000138267, 0.00010319]
     plt.xscale('log')
     plt.yscale('log')
-    plt.scatter(timesteps, tr_er)
-    plt.scatter(timesteps, val_er)
-    plt.plot(timesteps, tr_er)
-    plt.plot(timesteps, val_er)
-    
+
+    tr_ers = []
+    val_ers = []
+    for m in MAEs_si:
+        #plt.scatter(timesteps, m[1], color='blue')
+        #plt.scatter(timesteps, m[1], color='blue')
+        #plt.scatter(100, m[1], color='blue', alpha=0.3)
+        #plt.scatter(100, m[6], color='orange', alpha=0.3)
+        tr_ers.append(m[1])
+        val_ers.append(m[6])
+
+    plt.ylim([0.00001, 0.01])
+    tr_std = np.std(tr_ers)
+    val_std = np.std(val_ers)
+
+    plt.scatter(timesteps, tr_er, color='blue')
+    plt.scatter(timesteps, val_er, color='orange')
+    plt.plot(timesteps, tr_er, tr_std, color='blue')
+    plt.plot(timesteps, val_er, val_std, color='orange')
+    plt.errorbar(100, tr_er[2], tr_std, capsize=3)
+    plt.errorbar(100, val_er[2], val_std, capsize=3)
+
     plt.legend(['training', 'validation'])
     plt.savefig('figures/Si_errors.png')
+
 
 if __name__ == "__main__":
     #plot_mtp_closer_to_zero()
@@ -924,4 +989,4 @@ if __name__ == "__main__":
     #plot_mtp_log()
     #plot_learning_curves_log()
     plot_mtp_training_and_validation_errors()
-        
+    
