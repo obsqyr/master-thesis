@@ -76,9 +76,8 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
 
     #atoms.calc = calcs.zero_calculator()
     # Set the momenta corresponding to T=300K
-    print('atoms', atoms)
     # do I need this?
-    MaxwellBoltzmannDistribution(atoms, temperature_K = 300)
+    MaxwellBoltzmannDistribution(atoms, temperature_K = settings['temperature'])
 
     # Select integrator
     if settings['ensemble'] == "NVE":
@@ -88,7 +87,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
     elif settings['ensemble'] == "NVT":
         print('-- Using Langevin, NVT ensamble --')
         from ase.md.langevin import Langevin
-        dyn = Langevin(atoms, settings['time_step'] * units.fs, settings['temperature'] * units.kB, settings['friction'])
+        dyn = Langevin(atoms, settings['time_step'] * units.fs, temperature_K = settings['temperature'], friction = settings['friction'])
         #from ase.md.nptberendsen import NPTBerendsen
         #dyn = NVTBerendsen(atoms, 1 * units.fs, 300, taut=0.5*1000*units.fs)
         #dyn = NPTBerendsen(atoms, timestep=0.1 * units.fs, temperature_K=300, taut=100 * units.fs, pressure_au=1.01325 * units.bar, taup=1000 * units.fs, compressibility=4.57e-5 / units.bar)

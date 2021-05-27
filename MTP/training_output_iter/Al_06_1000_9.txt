@@ -1,0 +1,505 @@
+MTPR from untrained_mtps/06.mtp, Database: cfg_train/Al_train_1000.cfg
+validation set: cfg_test/Al_test_1000.cfg
+Random initialization of radial coefficients
+Rescaling...
+   scaling = 0.833333333333333, condition number = 1166.60747130326
+   scaling = 0.909090909090909, condition number = 1272.65836010374
+   scaling = 1, condition number = 1399.91937966471
+   scaling = 1.1, condition number = 1539.90695036276
+   scaling = 1.2, condition number = 1679.89487470747
+Rescaling to 0.833333333333333... done
+Rescaling...
+   scaling = 0.694444444444445, condition number = 972.183434198499
+   scaling = 0.757575757575758, condition number = 1060.55792914256
+   scaling = 0.833333333333333, condition number = 1166.60790507516
+   scaling = 0.916666666666667, condition number = 1283.26342701101
+   scaling = 1, condition number = 1399.91937966471
+Rescaling to 0.694444444444445... done
+Rescaling...
+   scaling = 0.578703703703704, condition number = 783.342313857815
+   scaling = 0.631313131313131, condition number = 883.809530054589
+   scaling = 0.694444444444445, condition number = 972.183434198499
+   scaling = 0.763888888888889, condition number = 1069.39540534455
+   scaling = 0.833333333333333, condition number = 1166.60790507516
+Rescaling to 0.578703703703704... done
+Rescaling...
+   scaling = 0.482253086419753, condition number = 543.999859857939
+   scaling = 0.526094276094276, condition number = 647.397202100956
+   scaling = 0.578703703703704, condition number = 783.342313857815
+   scaling = 0.636574074074074, condition number = 891.173994859529
+   scaling = 0.694444444444445, condition number = 972.183434198499
+Rescaling to 0.482253086419753... done
+Rescaling...
+   scaling = 0.401877572016461, condition number = 377.79014019971
+   scaling = 0.43841189674523, condition number = 449.593679662733
+   scaling = 0.482253086419753, condition number = 543.999859857939
+   scaling = 0.530478395061729, condition number = 658.231449222027
+   scaling = 0.578703703703704, condition number = 783.342313857815
+Rescaling to 0.401877572016461... done
+Rescaling...
+   scaling = 0.334897976680384, condition number = 262.367241264374
+   scaling = 0.365343247287692, condition number = 312.230531029236
+   scaling = 0.401877572016461, condition number = 377.79014019971
+   scaling = 0.442065329218107, condition number = 457.117448094636
+   scaling = 0.482253086419753, condition number = 543.999859857918
+Rescaling to 0.334897976680384... done
+Rescaling...
+   scaling = 0.279081647233653, condition number = 182.213319572108
+   scaling = 0.304452706073077, condition number = 216.840131501784
+   scaling = 0.334897976680384, condition number = 262.367241264374
+   scaling = 0.368387774348423, condition number = 317.45534696738
+   scaling = 0.401877572016461, condition number = 377.79014019971
+Rescaling to 0.279081647233653... done
+Rescaling...
+   scaling = 0.232568039361378, condition number = 126.552382614034
+   scaling = 0.25371058839423, condition number = 150.597953319599
+   scaling = 0.279081647233653, condition number = 182.213319572108
+   scaling = 0.306989811957019, condition number = 220.468436817815
+   scaling = 0.334897976680384, condition number = 262.367241264374
+Rescaling to 0.232568039361378... done
+Rescaling...
+   scaling = 0.193806699467815, condition number = 87.9016593671808
+   scaling = 0.211425490328525, condition number = 104.598479895617
+   scaling = 0.232568039361378, condition number = 126.552382614034
+   scaling = 0.255824843297516, condition number = 153.117542178541
+   scaling = 0.279081647233653, condition number = 182.213319572108
+Rescaling to 0.193806699467815... done
+Rescaling...
+   scaling = 0.161505582889846, condition number = 53.8995800695303
+   scaling = 0.176187908607104, condition number = 69.9615584384059
+   scaling = 0.193806699467815, condition number = 87.9016593671808
+   scaling = 0.213187369414596, condition number = 106.34807318644
+   scaling = 0.232568039361378, condition number = 126.552382614034
+Rescaling to 0.161505582889846... done
+Rescaling...
+   scaling = 0.134587985741538, condition number = 31.215820786373
+   scaling = 0.146823257172587, condition number = 40.5088772031555
+   scaling = 0.161505582889846, condition number = 53.8995800695303
+   scaling = 0.17765614117883, condition number = 71.7240067600237
+   scaling = 0.193806699467815, condition number = 87.90165936707
+Rescaling to 0.134587985741538... done
+Rescaling...
+   scaling = 0.112156654784615, condition number = 19.9567673801059
+   scaling = 0.122352714310489, condition number = 23.4697932744632
+   scaling = 0.134587985741538, condition number = 31.215820786373
+   scaling = 0.148046784315692, condition number = 41.5286519948282
+   scaling = 0.161505582889846, condition number = 53.8995800695303
+Rescaling to 0.112156654784615... done
+Rescaling...
+   scaling = 0.0934638789871793, condition number = 16.7011973472215
+   scaling = 0.101960595258741, condition number = 18.1738826098022
+   scaling = 0.112156654784615, condition number = 19.9567673801059
+   scaling = 0.123372320263077, condition number = 24.0596142372526
+   scaling = 0.134587985741538, condition number = 31.215820786373
+Rescaling to 0.0934638789871793... done
+Rescaling...
+   scaling = 0.0778865658226494, condition number = 14.0717518022532
+   scaling = 0.0849671627156175, condition number = 15.2504031171833
+   scaling = 0.0934638789871793, condition number = 16.7011973472215
+   scaling = 0.102810266885897, condition number = 18.3219328252235
+   scaling = 0.112156654784615, condition number = 19.9567673801059
+Rescaling to 0.0778865658226494... done
+Rescaling...
+   scaling = 0.0649054715188745, condition number = 10.3367113416614
+   scaling = 0.0708059689296813, condition number = 12.088700827665
+   scaling = 0.0778865658226494, condition number = 14.0717518022532
+   scaling = 0.0856752224049144, condition number = 15.3700875948149
+   scaling = 0.0934638789871793, condition number = 16.7011973472231
+Rescaling to 0.0649054715188745... done
+Rescaling...
+   scaling = 0.0540878929323954, condition number = 7.73631636372551
+   scaling = 0.0590049741080677, condition number = 8.8097746290064
+   scaling = 0.0649054715188745, condition number = 10.3367113416614
+   scaling = 0.071396018670762, condition number = 12.2752867821762
+   scaling = 0.0778865658226494, condition number = 14.0717518022501
+Rescaling to 0.0540878929323954... done
+Rescaling...
+   scaling = 0.0450732441103295, condition number = 6.36294478616568
+   scaling = 0.0491708117567231, condition number = 6.87915382230785
+   scaling = 0.0540878929323954, condition number = 7.73631636372551
+   scaling = 0.059496682225635, condition number = 8.92761473460489
+   scaling = 0.0649054715188745, condition number = 10.3367113416614
+Rescaling to 0.0450732441103295... done
+Rescaling...
+   scaling = 0.0375610367586079, condition number = 5.9948545019469
+   scaling = 0.0409756764639359, condition number = 6.06038418866339
+   scaling = 0.0450732441103295, condition number = 6.36294478616568
+   scaling = 0.0495805685213625, condition number = 6.94127717636988
+   scaling = 0.0540878929323954, condition number = 7.73631636371178
+Rescaling to 0.0375610367586079... done
+Rescaling...
+   scaling = 0.0313008639655066, condition number = 6.37700965884897
+   scaling = 0.03414639705328, condition number = 6.11775934842924
+   scaling = 0.0375610367586079, condition number = 5.9948545019469
+   scaling = 0.0413171404344687, condition number = 6.0766362303913
+   scaling = 0.0450732441103295, condition number = 6.36294478616568
+Rescaling to 0.0375610367586079... done
+Pre-training started
+MTPR parallel training started
+BFGS iter 0: f=0.0589392
+BFGS iter 1: f=0.0506442
+BFGS iter 2: f=0.0448016
+BFGS iter 3: f=0.0345948
+BFGS iter 4: f=0.0281939
+BFGS iter 5: f=0.0244533
+BFGS iter 6: f=0.0154957
+BFGS iter 7: f=0.00608494
+BFGS iter 8: f=0.00431617
+BFGS iter 9: f=0.00394283
+BFGS iter 10: f=0.00350852
+BFGS iter 11: f=0.00305789
+BFGS iter 12: f=0.00295403
+BFGS iter 13: f=0.00282909
+BFGS iter 14: f=0.00275353
+BFGS iter 15: f=0.00269971
+BFGS iter 16: f=0.00264098
+BFGS iter 17: f=0.00259843
+BFGS iter 18: f=0.00258051
+BFGS iter 19: f=0.00256585
+BFGS iter 20: f=0.00255182
+BFGS iter 21: f=0.00254501
+BFGS iter 22: f=0.00253307
+BFGS iter 23: f=0.00251879
+BFGS iter 24: f=0.00250278
+BFGS iter 25: f=0.00247085
+BFGS iter 26: f=0.00244461
+BFGS iter 27: f=0.00240346
+BFGS iter 28: f=0.00239341
+BFGS iter 29: f=0.00235341
+BFGS iter 30: f=0.00234404
+BFGS iter 31: f=0.00234043
+BFGS iter 32: f=0.00233707
+BFGS iter 33: f=0.00232249
+BFGS iter 34: f=0.00231553
+BFGS iter 35: f=0.00231396
+BFGS iter 36: f=0.0023138
+BFGS iter 37: f=0.00231323
+BFGS iter 38: f=0.00230839
+BFGS iter 39: f=0.00230431
+BFGS iter 40: f=0.00230206
+BFGS iter 41: f=0.00230129
+BFGS iter 42: f=0.00230048
+BFGS iter 43: f=0.00229863
+BFGS iter 44: f=0.00229042
+BFGS iter 45: f=0.00228928
+BFGS iter 46: f=0.00228804
+BFGS iter 47: f=0.00228734
+BFGS iter 48: f=0.00228714
+BFGS iter 49: f=0.00228689
+BFGS iter 50: f=0.00228204
+BFGS iter 51: f=0.00228114
+BFGS iter 52: f=0.00228094
+BFGS iter 53: f=0.00228053
+BFGS iter 54: f=0.00227989
+BFGS iter 55: f=0.00227951
+BFGS iter 56: f=0.0022792
+BFGS iter 57: f=0.00227882
+BFGS iter 58: f=0.00227848
+BFGS iter 59: f=0.00227841
+BFGS iter 60: f=0.00227838
+BFGS iter 61: f=0.00227837
+BFGS iter 62: f=0.00227837
+BFGS iter 63: f=0.00227836
+BFGS iter 64: f=0.00227812
+BFGS iter 65: f=0.00227789
+BFGS iter 66: f=0.00227785
+BFGS iter 67: f=0.00227785
+BFGS iter 68: f=0.00227785
+BFGS iter 69: f=0.00227785
+BFGS iter 70: f=0.00227784
+BFGS iter 71: f=0.00227781
+BFGS iter 72: f=0.0022778
+BFGS iter 73: f=0.00227778
+BFGS iter 74: f=0.00227778
+step limit reached
+MTPR training ended
+Rescaling...
+   scaling = 0.0313008639655066, condition number = 2.32728643069145
+   scaling = 0.03414639705328, condition number = 2.03039118273572
+   scaling = 0.0375610367586079, condition number = 2.34844193408686
+   scaling = 0.0413171404344687, condition number = 2.37434046903414
+   scaling = 0.0450732441103295, condition number = 2.37044798437226
+Rescaling to 0.03414639705328... done
+Rescaling...
+   scaling = 0.0284553308777333, condition number = 2.78983498891668
+   scaling = 0.0310421791393454, condition number = 2.36244494080926
+   scaling = 0.03414639705328, condition number = 2.03039118809441
+   scaling = 0.037561036758608, condition number = 2.34844191776111
+   scaling = 0.0409756764639359, condition number = 2.37690679730602
+Rescaling to 0.03414639705328... done
+Pre-training ended
+BFGS iterations count set to 1000
+BFGS convergence tolerance set to 0.001
+Energy weight: 1
+Force weight: 0.01
+Stress weight: 0.001
+MTPR parallel training started
+BFGS iter 0: f=0.00227571
+BFGS iter 1: f=0.00227569
+BFGS iter 2: f=0.00227568
+BFGS iter 3: f=0.00227559
+BFGS iter 4: f=0.00227541
+BFGS iter 5: f=0.00227534
+BFGS iter 6: f=0.00227527
+BFGS iter 7: f=0.00227509
+BFGS iter 8: f=0.00227504
+BFGS iter 9: f=0.00227502
+BFGS iter 10: f=0.00227501
+BFGS iter 11: f=0.00227501
+BFGS iter 12: f=0.00227501
+BFGS iter 13: f=0.00227498
+BFGS iter 14: f=0.00227483
+BFGS iter 15: f=0.0022748
+BFGS iter 16: f=0.00227479
+BFGS iter 17: f=0.00227478
+BFGS iter 18: f=0.00227478
+BFGS iter 19: f=0.00227478
+BFGS iter 20: f=0.00227476
+BFGS iter 21: f=0.00227473
+BFGS iter 22: f=0.00227472
+BFGS iter 23: f=0.00227465
+BFGS iter 24: f=0.00227451
+BFGS iter 25: f=0.00227446
+BFGS iter 26: f=0.00227445
+BFGS iter 27: f=0.00227445
+BFGS iter 28: f=0.00227444
+BFGS iter 29: f=0.00227444
+BFGS iter 30: f=0.00227443
+BFGS iter 31: f=0.00227442
+BFGS iter 32: f=0.00227438
+BFGS iter 33: f=0.00227429
+BFGS iter 34: f=0.00227421
+BFGS iter 35: f=0.00227405
+BFGS iter 36: f=0.00227395
+BFGS iter 37: f=0.00227388
+BFGS iter 38: f=0.00227384
+BFGS iter 39: f=0.00227382
+BFGS iter 40: f=0.0022738
+BFGS iter 41: f=0.00227379
+BFGS iter 42: f=0.00227377
+BFGS iter 43: f=0.00227373
+BFGS iter 44: f=0.00227371
+BFGS iter 45: f=0.00227368
+BFGS iter 46: f=0.00227367
+BFGS iter 47: f=0.00227366
+BFGS iter 48: f=0.00227365
+BFGS iter 49: f=0.00227362
+BFGS iter 50: f=0.00227251
+BFGS iter 51: f=0.00227239
+BFGS iter 52: f=0.00227223
+BFGS iter 53: f=0.00227209
+BFGS iter 54: f=0.00227203
+BFGS iter 55: f=0.00227199
+BFGS iter 56: f=0.00227194
+BFGS iter 57: f=0.00227192
+BFGS iter 58: f=0.00227191
+BFGS iter 59: f=0.00227189
+BFGS iter 60: f=0.00227187
+BFGS iter 61: f=0.0022718
+BFGS iter 62: f=0.00227171
+BFGS iter 63: f=0.0022716
+BFGS iter 64: f=0.00227153
+BFGS iter 65: f=0.00227152
+BFGS iter 66: f=0.00227151
+BFGS iter 67: f=0.0022715
+BFGS iter 68: f=0.00227148
+BFGS iter 69: f=0.00227148
+BFGS iter 70: f=0.00227148
+BFGS iter 71: f=0.00227147
+BFGS iter 72: f=0.00227147
+BFGS iter 73: f=0.00227146
+BFGS iter 74: f=0.00227141
+BFGS iter 75: f=0.00227137
+BFGS iter 76: f=0.00227135
+BFGS iter 77: f=0.00227135
+BFGS iter 78: f=0.00227134
+BFGS iter 79: f=0.00227134
+BFGS iter 80: f=0.00227134
+BFGS iter 81: f=0.00227134
+BFGS iter 82: f=0.00227134
+BFGS iter 83: f=0.00227134
+BFGS iter 84: f=0.00227134
+BFGS iter 85: f=0.00227134
+BFGS iter 86: f=0.00227133
+BFGS iter 87: f=0.00227129
+BFGS iter 88: f=0.00227115
+BFGS iter 89: f=0.00227099
+BFGS iter 90: f=0.00227078
+BFGS iter 91: f=0.00227071
+BFGS iter 92: f=0.00227061
+BFGS iter 93: f=0.00227054
+BFGS iter 94: f=0.00227047
+BFGS iter 95: f=0.00227043
+BFGS iter 96: f=0.00227042
+BFGS iter 97: f=0.00227041
+BFGS iter 98: f=0.00227041
+BFGS iter 99: f=0.0022704
+BFGS iter 100: f=0.00227033
+BFGS iter 101: f=0.00227031
+BFGS iter 102: f=0.00227031
+BFGS iter 103: f=0.0022703
+BFGS iter 104: f=0.0022703
+BFGS iter 105: f=0.00227028
+BFGS iter 106: f=0.00227026
+BFGS iter 107: f=0.00227025
+BFGS iter 108: f=0.00227023
+BFGS iter 109: f=0.00227011
+BFGS iter 110: f=0.00227001
+BFGS iter 111: f=0.00226999
+BFGS iter 112: f=0.00226997
+BFGS iter 113: f=0.00226995
+BFGS iter 114: f=0.00226994
+BFGS iter 115: f=0.00226993
+BFGS iter 116: f=0.00226993
+BFGS iter 117: f=0.00226993
+BFGS iter 118: f=0.00226992
+BFGS iter 119: f=0.00226992
+BFGS iter 120: f=0.00226992
+BFGS iter 121: f=0.00226992
+BFGS iter 122: f=0.00226992
+BFGS iter 123: f=0.00226992
+BFGS iter 124: f=0.00226991
+BFGS iter 125: f=0.00226968
+BFGS iter 126: f=0.00226956
+BFGS iter 127: f=0.00226937
+BFGS iter 128: f=0.00226909
+BFGS iter 129: f=0.00226896
+BFGS iter 130: f=0.00226889
+BFGS iter 131: f=0.00226881
+BFGS iter 132: f=0.00226876
+BFGS iter 133: f=0.00226873
+BFGS iter 134: f=0.00226868
+BFGS iter 135: f=0.00226864
+BFGS iter 136: f=0.00226858
+BFGS iter 137: f=0.00226856
+BFGS iter 138: f=0.00226855
+BFGS iter 139: f=0.00226854
+BFGS iter 140: f=0.00226854
+BFGS iter 141: f=0.00226854
+BFGS iter 142: f=0.00226854
+BFGS iter 143: f=0.00226854
+BFGS iter 144: f=0.00226853
+BFGS iter 145: f=0.00226851
+BFGS iter 146: f=0.0022685
+BFGS iter 147: f=0.00226847
+BFGS iter 148: f=0.00226844
+BFGS iter 149: f=0.00226831
+BFGS ended due to small decr. in 50 iterations
+MTPR training ended
+Rescaling...
+   scaling = 0.0284553308777333, condition number = 5.69568480104528
+   scaling = 0.0310421791393454, condition number = 5.38168547564684
+   scaling = 0.03414639705328, condition number = 5.08845677496956
+   scaling = 0.037561036758608, condition number = 4.74195107838281
+   scaling = 0.0409756764639359, condition number = 4.19224886330663
+Rescaling to 0.0409756764639359... done
+Rescaling...
+   scaling = 0.03414639705328, condition number = 5.08845677496956
+   scaling = 0.0372506149672145, condition number = 4.80002418413327
+   scaling = 0.0409756764639359, condition number = 4.19224886330663
+   scaling = 0.0450732441103295, condition number = 3.70173945032642
+   scaling = 0.0491708117567231, condition number = 3.22336030180383
+Rescaling to 0.0491708117567231... done
+Rescaling...
+   scaling = 0.0409756764639359, condition number = 4.19224886330663
+   scaling = 0.0447007379606574, condition number = 3.74023281898685
+   scaling = 0.0491708117567231, condition number = 3.22336030180383
+   scaling = 0.0540878929323955, condition number = 2.65930175043442
+   scaling = 0.0590049741080678, condition number = 2.26610426982233
+Rescaling to 0.0590049741080678... done
+Rescaling...
+   scaling = 0.0491708117567231, condition number = 3.22336030180383
+   scaling = 0.0536408855527889, condition number = 2.70238418621779
+   scaling = 0.0590049741080678, condition number = 2.26610426982233
+   scaling = 0.0649054715188745, condition number = 2.22674387474377
+   scaling = 0.0708059689296813, condition number = 2.55421712022415
+Rescaling to 0.0649054715188745... done
+Rescaling...
+   scaling = 0.0540878929323954, condition number = 2.65930172587581
+   scaling = 0.0590049741080678, condition number = 2.26610426982233
+   scaling = 0.0649054715188745, condition number = 2.22674387474377
+   scaling = 0.071396018670762, condition number = 2.55085717868299
+   scaling = 0.0778865658226494, condition number = 2.50804282936179
+Rescaling to 0.0649054715188745... done
+
+		* * * TRAIN ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.0525715
+	Average absolute difference = 0.0160998
+	RMS     absolute difference = 0.020542
+
+Energy per atom:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.00164286
+	Average absolute difference = 0.000503118
+	RMS     absolute difference = 0.000641936
+
+Forces:
+	Errors checked for 32000 atoms
+	Maximal absolute difference = 0.222134
+	Average absolute difference = 0.0251872
+	RMS     absolute difference = 0.0474213
+	Max(ForceDiff) / Max(Force) = 0.119671
+	RMS(ForceDiff) / RMS(Force) = 0.136433
+
+Stresses (in eV):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 2.93377
+	Average absolute difference = 0.183015
+	RMS     absolute difference = 0.584263
+	Max(StresDiff) / Max(Stres) = 0.131806
+	RMS(StresDiff) / RMS(Stres) = 0.134868
+
+Stresses (in GPa):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.890918
+	Average absolute difference = 0.0555773
+	RMS     absolute difference = 0.177427
+	Max(StresDiff) / Max(Stres) = 0.131806
+	RMS(StresDiff) / RMS(Stres) = 0.134868
+_______________________________________________
+
+
+		* * * VALIDATION ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.0592228
+	Average absolute difference = 0.0196754
+	RMS     absolute difference = 0.023952
+
+Energy per atom:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.00185071
+	Average absolute difference = 0.000614857
+	RMS     absolute difference = 0.000748501
+
+Forces:
+	Errors checked for 32000 atoms
+	Maximal absolute difference = 0.218027
+	Average absolute difference = 0.0255301
+	RMS     absolute difference = 0.0481648
+	Max(ForceDiff) / Max(Force) = 0.122163
+	RMS(ForceDiff) / RMS(Force) = 0.137741
+
+Stresses (in eV):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 3.03265
+	Average absolute difference = 0.18329
+	RMS     absolute difference = 0.580234
+	Max(StresDiff) / Max(Stres) = 0.207297
+	RMS(StresDiff) / RMS(Stres) = 0.152957
+
+Stresses (in GPa):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.920946
+	Average absolute difference = 0.0556609
+	RMS     absolute difference = 0.176204
+	Max(StresDiff) / Max(Stres) = 0.207297
+	RMS(StresDiff) / RMS(Stres) = 0.152957
+_______________________________________________
+

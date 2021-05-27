@@ -161,7 +161,7 @@ def calculate_properties_vasp(element, eq):
         if i != len(atoms) - 1:
         #    print(i)
             # is this multiplication of 10 physically motivated?
-            atoms[i].set_velocities(velocities[i])
+            atoms[i].set_velocities(velocities[i]*10)
 
     for i in range(len(atoms) - eq):
         i += eq
