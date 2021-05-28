@@ -9,11 +9,10 @@ if __name__ == "__main__":
     f = open('property_calculations/eq_2000/times.txt', 'w+')
     f.write('id\ttime[s]\n')
 
-    #index = [0,1,2,3,4,5,6,7,8,9]
-    index = [20]
+    index = [1, 10, 100, 1000, 10000]
     for i in index:
         #start_time = time.time()
-        id = md_qml.run_md('MTP', i, 'Al', '06', 2000, 'eq_2000/')
+        id = md_qml.run_md('MTP', i, 'Al', '06', 2000, 'eq_2000/', 2000)
         # for training on the same potential iteratively
         #id = md_qml.run_md('MTP', 100, 'Al', '06', 2000, 'eq_2000_iter_'+str(i)+'/', 2000)
         #print("Ran in %s seconds" % (time.time() - start_time))

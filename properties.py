@@ -353,7 +353,7 @@ d (int):
     file.close()
     return 
 
-def finalize_properties_file(a, id, d, ma, dft=False, dir=""):
+def finalize_properties_file(a, id, d, ma, dft=False, dir="", offset=0):
     """ Calculates and records the properties of a material.
     Parameters:
     a (obj): Atoms object form ase.
@@ -382,7 +382,7 @@ def finalize_properties_file(a, id, d, ma, dft=False, dir=""):
     if dft:
         steps = int(8000/100)
     else:
-        steps = math.floor(settings['max_steps'] / settings['interval'])
+        steps = math.floor((settings['max_steps'] - offset) / settings['interval'])
     print('properties.py: dft', dft)
     print('properties.py: steps', steps)
     for line in f_lines[-steps:]:
