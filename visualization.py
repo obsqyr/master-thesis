@@ -416,7 +416,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     if final:
         if element == 'Al':
-            indeces = [1000, 10000]
+            indeces = [1, 10, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
             indeces = [10, 100, 1000]
@@ -698,9 +698,9 @@ if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
 
-    mtps = ['06']
-    eqs = ['eq_0', 'eq_2000']
-    offsets = [0, 2000]
+    mtps = ['06', '10']
+    eqs = ['eq_2000']
+    offsets = [2000]
     
     for mtp in mtps:
         for eq in eqs:

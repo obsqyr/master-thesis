@@ -543,7 +543,7 @@ def get_averaged_properties(filename, element='Al', offset=0):
 
 if __name__ == "__main__":
     #clean_property_calculations()
-    M, C, E = get_averaged_properties('properties_Al_DFT_eq_0.txt', 'Al')
+    M, C, E = get_averaged_properties('properties_Al_DFT_eq_2000.txt', 'Al')
     
     print(C)
     #vec_0 = np.zeros(3)

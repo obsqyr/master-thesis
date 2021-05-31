@@ -891,19 +891,21 @@ def plot_mtp_training_and_validation_errors():
     MAEs_si = []
     MAEs_al = []
     for filename in filenames[0]:
-        print(filename)
-        #print(filename[21:23])
+        #print(filename)
+        #print(filename[27:31])
         f = open(filename)
         i = f.read()
         if filename[21:23] == 'Si':
             MAEs_si.append(extract_MAE(i))
-        elif filename[21:23] == 'Al':
+        elif filename[21:23] == 'Al' and filename[27:31] != '8000':
+            print(filename)
             MAEs_al.append(extract_MAE(i))
         else:
             continue
 
     print(len(MAEs_si))
     print(len(MAEs_al))
+    print(MAEs_al)
 
     # ALUMINIUM
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
@@ -920,11 +922,15 @@ def plot_mtp_training_and_validation_errors():
     
     tr_ers = []
     val_ers = []
+    i = 0
     for m in MAEs_al:
+        print(i)
+        i += 1
         #plt.scatter(timesteps, m[1], color='blue')
         #plt.scatter(timesteps, m[1], color='blue')
         #plt.scatter(100, m[1], color='blue', alpha=0.3)
         #plt.scatter(100, m[6], color='orange', alpha=0.3)
+        print(len(m))
         tr_ers.append(m[1])
         val_ers.append(m[6])
 

@@ -189,6 +189,8 @@ def calculate_properties_vasp(element, eq):
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
         
+
+
 if __name__ == "__main__":
     #clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
