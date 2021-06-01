@@ -419,7 +419,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             indeces = [1, 10, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
-            indeces = [10, 100, 1000]
+            indeces = [1, 10, 100, 1000]
             indeces_str = [str(i) for i in indeces]
         legend = ['DFT']
         legend.extend(indeces_str)
@@ -698,15 +698,15 @@ if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
 
-    mtps = ['06', '10']
-    eqs = ['eq_2000']
-    offsets = [2000]
+    mtps = ['06']
+    eqs = ['eq_0']
+    offsets = [0]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Al', eq, mtp, True, offset, False)
+                plot_properties_convergence('Si', eq, mtp, True, offset, False)
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
 
     #plot_forces('all')

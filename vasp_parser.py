@@ -37,6 +37,10 @@ def vasp_read(directory, filetype):
     # write atoms to trajectory file
     traj = Trajectory(directory[:-1]+'_infiles/'+atoms[0].get_chemical_symbols()[0]+'.traj',mode='a', atoms=atoms)
 
+    print(atoms[0].get_scaled_positions())
+    print(atoms[1].get_scaled_positions())
+    print(atoms[2].get_scaled_positions())
+    
     # write relevant data to file
     first = True
     velocities = []
@@ -75,7 +79,7 @@ def vasp_read(directory, filetype):
             v = unit_cell.cartesian_positions(v) # unit: Å / fs
             #v = np.array([i*l for i in v]) # unit: Å / fs
             #print('my v in Å', v)
-            print('v in Å', v)
+            #print('v in Å', v)
             velocities.append(v)
             prev_atom = atom
             
@@ -188,14 +192,13 @@ def calculate_properties_vasp(element, eq):
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
-        
 
 
 if __name__ == "__main__":
-    #clear_infiles("Al_300K/")
-    #clear_infiles("Si_300K/")
+    clear_infiles("Al_300K/")
+    clear_infiles("Si_300K/")
     
-    #vasp_read("Al_300K/", "xml")
+    vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
@@ -203,4 +206,4 @@ if __name__ == "__main__":
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
     #calculate_properties_vasp('Al', 0)
-    calculate_properties_vasp('Al', 2000)
+    #calculate_properties_vasp('Si', 2000)
