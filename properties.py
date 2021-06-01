@@ -162,7 +162,12 @@ def energies_and_temp(a):
     epot = a.get_potential_energy() / len(a)
     ekin = a.get_kinetic_energy() / len(a)
     etot = epot + ekin
-    t = ekin / (1.5 * units.kB)
+    
+    # convert to eV
+    ekin = a.get_kinetic_energy() * 1E7 / units._Nav / units._e
+    # degrees of freedom (translational only)
+    dof = (len(a) - 1) * 3
+    t = 2 * ekin / (units.kB * dof)
     return epot, ekin, etot, t
 
 def lattice_constants(a):

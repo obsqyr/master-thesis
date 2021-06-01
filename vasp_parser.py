@@ -2,6 +2,7 @@
 from ase.io.vasp import *
 import numpy as np
 import os
+from ase import units
 from ase.io.trajectory import Trajectory
 import properties as pr
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
@@ -142,13 +143,13 @@ def calculate_properties_vasp(element, eq):
     atoms = [atom for atom in traj]
     id = str(element)+'_'+'DFT_eq_' + str(eq)
     
-    # delete old DFT properties file, it it exists
+    # delete old DFT properties file, if it exists
     if os.path.exists('property_calculations/properties_' + id + '.txt'):
         os.remove('property_calculations/properties_' + id + '.txt')
 
     pr.initialize_properties_file(atoms[1], atoms[0][:4], id, 5, True) 
     #for atom in atoms:
-    print('atoms', atoms[0])
+    #print('atoms', atoms[0])
     velocities = np.load(element +'_300K_infiles/velocities.npy')
     #print(velocities[:10])
     #print(velocities[0])
@@ -162,11 +163,12 @@ def calculate_properties_vasp(element, eq):
     etots = []
     
     # set all velocities first
+    #print(velocities[0])
+    #print(len(velocities))
     for i in range(len(atoms)):
         if i != len(atoms) - 1:
         #    print(i)
-            # is this multiplication of 10 physically motivated?
-            atoms[i].set_velocities(velocities[i]*10)
+            atoms[i].set_velocities(velocities[i])
 
     for i in range(len(atoms) - eq):
         i += eq
@@ -180,12 +182,25 @@ def calculate_properties_vasp(element, eq):
         #print(atom.get_forces())
         #print(atoms[i].get_positions())
         #print(atoms[i].get_momenta())
+
         
         if i % 100 == 0:
-            print(i, eq)
+        #print(i, eq)
+            # calculate temp by hand
+            ke = 0
+            for j, a in enumerate(atoms[i]):
+                #print(i, a)
+                v = atoms[i].get_velocities()[j]
+                ke_comp = np.dot(v, v) * atoms[i].get_masses()[j] / 2
+                ke += ke_comp
+                #v2 = (atoms[i].get_velocities()**2))
+            
+            # kinetic e and ase ke are the same
+            #print('kinetic e', ke)
+            #print('ase ke', atoms[i].get_kinetic_energy())
+            ke = ke * 1E7 / units._Nav / units._e
+            
             _, _, etot, t = pr.energies_and_temp(atoms[i])
-            #print('get temperature', atoms[i].get_temperature())
-            #print('my temperature', t)
             temps.append(t)
             etots.append(etot)
             Cvs.append(pr.specific_heat_NVT(etots, len(atoms[i]), atoms[i], t))
@@ -193,10 +208,9 @@ def calculate_properties_vasp(element, eq):
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
-
 if __name__ == "__main__":
     clear_infiles("Al_300K/")
-    clear_infiles("Si_300K/")
+    #clear_infiles("Si_300K/")
     
     vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
@@ -205,5 +219,5 @@ if __name__ == "__main__":
     #calculate_properties_vasp('Si', 0)
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
-    #calculate_properties_vasp('Al', 0)
+    calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 2000)
