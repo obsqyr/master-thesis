@@ -151,7 +151,7 @@ def meansquaredisp(atoms, old_atoms):
     #print('MSD', msd/length)
     return msd/length
 
-def energies_and_temp(a):
+def energies_and_temp(a, dft=False):
     """ Calculates the energies and temperature.
     Parameters:
     a (obj): a is an atoms object of class defined in ase.
@@ -162,12 +162,16 @@ def energies_and_temp(a):
     epot = a.get_potential_energy() / len(a)
     ekin = a.get_kinetic_energy() / len(a)
     etot = epot + ekin
+    t = ekin / (1.5 * units.kB)
+    #dof = (len(a) - 1) * 3
+    #t = 2 * a.get_kinetic_energy() / (units.kB * dof)
     
-    # convert to eV
-    ekin = a.get_kinetic_energy() * 1E7 / units._Nav / units._e
-    # degrees of freedom (translational only)
-    dof = (len(a) - 1) * 3
-    t = 2 * ekin / (units.kB * dof)
+    if dft:
+        # convert to eV
+        ek = a.get_kinetic_energy() * 1E7 / units._Nav / units._e
+        # degrees of freedom (translational only)
+        dof = (len(a) - 1) * 3
+        t = 2 * ek / (units.kB * dof)
     return epot, ekin, etot, t
 
 def lattice_constants(a):
@@ -313,7 +317,7 @@ def ss(value, decimals):
         tmp = str(round(value, decimals))
     return " "+tmp.ljust(decimals + 6)
 
-def calc_properties(a_old, a, id, d, ma, dir=""):
+def calc_properties(a_old, a, id, d, ma, dir="", dft=False):
     """Calculates prioperties and writes them in a file.
     Parameters:
     a_old (obj): a_old is an atoms object from clas defined from ase.
@@ -329,7 +333,7 @@ d (int):
     
     #print('atoms pos', a.get_positions(), '\n')
     #print('old_atoms pos', a_old.get_positions())
-    epot, ekin, etot, temp = energies_and_temp(a)
+    epot, ekin, etot, temp = energies_and_temp(a, dft)
     msd =  meansquaredisp(a, a_old)
     #print('MSD', msd)
     settings = read_settings_file()

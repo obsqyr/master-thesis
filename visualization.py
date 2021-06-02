@@ -521,7 +521,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
     if element == 'Al':
         print('remember the ylim')
-        #plt.ylim([460, 600])
+        plt.ylim([0, 1400])
     elif element == 'Si':
         print('remember the ylim')
         #plt.ylim([460, 950])
@@ -699,7 +699,7 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_0']
+    eqs = ['eq_0', 'eq_2000']
     offsets = [0]
     
     for mtp in mtps:

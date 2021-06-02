@@ -38,10 +38,6 @@ def vasp_read(directory, filetype):
     # write atoms to trajectory file
     traj = Trajectory(directory[:-1]+'_infiles/'+atoms[0].get_chemical_symbols()[0]+'.traj',mode='a', atoms=atoms)
 
-    print(atoms[0].get_scaled_positions())
-    print(atoms[1].get_scaled_positions())
-    print(atoms[2].get_scaled_positions())
-    
     # write relevant data to file
     first = True
     velocities = []
@@ -183,7 +179,6 @@ def calculate_properties_vasp(element, eq):
         #print(atoms[i].get_positions())
         #print(atoms[i].get_momenta())
 
-        
         if i % 100 == 0:
         #print(i, eq)
             # calculate temp by hand
@@ -200,24 +195,27 @@ def calculate_properties_vasp(element, eq):
             #print('ase ke', atoms[i].get_kinetic_energy())
             ke = ke * 1E7 / units._Nav / units._e
             
-            _, _, etot, t = pr.energies_and_temp(atoms[i])
+            _, _, _, t0 = pr.energies_and_temp(atoms[i])
+            _, _, etot, t = pr.energies_and_temp(atoms[i], True)
+            print('conversion t', t)
+            print('non-conv. t', t0)
             temps.append(t)
             etots.append(etot)
             Cvs.append(pr.specific_heat_NVT(etots, len(atoms[i]), atoms[i], t))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
-            pr.calc_properties(atoms[eq], atoms[i], id, 5, True)
+            pr.calc_properties(atoms[eq], atoms[i], id, 5, True, "", True)
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
+    #clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    vasp_read("Al_300K/", "xml")
+    #vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
     #calculate_properties_vasp('Si', 0)
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
-    calculate_properties_vasp('Al', 0)
+    calculate_properties_vasp('Al', 2000)
     #calculate_properties_vasp('Si', 2000)
