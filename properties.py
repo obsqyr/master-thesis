@@ -34,7 +34,6 @@ def normalize_half(vec):
             temp.append(v)
     return np.array(temp)
     '''
-    
     #vec_std = (vec - np.amin(vec)) / (np.amax(vec) - np.amin(vec))
     
     #vec_std = (vec - np.amin(vec)) / 

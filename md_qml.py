@@ -93,7 +93,7 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
         #dyn = NPTBerendsen(atoms, timestep=0.1 * units.fs, temperature_K=300, taut=100 * units.fs, pressure_au=1.01325 * units.bar, taup=1000 * units.fs, compressibility=4.57e-5 / units.bar)
         
         #from ase.md.andersen import Andersen
-        #dyn = Andersen(atoms, settings['time_step'] * units.fs, settings['temperature'], 0.1)
+        #dyn = Andersen(atoms, settings['time_step'] * units.fs, settings['temperature'], 0.01)
         #print("-- Using Nose-Hoover, 'NTP' ensamble --")
         #dyn = NPT(atoms, settings['time_step'] * units.fs, settings['temperature'] * units.kB, externalstress = 0, ttime = 25*units.fs, pfactor=(400*units.fs)**2 * 0.6) 
         

@@ -161,10 +161,11 @@ def calculate_properties_vasp(element, eq):
     # set all velocities first
     #print(velocities[0])
     #print(len(velocities))
-    for i in range(len(atoms)):
-        if i != len(atoms) - 1:
+    # THIS INDEXING DEPENDS ON HOW VELOCITIES ARE CALCULATED
+    for i in range(len(atoms)-2):
+        #if i != len(atoms) - 1:
         #    print(i)
-            atoms[i].set_velocities(velocities[i])
+        atoms[i].set_velocities(velocities[i])
 
     for i in range(len(atoms) - eq):
         i += eq
@@ -204,8 +205,47 @@ def calculate_properties_vasp(element, eq):
             Cvs.append(pr.specific_heat_NVT(etots, len(atoms[i]), atoms[i], t))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True, "", True)
+    print(velocities[:10])
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
+
+def calculate_velocities(element):
+    '''
+    Calculates velocities from positions by reading trajectory
+    file from parameter 'element'. IN THE FUTURE: update so that 
+    parameters scaled_position, cell and timestep only are needed.
+    '''
+    traj = Trajectory(element +'_300K_infiles/'+ element +'.traj')
+    atoms = [atom for atom in traj]
+    # define time step in fs between atoms images
+    timestep = 1 # fs
+    
+    # get positions
+    positions = []
+    for atom in atoms:
+        positions.append(atom.get_scaled_positions())
+    # get unit cell
+    cell = atoms[0].get_cell()[:]
+    
+    # delete initial ideal position
+    positions.pop(0)
+    positions = np.array(positions)
+    
+    # ACTUAL VELOCITY CALCULATION HERE
+    # take difference: dpos[i] = pos[i+1] - pos[i]
+    dpos = np.diff(positions, axis=0)
+    # apply periodic boundary condition
+    dpos[dpos > 0.5] -= 1.0
+    dpos[dpos <-0.5] += 1.0
+
+    # scale to differences to Å / fs
+    for i in range(len(dpos)):
+        dpos[i,:,:] = np.dot(dpos[i,:,:], cell)  / timestep
+    
+    velocities = dpos
+    #np.save('Al_300K_infiles/'+'velocities.npy', velocities)
+    return velocities
+    
 if __name__ == "__main__":
     #clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
@@ -217,5 +257,6 @@ if __name__ == "__main__":
     #calculate_properties_vasp('Si', 0)
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
-    calculate_properties_vasp('Al', 2000)
+    calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 2000)
+    #calculate_velocities('Al')
