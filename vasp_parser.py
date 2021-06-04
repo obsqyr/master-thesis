@@ -41,7 +41,10 @@ def vasp_read(directory, filetype):
     # write relevant data to file
     first = True
     velocities = []
+    cell = atoms[0].get_cell()[:]
+    scaled_positions = []
     for i, atom in enumerate(atoms):
+        scaled_positions.append(atom.get_scaled_positions())
         if first:
             prev_atom = atom
             traj.write(atom)
@@ -84,6 +87,8 @@ def vasp_read(directory, filetype):
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/')
     
     velocities = np.array(velocities)
+    velocities = calculate_velocities(np.array(scaled_positions[1:]), cell, 1)
+    print(len(velocities))                                
     # write velocities to file
     np.save(directory[:-1]+'_infiles/'+'velocities.npy', velocities)
         
@@ -209,7 +214,7 @@ def calculate_properties_vasp(element, eq):
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
 
 
-def calculate_velocities(element):
+def calculate_velocities_traj(element):
     '''
     Calculates velocities from positions by reading trajectory
     file from parameter 'element'. IN THE FUTURE: update so that 
@@ -245,12 +250,26 @@ def calculate_velocities(element):
     velocities = dpos
     #np.save('Al_300K_infiles/'+'velocities.npy', velocities)
     return velocities
+
+def calculate_velocities(scaled_positions, cell, timestep):
+    # take difference: dpos[i] = pos[i+1] - pos[i]
+    dpos = np.diff(scaled_positions, axis=0)
+    # apply periodic boundary condition
+    dpos[dpos > 0.5] -= 1.0
+    dpos[dpos <-0.5] += 1.0
+
+    # scale to differences to Å / fs
+    for i in range(len(dpos)):
+        dpos[i,:,:] = np.dot(dpos[i,:,:], cell)  / timestep
+    
+    velocities = dpos
+    return velocities
     
 if __name__ == "__main__":
-    #clear_infiles("Al_300K/")
+    clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    #vasp_read("Al_300K/", "xml")
+    vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
