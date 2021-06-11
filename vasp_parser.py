@@ -205,14 +205,15 @@ def calculate_properties_vasp(element, eq):
             _, _, etot, t = pr.energies_and_temp(atoms[i], True)
             print('conversion t', t)
             print('non-conv. t', t0)
+            print(2 * atoms[i].get_kinetic_energy() / (units.kB * 93)) 
             temps.append(t)
             etots.append(etot)
             Cvs.append(pr.specific_heat_NVT(etots, len(atoms[i]), atoms[i], t))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
             pr.calc_properties(atoms[eq], atoms[i], id, 5, True, "", True)
-    print(velocities[:10])
+    #print(velocities[:10])
+    #print(atoms[0].get_masses())
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
-
 
 def calculate_velocities_traj(element):
     '''
@@ -235,7 +236,7 @@ def calculate_velocities_traj(element):
     # delete initial ideal position
     positions.pop(0)
     positions = np.array(positions)
-    
+
     # ACTUAL VELOCITY CALCULATION HERE
     # take difference: dpos[i] = pos[i+1] - pos[i]
     dpos = np.diff(positions, axis=0)
@@ -252,6 +253,7 @@ def calculate_velocities_traj(element):
     return velocities
 
 def calculate_velocities(scaled_positions, cell, timestep):
+    print(scaled_positions)
     # take difference: dpos[i] = pos[i+1] - pos[i]
     dpos = np.diff(scaled_positions, axis=0)
     # apply periodic boundary condition
@@ -266,16 +268,16 @@ def calculate_velocities(scaled_positions, cell, timestep):
     return velocities
     
 if __name__ == "__main__":
-    clear_infiles("Al_300K/")
+    #clear_infiles("Al_300K/")
     #clear_infiles("Si_300K/")
     
-    vasp_read("Al_300K/", "xml")
+    #vasp_read("Al_300K/", "xml")
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
-    #calculate_properties_vasp('Si', 0)
+    calculate_properties_vasp('Si', 0)
     #calculate_properties_vasp('Al', 0)
     #calculate_properties_vasp('Si', 6000)
-    calculate_properties_vasp('Al', 0)
+    #calculate_properties_vasp('Si', 0)
     #calculate_properties_vasp('Si', 2000)
-    #calculate_velocities('Al')
+    #calculate_velocities_traj('Si')

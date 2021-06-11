@@ -419,7 +419,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             indeces = [1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
-            indeces = [1, 10, 100, 1000]
+            indeces = [1, 10, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         legend = ['DFT']
         legend.extend(indeces_str)
@@ -524,7 +524,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         plt.ylim([0, 1400])
     elif element == 'Si':
         print('remember the ylim')
-        #plt.ylim([460, 950])
+        plt.ylim([10000, 17000])
     #plt.xscale('log')
     plt.grid(True)
     timesteps = range(100,10100, 100)
@@ -569,7 +569,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         plt.ylim([-3.70, -3.645])
     elif element == 'Si':
         print('ylim,etot')
-        #plt.ylim([-8, 4])
+        plt.ylim([-8, 4])
     #plt.xscale('log')
     plt.grid(True)    
     timesteps = range(100,10100, 100)
@@ -699,15 +699,15 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_2000']
-    offsets = [0, 2000]
+    eqs = ['eq_0', 'eq_2000']
+    offsets = [0]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Al', eq, mtp, True, offset, False)
-                #plot_properties_convergence('Si', eq, mtp, True, offset)
+                #plot_properties_convergence('Al', eq, mtp, True, offset, False)
+                plot_properties_convergence('Si', eq, mtp, True, offset)
 
     #plot_forces('all')
     #plot_energies('all')
@@ -720,7 +720,7 @@ if __name__ == "__main__":
     #plot_forces('all')
     # håll separata tränings- och evalueringsdataset
     # säg håll ett test
-
+    
     # träna explicit för simulering, mata in säg 10 observerade värden?
     # när vi tränar, optimera för att mata in modellens egna prediktioner
     # och komma så nära det riktiga datat som möjligt

@@ -128,6 +128,9 @@ def meansquaredisp(atoms, old_atoms):
     #print('pos', pos)
     #print('old_pos', old_pos)
     
+    sc_pos = atoms.get_scaled_positions()
+    sc_old_pos = old_atoms.get_scaled_positions()
+    
     #np.set_printoptions(suppress=True)
     #print('old_pos', old_pos, 'pos', pos)
     if length != len(old_pos):
@@ -135,10 +138,16 @@ def meansquaredisp(atoms, old_atoms):
         sys.exit('ERROR')
 
     msd = 0.0
-    #msd_np = 0.0
+    msd_sc = 0.0
     for atom in range(length):
         #msd += distance2(pos[atom], old_pos[atom])
         diff = pos[atom] - old_pos[atom]
+        diff2 = sc_pos[atom] - sc_old_pos[atom]
+        diff2[diff2 > 0.5] -= 1.0
+        diff2[diff2 <-0.5] += 1.0
+        # scale diff2 to Å
+        diff2 = np.dot(diff2, unit_cell[:])
+        msd_sc += np.linalg.norm(diff2)**2
         #print(diff)
         # do I need to do this?
         #diff = [i/l for i in diff]
@@ -148,6 +157,7 @@ def meansquaredisp(atoms, old_atoms):
         #print(msd)
 
     #print('MSD', msd/length)
+    #print('MSD_sc', msd_sc/length)
     return msd/length
 
 def energies_and_temp(a, dft=False):

@@ -126,6 +126,8 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
         epot = a.get_potential_energy() / len(a)
         ekin = a.get_kinetic_energy() / len(a)
         t.append(ekin / (1.5 * units.kB))
+        print(atoms.get_velocities())
+        print(atoms.get_masses())
         print('Energy per atom: Epot = %.3feV  Ekin = %.3feV (T=%3.0fK)  '
               'Etot = %.3feV' % (epot, ekin, ekin / (1.5 * units.kB), epot + ekin))
     
