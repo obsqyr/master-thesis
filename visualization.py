@@ -416,7 +416,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     if final:
         if element == 'Al':
-            indeces = [1000, 10000]
+            indeces = [1, 10, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
             indeces = [1, 10, 100, 1000, 10000]
@@ -521,7 +521,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
     if element == 'Al':
         print('remember the ylim')
-        plt.ylim([0, 1400])
+        plt.ylim([0, 6000])
     elif element == 'Si':
         print('remember the ylim')
         plt.ylim([10000, 17000])
@@ -706,8 +706,8 @@ if __name__ == "__main__":
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                #plot_properties_convergence('Al', eq, mtp, True, offset, False)
-                plot_properties_convergence('Si', eq, mtp, True, offset)
+                plot_properties_convergence('Al', eq, mtp, True, offset, False)
+                #plot_properties_convergence('Si', eq, mtp, True, offset)
 
     #plot_forces('all')
     #plot_energies('all')
