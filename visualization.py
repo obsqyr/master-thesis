@@ -706,7 +706,6 @@ if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
 
-    '''
     mtps = ['06']
     eqs = ['eq_0', 'eq_2000']
     offsets = [0]
@@ -717,9 +716,9 @@ if __name__ == "__main__":
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
                 plot_properties_convergence('Al', eq, mtp, True, offset, False)
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
-    '''
-    plot_forces('all')
-    plot_energies('all')
+    
+    #plot_forces('all')
+    #plot_energies('all')
 
     #sizes = ['big', 'small', 'smaller']
     #for s in sizes:
