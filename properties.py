@@ -559,11 +559,61 @@ def get_averaged_properties(filename, element='Al', offset=0):
         
     return MSD_averaged, Cvs_averaged, E_tots_averaged
 
+def get_instantaneous_properties(filename, element='Al', offset=0):
+    '''
+    Returns averaged properties from a properties file.
+
+    Parameters:
+    filename (str): filename of the properties file to calculate 
+    averages for
+    offset (int): an offset for the time averaging; the time average
+    starts at the offset
+    '''
+    # convert offset in timesteps to offest in amount of lines
+    # (assuming that properties are calculated each 100 timesteps)
+    offset = int(offset / 100)
+
+    lines = []
+    with open('property_calculations/'+filename, 'r') as f:
+        for i, line in enumerate(f):
+            if i > 10 + offset:
+                if line == "Time averages:\n":
+                    #print('break time')
+                    break
+                lines.append(line.split())
+    lines = lines[:-1]
+    #print('lines', len(lines))
+
+    # create atoms object
+    if element == 'Al': 
+        atom = bulk('Al', 'fcc', a=4.0479, cubic=True)
+    elif element == 'Si':
+        atom = bulk('Si', 'fcc', a=5.4310)
+    else:
+        raise ValueError('Unsupported element chosen: ' + element)
+
+    atoms = atom * 2 * (1,1,1)
+    print(element, len(atoms))
+
+    MSDs = []
+    temps = []
+    E_tots = []
+    Cvs = []
+    for line in lines:
+        MSDs.append(float(line[5]))
+        E_tots.append(float(line[3]))
+        temps.append(float(line[4]))
+        Cvs.append(specific_heat_NVT(E_tots, len(atoms), atoms, temps[-1]))
+        
+    return MSDs, Cvs, E_tots
+
 if __name__ == "__main__":
     #clean_property_calculations()
-    M, C, E = get_averaged_properties('properties_Al_DFT_eq_2000.txt', 'Al')
+    M, C, E = get_averaged_properties('properties_Al_DFT_eq_2000.txt', 'Al',2000)
+    M2, C2, E2 = get_averaged_properties('eq_2000/properties_Al_MTP_06_1000_eq_2000_offset_0_ranfor_10000.txt', 'Al',2000)
     
     print(C)
+    print(C2)
     #vec_0 = np.zeros(3)
     #vec_1 = np.array([8.0803606, 8.0780096, 8.0762162])
 
