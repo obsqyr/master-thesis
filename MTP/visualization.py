@@ -992,7 +992,7 @@ def plot_mtp_training_and_validation_errors():
 if __name__ == "__main__":
     #plot_mtp_closer_to_zero()
     #plot_mtp_cv()
-    #plot_mtp_log()
+    plot_mtp_log()
     #plot_learning_curves_log()
-    plot_mtp_training_and_validation_errors()
+    #plot_mtp_training_and_validation_errors()
     

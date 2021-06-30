@@ -43,7 +43,9 @@ def vasp_read(directory, filetype):
     velocities = []
     cell = atoms[0].get_cell()[:]
     scaled_positions = []
+    positions = []
     for i, atom in enumerate(atoms):
+        positions.append(atom.get_positions())
         scaled_positions.append(atom.get_scaled_positions())
         if first:
             prev_atom = atom
@@ -85,10 +87,14 @@ def vasp_read(directory, filetype):
             
             traj.write(atom)
             write_atom_to_infiles(atom, directory[:-1]+'_infiles/')
-    
+
+    print('len scaled positions', len(scaled_positions))
+    print('len scale pos check', len([a.get_scaled_positions() for a in atoms]))
     velocities = np.array(velocities)
     velocities = calculate_velocities(np.array(scaled_positions[1:]), cell, 1)
-    print(len(velocities))                                
+    #velocities = calculate_velocities_Å(np.array(positions[1:]), cell, 1)
+    print(len(velocities))
+    #print('velocities', velocities[-1])
     # write velocities to file
     np.save(directory[:-1]+'_infiles/'+'velocities.npy', velocities)
         
@@ -170,7 +176,13 @@ def calculate_properties_vasp(element, eq):
     for i in range(len(atoms)-2):
         #if i != len(atoms) - 1:
         #    print(i)
-        atoms[i].set_velocities(velocities[i])
+        # multiply with factor to make ASE yield kinetic
+        # energy in the unit of eV
+        # 0.0985329278164
+        atoms[i].set_velocities(velocities[i]*10.1805056849)
+        #(atoms[i].set_velocities(velocities[i])
+        
+        print(atoms[i].get_velocities())
 
     for i in range(len(atoms) - eq):
         i += eq
@@ -202,15 +214,15 @@ def calculate_properties_vasp(element, eq):
             ke = ke * 1E7 / units._Nav / units._e
             
             _, _, _, t0 = pr.energies_and_temp(atoms[i])
-            _, _, etot, t = pr.energies_and_temp(atoms[i], True)
-            print('conversion t', t)
-            print('non-conv. t', t0)
-            print(2 * atoms[i].get_kinetic_energy() / (units.kB * 93)) 
+            _, _, etot, t = pr.energies_and_temp(atoms[i], False)
+            print('DFT true t', t)
+            print('DFT false t', t0)
+            #print(2 * atoms[i].get_kinetic_energy() / (units.kB * 93)) 
             temps.append(t)
             etots.append(etot)
             Cvs.append(pr.specific_heat_NVT(etots, len(atoms[i]), atoms[i], t))
             MSDs.append(pr.meansquaredisp(atoms[i], atoms[eq]))
-            pr.calc_properties(atoms[eq], atoms[i], id, 5, True, "", True)
+            pr.calc_properties(atoms[eq], atoms[i], id, 5, True, "", False)
     #print(velocities[:10])
     #print(atoms[0].get_masses())
     pr.finalize_properties_file(atoms[-1], id, 5, True, True)
@@ -253,12 +265,48 @@ def calculate_velocities_traj(element):
     return velocities
 
 def calculate_velocities(scaled_positions, cell, timestep):
-    print(scaled_positions)
+    #print(scaled_positions)
     # take difference: dpos[i] = pos[i+1] - pos[i]
     dpos = np.diff(scaled_positions, axis=0)
     # apply periodic boundary condition
+    #for i in range(len(dpos)):
+    #    dpos[i,:,:] = np.dot(dpos[i,:,:], cell)
+    last_pos = scaled_positions[9998]
+    seclast_pos = scaled_positions[9997]
+    #print('len pos', len(scaled_positions))
+    #print('last positions', last_pos)
+    #print('second to last position', seclast_pos)
+
+    #print('with constant', dpos[-1]*8.0804)
+    #print('without constant', dpos[-1])
+    #print('with np.subtract', )
+
     dpos[dpos > 0.5] -= 1.0
     dpos[dpos <-0.5] += 1.0
+
+    # scale to differences to Å / fs
+    for i in range(len(dpos)):
+        dpos[i,:,:] = np.dot(dpos[i,:,:], cell)  / timestep
+    
+    #print('last velocity', dpos[-1])
+    velocities = dpos
+    return velocities
+
+def calculate_velocities_Å(positions, cell, timestep):
+    #print(positions[0])
+    # take difference: dpos[i] = pos[i+1] - pos[i]
+    dpos = np.diff(positions, axis=0)
+    # apply periodic boundary condition
+    cell_inverse = np.array([[0.12375625, 0, 0], [0, 0.12375625, 0], [0, 0, 0.12375625]])
+    #print('cell inverse', cell_inverse)
+    for i in range(len(dpos)):
+        dpos[i,:,:] = np.dot(dpos[i,:,:], cell_inverse)
+    
+    dpos[dpos > 0.5] -= 1.0
+    dpos[dpos <-0.5] += 1.0
+    
+    for i in range(len(dpos)):
+        dpos[i,:,:] = np.dot(dpos[i,:,:], cell)
 
     # scale to differences to Å / fs
     for i in range(len(dpos)):
@@ -268,16 +316,22 @@ def calculate_velocities(scaled_positions, cell, timestep):
     return velocities
     
 if __name__ == "__main__":
-    #clear_infiles("Al_300K/")
-    #clear_infiles("Si_300K/")
+    clear_infiles("Al_300K/")
+    clear_infiles("Si_300K/")
     
-    #vasp_read("Al_300K/", "xml")
+    vasp_read("Al_300K/", "xml")
+    vasp_read("Si_300K/", "OUTCAR")
+    #f, pos, pot, num = read_infiles("Al_300K/")
+    #read_vasp_out("Si_300K/OUTCAR")    
     #vasp_read("Si_300K/", "OUTCAR")
     #f, pos, pot, num = read_infiles("Al_300K/")
     #read_vasp_out("Si_300K/OUTCAR")    
-    calculate_properties_vasp('Si', 0)
-    #calculate_properties_vasp('Al', 0)
-    #calculate_properties_vasp('Si', 6000)
     #calculate_properties_vasp('Si', 0)
-    #calculate_properties_vasp('Si', 2000)
+    #calculate_properties_vasp('Al', 0)
+    #calculate_properties_vasp('Al', 2000)
+    #calculate_properties_vasp('Si', 0)
+    calculate_properties_vasp('Al', 0)
+    calculate_properties_vasp('Al', 2000)
+    calculate_properties_vasp('Si', 0)
+    calculate_properties_vasp('Si', 2000)
     #calculate_velocities_traj('Si')

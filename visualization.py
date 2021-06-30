@@ -195,12 +195,14 @@ def plot_energies(size='big'):
     del MAEs_al[0]
 
     # plot Al energy
-    fig = figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    fig = figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Al")
-    plt.xlabel('timesteps')
+    plt.xlabel('Amount of time steps in training data')
     plt.ylabel('MAE [eV]')
     plt.xscale('log')
-    plt.ylim([0,0.04])
+    plt.yscale('log')
+    plt.grid(True)
+    #plt.ylim([0,0.04])
     # this depends on size
     if size == 'big':
         timesteps = range(1000,10000,1000)
@@ -237,12 +239,14 @@ def plot_energies(size='big'):
     plt.show()
 
     # plot Si energy
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Si")
-    plt.xlabel('timesteps')
+    plt.xlabel('Amount of time steps in training data')
     plt.ylabel('MAE [eV]')
-    plt.ylim([0,0.16])
+    #plt.ylim([0,0.16])
+    plt.yscale('log')
     plt.xscale('log')
+    plt.grid(True)
     
     # energy
     for pot in MAEs_si:
@@ -270,13 +274,15 @@ def plot_forces(size='big'):
     del MAEs_al[0]
 
     # plot Al forces
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Average force length MAE, Al")
-    plt.xlabel('timesteps')
+    plt.xlabel('Amount of time steps in training data')
     plt.ylabel('MAE [eV/ Å]')
     plt.xscale('log')
-    plt.ylim([0,3.2])
-    
+    plt.yscale('log')
+    #plt.ylim([0,3.2])
+    plt.grid(True)
+
     # this depends on size
     if size == 'big':
         timesteps = range(1000,10000,1000)
@@ -314,13 +320,15 @@ def plot_forces(size='big'):
     plt.show()
 
     # plot Si energy
-    figure(num=None, figsize=(8, 5), dpi=80, facecolor='w', edgecolor='k')
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Average force length MAE, Si")
-    plt.xlabel('timesteps')
+    plt.xlabel('Amount of time steps in training data')
     plt.ylabel('MAE [eV / Å]')
     plt.xscale('log')
-    plt.ylim([0,5.7])
-    
+    plt.yscale('log')
+    #plt.ylim([0,5.7])
+    plt.grid(True)
+
     # forces
     for pot in MAEs_si:
         MAE = [m[2] for m in pot]
@@ -416,7 +424,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     if final:
         if element == 'Al':
-            indeces = [1000, 10000]
+            indeces = [1, 10, 100, 1000, 10000]
             indeces_str = [str(i) for i in indeces]
         elif element == 'Si':
             indeces = [1, 10, 100, 1000, 10000]
@@ -521,7 +529,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
     if element == 'Al':
         print('remember the ylim')
-        plt.ylim([0, 1400])
+        plt.ylim([0, 6000])
     elif element == 'Si':
         print('remember the ylim')
         plt.ylim([10000, 17000])
@@ -698,6 +706,7 @@ if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
 
+    '''
     mtps = ['06']
     eqs = ['eq_0', 'eq_2000']
     offsets = [0]
@@ -706,11 +715,12 @@ if __name__ == "__main__":
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                #plot_properties_convergence('Al', eq, mtp, True, offset, False)
-                plot_properties_convergence('Si', eq, mtp, True, offset)
+                plot_properties_convergence('Al', eq, mtp, True, offset, False)
+                #plot_properties_convergence('Si', eq, mtp, True, offset)
+    '''
+    plot_forces('all')
+    plot_energies('all')
 
-    #plot_forces('all')
-    #plot_energies('all')
     #sizes = ['big', 'small', 'smaller']
     #for s in sizes:
     #    plot_energies(s)

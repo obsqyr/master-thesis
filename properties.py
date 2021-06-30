@@ -169,7 +169,7 @@ def energies_and_temp(a, dft=False):
             and temperature.
     """
     epot = a.get_potential_energy() / len(a)
-    ekin = a.get_kinetic_energy() / len(a)
+    ekin = a.get_kinetic_energy() / len(a) # dof: num atoms - 1
     etot = epot + ekin
     t = ekin / (1.5 * units.kB)
     #dof = (len(a) - 1) * 3
