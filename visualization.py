@@ -395,7 +395,7 @@ def plot_forces_sphere():
     plt.savefig('figures/Al_average_force_length_MAE_sphere.png')
     plt.show()
 
-def plot_properties_convergence(element, eq, mtp, final=False, offset=0, variance=False, averaged=True):
+def plot_properties_convergence(element, eq, mtp, final=False, offset=0, variance=False, time_type="Time averaged"):
     '''
     Plot time averages of properties to check whether or not
     they converge. 
@@ -409,18 +409,19 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     # MSD
     figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Time averaged MSD, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ", offset " + str(offset))
+    plt.title(time_type + " MSD, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ", offset " + str(offset))
     plt.xlabel('Amount of simulated time steps')
     plt.ylabel('MSD [Å^2]')
     #plt.xscale('log')
     plt.grid(True)
+    plt.ylim([0,0.001])
 
     timesteps = range(100,10100, 100)
     # get DFT averages
-    if averaged:
+    if time_type=="Time averaged":
         MSDs, Cvs, E_tots = pr.get_averaged_properties('properties_'+element+'_DFT_eq_'+ str(offset) +'.txt')
     else:
-        MSDs, Cvs, E_tots = pr.get_instantenous_properties('properties_'+element+'_DFT_eq_'+ str(offset) +'.txt')
+        MSDs, Cvs, E_tots = pr.get_instantaneous_properties('properties_'+element+'_DFT_eq_'+ str(offset) +'.txt')
     MSDs_mtp = []
     Cvs_mtp = []
     E_tots_mtp = []
@@ -438,7 +439,10 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
 
     # get averages from indeces
     for i in indeces:
-        MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_0_ranfor_10000.txt', element, offset)
+        if time_type=="Time averaged":
+            MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_0_ranfor_10000.txt', element, offset)
+        else:
+            MSD, Cv, E_tot = pr.get_instantaneous_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_0_ranfor_10000.txt', element, offset)
         MSDs_mtp.append(MSD)
         Cvs_mtp.append(Cv)
         E_tots_mtp.append(E_tot)
@@ -518,7 +522,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             else:
                 plt.legend(legend)
             
-        plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_MSD_'+time_type+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -526,12 +530,15 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     # specific heat
     figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Time averaged specific heat capacity, "+ element +", MTP " +mtp+ ", eq. at " + str(eq_ts) + ", offset " + str(offset))
+    plt.title(time_type + " specific heat capacity, "+ element +", MTP " +mtp+ ", eq. at " + str(eq_ts) + ", offset " + str(offset))
     plt.xlabel('Amount of simulated time steps')
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
     if element == 'Al':
         print('remember the ylim')
-        plt.ylim([0, 8000])
+        if offset==2000:
+            plt.ylim([0, 1500])
+        elif offset==0:
+            plt.ylim([0,6000])
     elif element == 'Si':
         print('remember the ylim')
         plt.ylim([10000, 17000])
@@ -564,7 +571,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         elif element == 'Si':
             plt.legend(legend)
 
-        plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_Cv_'+time_type+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -572,7 +579,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     
     # E_tot
     figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
-    plt.title("Time averaged total energy, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ', offset ' + str(offset))
+    plt.title(time_type + " total energy, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ', offset ' + str(offset))
     plt.xlabel('Amount of simulated time steps')
     plt.ylabel('total energy [eV/atom]')
     if element == 'Al':
@@ -608,7 +615,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         elif element == 'Si':
             plt.legend(legend)
 
-        plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_Etot_'+time_type+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -627,11 +634,11 @@ if __name__ == "__main__":
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Al', eq, mtp, True, offset, False)
+                plot_properties_convergence('Al', eq, mtp, True, offset, False, "Instantaneous")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
-    #plot_forces('all')
-    #plot_energies('all')
+    plot_forces('all')
+    plot_energies('all')
 
     #sizes = ['big', 'small', 'smaller']
     #for s in sizes:
