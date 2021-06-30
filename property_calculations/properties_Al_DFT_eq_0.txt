@@ -1,0 +1,11 @@
+Material ID: Al_DFT_eq_0
+Unit cell composition: Al32
+Material:  Al
+Site positions of initial unit cell:
+ Al          Al          Al          Al         
+ 0.00000     0.00000     2.02010     2.02010    
+ 0.00000     2.02010     0.00000     2.02010    
+ 0.00000     2.02010     2.02010     0.00000    
+Properties:
+ Time        Epot        Ekin        Etot        Temp     MSD         Self_diff   LC_a      LC_b      LC_c      Volume      Pressure    DebyeT   Lindemann 
+ fs          eV/atom     eV/atom     eV/atom     K        Å^2         mm^2/s      Å         Å         Å         Å^3/atom    GPa        K        1          
