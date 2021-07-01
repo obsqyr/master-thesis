@@ -631,8 +631,8 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_0']
-    offsets = [2000]
+    eqs = ['eq_0', 'eq_2000']
+    offsets = [0]
     
     for mtp in mtps:
         for eq in eqs:
