@@ -414,7 +414,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     plt.ylabel('MSD [Å^2]')
     #plt.xscale('log')
     plt.grid(True)
-    plt.ylim([0,0.0008])
+    plt.ylim([0,0.001])
 
     timesteps = range(100,10100, 100)
     # get DFT averages
@@ -540,7 +540,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     if element == 'Al':
         print('remember the ylim')
         if offset==2000:
-            plt.ylim([0, 1500])
+            plt.ylim([0, 1700])
         elif offset==0:
             plt.ylim([0,6000])
     elif element == 'Si':
@@ -631,14 +631,14 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_0', 'eq_2000']
-    offsets = [0]
+    eqs = ['eq_0']
+    offsets = [2000]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Al', eq, mtp, True, offset, False, "Instantaneous")
+                plot_properties_convergence('Al', eq, mtp, True, offset, False, "Time averaged")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
     #plot_forces('all')
