@@ -410,18 +410,20 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     # MSD
     figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     plt.title(time_type + " MSD, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ", offset " + str(offset))
-    plt.xlabel('Amount of simulated time steps')
+    plt.xlabel('Simulated time steps')
     plt.ylabel('MSD [Å^2]')
     #plt.xscale('log')
     plt.grid(True)
-    plt.ylim([0,0.001])
+    plt.ylim([0,0.0008])
 
     timesteps = range(100,10100, 100)
     # get DFT averages
     if time_type=="Time averaged":
         MSDs, Cvs, E_tots = pr.get_averaged_properties('properties_'+element+'_DFT_eq_'+ str(offset) +'.txt')
-    else:
+    elif time_type=="Instantaneous":
         MSDs, Cvs, E_tots = pr.get_instantaneous_properties('properties_'+element+'_DFT_eq_'+ str(offset) +'.txt')
+    else:
+        print("Invalid time_type chosen")
     MSDs_mtp = []
     Cvs_mtp = []
     E_tots_mtp = []
@@ -440,9 +442,11 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     # get averages from indeces
     for i in indeces:
         if time_type=="Time averaged":
-            MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_0_ranfor_10000.txt', element, offset)
+            MSD, Cv, E_tot = pr.get_averaged_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_'+str(offset)+'_ranfor_10000.txt', element)
+        elif time_type=="Instantaneous":
+            MSD, Cv, E_tot = pr.get_instantaneous_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_'+str(offset)+'_ranfor_10000.txt', element)
         else:
-            MSD, Cv, E_tot = pr.get_instantaneous_properties(eq+'/properties_'+element+'_MTP_'+mtp+'_'+str(i)+'_'+eq+'_offset_0_ranfor_10000.txt', element, offset)
+            print("Invalid time_type chosen")
         MSDs_mtp.append(MSD)
         Cvs_mtp.append(Cv)
         E_tots_mtp.append(E_tot)
@@ -485,7 +489,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             else:
                 # why MSDs[-1]?
                 if offset != 0:
-                    plt.plot(timesteps[int(offset/100):], MSDs[:-1])
+                    plt.plot(timesteps[int(offset/100):], MSDs)
                 else:
                     plt.plot(timesteps[int(offset/100):], MSDs[:-1])
         elif element == 'Si':
@@ -522,7 +526,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             else:
                 plt.legend(legend)
             
-        plt.savefig('figures/convergence/'+element+'_MSD_'+time_type+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_MSD_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -531,7 +535,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     # specific heat
     figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     plt.title(time_type + " specific heat capacity, "+ element +", MTP " +mtp+ ", eq. at " + str(eq_ts) + ", offset " + str(offset))
-    plt.xlabel('Amount of simulated time steps')
+    plt.xlabel('Simulated time steps')
     plt.ylabel('Specific heat capacity [J/(K*Kg)]')
     if element == 'Al':
         print('remember the ylim')
@@ -553,7 +557,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     for Cv in Cvs_mtp:
         #plt.scatter(timesteps, Cv[:-1])
         if offset != 0:
-            plt.plot(timesteps[int(offset/100):], Cv[:-1])
+            plt.plot(timesteps[int(offset/100):], Cv)
         else:
             plt.plot(timesteps[int(offset/100):], Cv[:-1])
 
@@ -571,7 +575,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         elif element == 'Si':
             plt.legend(legend)
 
-        plt.savefig('figures/convergence/'+element+'_Cv_'+time_type+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_Cv_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -580,10 +584,10 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     # E_tot
     figure(num=None, figsize=(8, 4), dpi=80, facecolor='w', edgecolor='k')
     plt.title(time_type + " total energy, " + element + ", MTP " + mtp +", eq. at " + str(eq_ts) + ', offset ' + str(offset))
-    plt.xlabel('Amount of simulated time steps')
+    plt.xlabel('Simulated time steps')
     plt.ylabel('total energy [eV/atom]')
     if element == 'Al':
-        plt.ylim([-3.70, -3.645])
+        plt.ylim([-3.70, -3.62])
     elif element == 'Si':
         print('ylim,etot')
         plt.ylim([-8, 4])
@@ -597,7 +601,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     for E_tot in E_tots_mtp:
         #plt.scatter(timesteps, E_tot[:-1])
         if offset != 0:
-            plt.plot(timesteps[int(offset/100):], E_tot[:-1])
+            plt.plot(timesteps[int(offset/100):], E_tot)
         else:
             plt.plot(timesteps[int(offset/100):], E_tot[:-1])
     
@@ -615,7 +619,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         elif element == 'Si':
             plt.legend(legend)
 
-        plt.savefig('figures/convergence/'+element+'_Etot_'+time_type+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        plt.savefig('figures/convergence/'+element+'_Etot_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -627,8 +631,8 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_2000']
-    offsets = [0, 2000]
+    eqs = ['eq_0', 'eq_2000']
+    offsets = [0]
     
     for mtp in mtps:
         for eq in eqs:
@@ -637,8 +641,8 @@ if __name__ == "__main__":
                 plot_properties_convergence('Al', eq, mtp, True, offset, False, "Instantaneous")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
-    plot_forces('all')
-    plot_energies('all')
+    #plot_forces('all')
+    #plot_energies('all')
 
     #sizes = ['big', 'small', 'smaller']
     #for s in sizes:
