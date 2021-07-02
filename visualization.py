@@ -545,7 +545,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             plt.ylim([0,6000])
     elif element == 'Si':
         print('remember the ylim')
-        plt.ylim([0, 280000])
+        plt.ylim([0, 100000])
     #plt.xscale('log')
     plt.grid(True)
     timesteps = range(100,10100, 100)
@@ -631,14 +631,14 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_0', 'eq_2000']
-    offsets = [0]
+    eqs = ['eq_2000']
+    offsets = [2000]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Instantaneous")
+                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Time averaged")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
     #plot_forces('all')
