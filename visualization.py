@@ -525,7 +525,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
                 plt.legend(['DFT', '1', '100', '1000', '10000'])
             else:
                 plt.legend(legend)
-            
+                
         plt.savefig('figures/convergence/'+element+'_MSD_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
@@ -631,14 +631,14 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['06']
-    eqs = ['eq_2000']
+    eqs = ['eq_0']
     offsets = [2000]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Time averaged")
+                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Instantaneous")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
     #plot_forces('all')
