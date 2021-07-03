@@ -494,7 +494,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
                 else:
                     plt.plot(timesteps[int(offset/100):], MSDs[:-1])
         elif element == 'Si':
-            if mtp == '10' and eq_ts == 2000:
+            if mtp == '10' and eq_ts == 2001:
                 if i != 1:
                     plt.plot(timesteps, MSDs[:-1])
             else:
@@ -632,14 +632,14 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
 
     mtps = ['10']
-    eqs = ['eq_2000']
+    eqs = ['eq_0']
     offsets = [2000]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Time averaged")
+                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Instantaneous")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
     #plot_forces('all')
