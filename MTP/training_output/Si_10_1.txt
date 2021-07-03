@@ -1,0 +1,228 @@
+MTPR from untrained_mtps/10.mtp, Database: cfg_train/Si_train_1.cfg
+validation set: cfg_test/Si_test_1000.cfg
+Random initialization of radial coefficients
+Rescaling...
+   scaling = 0.833333333333333, condition number = 744.926841935238
+   scaling = 0.909090909090909, condition number = 963.436090128934
+   scaling = 1, condition number = 1284.11709971259
+   scaling = 1.1, condition number = 1691.89448868546
+   scaling = 1.2, condition number = 2198.96479818637
+Rescaling to 0.833333333333333... done
+Rescaling...
+   scaling = 0.694444444444445, condition number = 431.221906715541
+   scaling = 0.757575757575758, condition number = 563.611753934184
+   scaling = 0.833333333333333, condition number = 744.737008127297
+   scaling = 0.916666666666667, condition number = 987.683779924496
+   scaling = 1, condition number = 1284.28172045781
+Rescaling to 0.694444444444445... done
+Rescaling...
+   scaling = 0.578703703703704, condition number = 250.782542236115
+   scaling = 0.631313131313131, condition number = 323.891672366575
+   scaling = 0.694444444444445, condition number = 431.221906715541
+   scaling = 0.763888888888889, condition number = 573.011937340795
+   scaling = 0.833333333333333, condition number = 744.737008127297
+Rescaling to 0.578703703703704... done
+Rescaling...
+   scaling = 0.482253086419753, condition number = 146.281880721134
+   scaling = 0.526094276094276, condition number = 192.217505229217
+   scaling = 0.578703703703704, condition number = 250.782542236115
+   scaling = 0.636574074074074, condition number = 333.291817172207
+   scaling = 0.694444444444445, condition number = 431.221906715541
+Rescaling to 0.482253086419753... done
+Rescaling...
+   scaling = 0.401877572016461, condition number = 87.575304343694
+   scaling = 0.43841189674523, condition number = 113.485224254551
+   scaling = 0.482253086419753, condition number = 146.281880721134
+   scaling = 0.530478395061729, condition number = 195.087650097541
+   scaling = 0.578703703703704, condition number = 250.782542236115
+Rescaling to 0.401877572016461... done
+Rescaling...
+   scaling = 0.334897976680384, condition number = 52.8056050683228
+   scaling = 0.365343247287692, condition number = 66.9553330646206
+   scaling = 0.401877572016461, condition number = 87.575304343694
+   scaling = 0.442065329218107, condition number = 114.483558059327
+   scaling = 0.482253086419753, condition number = 146.031161337901
+Rescaling to 0.334897976680384... done
+Rescaling...
+   scaling = 0.279081647233653, condition number = 36.8356889067244
+   scaling = 0.304452706073077, condition number = 40.6792166555065
+   scaling = 0.334897976680384, condition number = 52.8056050683228
+   scaling = 0.368387774348423, condition number = 68.2727342917804
+   scaling = 0.401877572016461, condition number = 87.575304343694
+Rescaling to 0.279081647233653... done
+Rescaling...
+   scaling = 0.232568039361378, condition number = 26.1804732072429
+   scaling = 0.25371058839423, condition number = 30.0076332349794
+   scaling = 0.279081647233653, condition number = 36.8356889067244
+   scaling = 0.306989811957019, condition number = 41.9993897410309
+   scaling = 0.334897976680384, condition number = 52.8056050683228
+Rescaling to 0.232568039361378... done
+Rescaling...
+   scaling = 0.193806699467815, condition number = 21.0207840901405
+   scaling = 0.211425490328525, condition number = 22.8432399226829
+   scaling = 0.232568039361378, condition number = 26.1804732072429
+   scaling = 0.255824843297516, condition number = 30.2586622829702
+   scaling = 0.279081647233653, condition number = 36.8356889067244
+Rescaling to 0.193806699467815... done
+Rescaling...
+   scaling = 0.161505582889846, condition number = 15.7613758877204
+   scaling = 0.176187908607104, condition number = 17.6736843396133
+   scaling = 0.193806699467815, condition number = 21.0207840901405
+   scaling = 0.213187369414596, condition number = 23.2526371149385
+   scaling = 0.232568039361378, condition number = 26.1804732072429
+Rescaling to 0.161505582889846... done
+Rescaling...
+   scaling = 0.134587985741538, condition number = 11.0105338985393
+   scaling = 0.146823257172587, condition number = 14.3623760253453
+   scaling = 0.161505582889846, condition number = 15.7613758877204
+   scaling = 0.17765614117883, condition number = 18.240256464912
+   scaling = 0.193806699467815, condition number = 21.0168263735651
+Rescaling to 0.134587985741538... done
+Rescaling...
+   scaling = 0.112156654784615, condition number = 6.60826014069891
+   scaling = 0.122352714310489, condition number = 8.28253412026525
+   scaling = 0.134587985741538, condition number = 11.0105338985393
+   scaling = 0.148046784315692, condition number = 13.7827630963098
+   scaling = 0.161505582889846, condition number = 15.7613758877204
+Rescaling to 0.112156654784615... done
+Rescaling...
+   scaling = 0.0934638789871793, condition number = 5.07322928910582
+   scaling = 0.101960595258741, condition number = 5.59172218837648
+   scaling = 0.112156654784615, condition number = 6.60826014069891
+   scaling = 0.123372320263077, condition number = 8.31142598914781
+   scaling = 0.134587985741538, condition number = 11.0105338985393
+Rescaling to 0.0934638789871793... done
+Rescaling...
+   scaling = 0.0778865658226494, condition number = 5.11414641531893
+   scaling = 0.0849671627156175, condition number = 5.01627614783848
+   scaling = 0.0934638789871793, condition number = 5.07322928910582
+   scaling = 0.102810266885897, condition number = 5.7119518296774
+   scaling = 0.112156654784615, condition number = 6.60826014069891
+Rescaling to 0.0849671627156175... done
+Rescaling...
+   scaling = 0.0708059689296813, condition number = 4.65870085568407
+   scaling = 0.0772428751960159, condition number = 5.18696898582289
+   scaling = 0.0849671627156175, condition number = 5.01627614783848
+   scaling = 0.0934638789871793, condition number = 5.07322928910582
+   scaling = 0.101960595258741, condition number = 5.59042740138084
+Rescaling to 0.0708059689296813... done
+Rescaling...
+   scaling = 0.0590049741080677, condition number = 5.247405407872
+   scaling = 0.0643690626633466, condition number = 4.78530786860138
+   scaling = 0.0708059689296813, condition number = 4.65870085568407
+   scaling = 0.0778865658226494, condition number = 5.11414641531893
+   scaling = 0.0849671627156175, condition number = 5.01627614783848
+Rescaling to 0.0708059689296813... done
+Pre-training started
+MTPR parallel training started
+BFGS iter 0: f=1.30293e-10
+BFGS ended due to small decr. for 1 iteration
+BFGS iter 1: f=1.30293e-10
+MTPR training ended
+Rescaling...
+   scaling = 0.0590049741080677, condition number = 5.26092593391653
+   scaling = 0.0643690626633466, condition number = 4.79983381813127
+   scaling = 0.0708059689296813, condition number = 4.66976007100083
+   scaling = 0.0778865658226494, condition number = 5.1127407376249
+   scaling = 0.0849671627156175, condition number = 5.01724224309116
+Rescaling to 0.0708059689296813... done
+Pre-training ended
+BFGS iterations count set to 1000
+BFGS convergence tolerance set to 0.001
+Energy weight: 1
+Force weight: 0.01
+Stress weight: 0.001
+MTPR parallel training started
+BFGS iter 0: f=1.30293e-10
+BFGS ended due to small decr. for 1 iteration
+BFGS iter 1: f=1.30293e-10
+MTPR training ended
+Rescaling...
+   scaling = 0.0590049741080677, condition number = 5.25565073242128
+   scaling = 0.0643690626633466, condition number = 4.798413906145
+   scaling = 0.0708059689296813, condition number = 4.6611263894269
+   scaling = 0.0778865658226494, condition number = 5.1009063800134
+   scaling = 0.0849671627156175, condition number = 5.01371313192017
+Rescaling to 0.0708059689296813... done
+
+		* * * TRAIN ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1 configurations
+	Maximal absolute difference = 1.40687e-12
+	Average absolute difference = 1.40687e-12
+	RMS     absolute difference = 1.40687e-12
+
+Energy per atom:
+	Errors checked for 1 configurations
+	Maximal absolute difference = 1.75859e-13
+	Average absolute difference = 1.75859e-13
+	RMS     absolute difference = 1.75859e-13
+
+Forces:
+	Errors checked for 8 atoms
+	Maximal absolute difference = 5.32635e-05
+	Average absolute difference = 1.23669e-05
+	RMS     absolute difference = 2.25055e-05
+	Max(ForceDiff) / Max(Force) = 1
+	RMS(ForceDiff) / RMS(Force) = 0.994287
+
+Stresses (in eV):
+	Errors checked for 1 configurations
+	Maximal absolute difference = 0.000264323
+	Average absolute difference = 2.93692e-05
+	RMS     absolute difference = 8.81077e-05
+	Max(StresDiff) / Max(Stres) = 0.0122698
+	RMS(StresDiff) / RMS(Stres) = 0.0122698
+
+Stresses (in GPa):
+	Errors checked for 1 configurations
+	Maximal absolute difference = 0.000258908
+	Average absolute difference = 2.87676e-05
+	RMS     absolute difference = 8.63027e-05
+	Max(StresDiff) / Max(Stres) = 0.0122698
+	RMS(StresDiff) / RMS(Stres) = 0.0122698
+_______________________________________________
+
+
+		* * * VALIDATION ERRORS * * *
+
+_________________Errors report_________________
+Energy:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 1.3584
+	Average absolute difference = 0.488868
+	RMS     absolute difference = 0.579072
+
+Energy per atom:
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 0.1698
+	Average absolute difference = 0.0611084
+	RMS     absolute difference = 0.072384
+
+Forces:
+	Errors checked for 8000 atoms
+	Maximal absolute difference = 13.0411
+	Average absolute difference = 1.86353
+	RMS     absolute difference = 3.46302
+	Max(ForceDiff) / Max(Force) = 5.17477
+	RMS(ForceDiff) / RMS(Force) = 5.64307
+
+Stresses (in eV):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 43.4831
+	Average absolute difference = 2.5751
+	RMS     absolute difference = 7.98441
+	Max(StresDiff) / Max(Stres) = 10.4578
+	RMS(StresDiff) / RMS(Stres) = 10.4293
+
+Stresses (in GPa):
+	Errors checked for 1000 configurations
+	Maximal absolute difference = 42.5922
+	Average absolute difference = 2.52235
+	RMS     absolute difference = 7.82084
+	Max(StresDiff) / Max(Stres) = 10.4578
+	RMS(StresDiff) / RMS(Stres) = 10.4293
+_______________________________________________
+
