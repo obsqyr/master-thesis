@@ -916,12 +916,13 @@ def plot_mtp_training_and_validation_errors():
     tr_er_06 = [3.44613e-13, 2.82733e-05, 0.000246437, 0.000578199, 0.000501822]
     val_er_06 = [0.208856, 0.0107632, 0.000615748, 0.000662907, 0.000595121]
     # 8000 missing
-    tr_er_10 = [7.19425e-14, 1.67765e-05, 0.000413415, 0.000426802]
-    val_er_10 = [0.235305, 0.0107418, 0.000651099, 0.000531738]
+    tr_er_10 = [7.19425e-14, 1.67765e-05, 0.000413415, 0.000426802, 0.000382745]
+    val_er_10 = [0.235305, 0.0107418, 0.000651099, 0.000531738, 0.000415514]
     #tr_er_2 = [1.83409e-13, 2.58173e-05, 0.000436566, 0.000517493, 0.00051914]
     #val_er_2 = [0.0616174, 0.00512976, 0.000632198, 0.000577663, 0.000565452]
     plt.xscale('log')
     plt.yscale('log')
+    plt.grid(True)
     
     tr_ers = []
     val_ers = []
@@ -954,7 +955,6 @@ def plot_mtp_training_and_validation_errors():
     #plt.plot(timesteps, tr_er_2)
     #plt.plot(timesteps, val_er_2)
 
-    plt.grid(True)
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Al_errors_06.png')
 
@@ -965,13 +965,13 @@ def plot_mtp_training_and_validation_errors():
     plt.ylabel('MAE [eV]')
     plt.xscale('log')
     plt.yscale('log')
-    
+    plt.grid(True)
+
     plt.scatter(timesteps, tr_er_10, color='blue')
     plt.scatter(timesteps, val_er_10, color='orange')
     plt.plot(timesteps, tr_er_10, color='blue')
     plt.plot(timesteps, val_er_10, color='orange')
 
-    plt.grid(True)
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Al_errors_10.png')
 
@@ -984,10 +984,11 @@ def plot_mtp_training_and_validation_errors():
     tr_er_06 = [4.07674e-13, 2.83252e-06, 0.000155095, 0.000143081, 0.000120598]
     val_er_06 = [0.059846, 0.00117006, 0.000269087, 0.000138267, 0.00010319]
     # missing 8000
-    tr_er_10 = [1.75859e-13, 3.851e-06, 0.000130168, 9.64231e-05]
-    val_er_10 =  [0.0611084, 0.00132119, 0.000152721, 6.19054e-05]
+    tr_er_10 = [1.75859e-13, 3.851e-06, 0.000130168, 9.64231e-05, 7.65238e-05]
+    val_er_10 =  [0.0611084, 0.00132119, 0.000152721, 6.19054e-05, 6.40143e-05]
     plt.xscale('log')
     plt.yscale('log')
+    plt.grid(True)
 
     tr_ers = []
     val_ers = []
@@ -1010,7 +1011,6 @@ def plot_mtp_training_and_validation_errors():
     #plt.errorbar(100, tr_er[2], tr_std, capsize=3)
     #plt.errorbar(100, val_er[2], val_std, capsize=3)
     
-    plt.grid(True)
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Si_errors_06.png')
 
@@ -1021,13 +1021,13 @@ def plot_mtp_training_and_validation_errors():
     plt.ylabel('MAE [eV]')
     plt.xscale('log')
     plt.yscale('log')
-    
+    plt.grid(True)
+
     plt.scatter(timesteps, tr_er_10, color='blue')
     plt.scatter(timesteps, val_er_10, color='orange')
     plt.plot(timesteps, tr_er_10, color='blue')
     plt.plot(timesteps, val_er_10, color='orange')
 
-    plt.grid(True)
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Si_errors_10.png')
 
