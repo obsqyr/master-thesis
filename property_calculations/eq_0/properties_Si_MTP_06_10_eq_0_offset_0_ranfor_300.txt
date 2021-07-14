@@ -1,0 +1,20 @@
+Material ID: Si_MTP_06_10_eq_0_offset_0_ranfor_300
+Unit cell composition: Si8
+Material:  Si
+Site positions of initial unit cell:
+ Si         
+ 0.00000    
+ 0.00000    
+ 0.00000    
+Properties:
+ Time        Epot        Ekin        Etot        Temp     MSD         Self_diff   LC_a      LC_b      LC_c      Volume      Pressure    DebyeT   Lindemann 
+ fs          eV/atom     eV/atom     eV/atom     K        Å^2         mm^2/s      Å         Å         Å         Å^3/atom    GPa        K        1          
+ 100         -4.77648    0.06028     -4.7162     466.32   0.0         0.0         3.84      3.84      3.84      40.048    0.0         0        0.0        
+ 200         -4.75047    0.01349     -4.73698    104.35   0.00229     2e-05       3.84      3.84      3.84      40.048    0.0         840.73   0.00624    
+ 300         -4.75444    0.01767     -4.73676    136.72   0.00455     3e-05       3.84      3.84      3.84      40.048    0.0         683.47   0.00878    
+ 400         -4.76928    0.02989     -4.73939    231.26   0.01106     5e-05       3.84      3.84      3.84      40.048    0.0         570.03   0.01369    
+
+Time averages:
+             Epot        Ekin        Etot        Temp     MSD         Self_diff   Pressure    Spec_heat   DebyeT   Lindemann  
+             eV/atom     eV/atom     eV/atom     K        Å^2         mm^2/s      GPa         J/(K*Kg)    K        1          
+             -4.75806    0.02035     -4.73771    157.44   0.00597     4e-05       0.0         481.62087   698.08   0.00957    

@@ -631,15 +631,15 @@ if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
 
-    mtps = ['10']
-    eqs = ['eq_2000']
-    offsets = [2000]
+    mtps = ['06']
+    eqs = ['eq_0']
+    offsets = [0]
     
     for mtp in mtps:
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Time averaged")
+                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Instantaneous")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
     #plot_forces('all')

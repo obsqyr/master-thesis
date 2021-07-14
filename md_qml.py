@@ -120,12 +120,15 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
     #dyn.attach(traj.write, interval=100)
     
     temperatures = []
+    positions = []
     def printenergy(t=temperatures, a=atoms):  # store a reference to atoms in the definition.
         """Function to print the potential, kinetic and total energy."""
         #print(atoms)
         epot = a.get_potential_energy() / len(a)
         ekin = a.get_kinetic_energy() / len(a)
         t.append(ekin / (1.5 * units.kB))
+        positions.append(atoms.get_positions())
+        #print(atoms.get_positions())
         #print(atoms.get_velocities())
         #print(atoms.get_masses())
         print('Energy per atom: Epot = %.3feV  Ekin = %.3feV (T=%3.0fK)  '
@@ -152,6 +155,12 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
 
     pr.finalize_properties_file(atoms, id, decimals, monoatomic, False, dir, offset)
     #return temperatures, N, atoms, size
+    positions = np.array(positions)
+    f = open('Si_analysis/'+str(timesteps)+'.txt', 'w+')
+    print(positions, file = f)
+    f.close()
+    #np.save('Si_analysis/'+str(timesteps)+'.txt', positions)
+    print(positions)
     print('id', id)
     return id
 

@@ -12,7 +12,7 @@
 MLP_EXE=../../mlip-2/bin/mlp
 TMP_DIR=./mtps_out
 mkdir -p $TMP_DIR
-NUM_POT=10
+NUM_POT=06
 ELEMENT=Si
 #NUM_TIMESTEPS=2000
 
@@ -20,7 +20,7 @@ ELEMENT=Si
 # CHECK mtps_out and cfg_train, WAS USED FOR LOG SCALE
 # This converts OUTCAR to the internal format .cfg
 #i = 100
-for i in 8000  
+for i in 1 10 100 1000 10000  
 do
     #for j in 0 1 2 3 4 5 6 7 8 9 
     #do
