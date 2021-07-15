@@ -28,9 +28,9 @@ if __name__ == "__main__":
     tr_data = data[:15]
     ts_data = data[15:]
 
-    plt.plot(time, sine, color='black', linewidth=5)
-    plt.scatter(time, noisy_sine, s=90)
-
+    plt.plot(time, sine, color='black', linewidth=5, zorder=1)
+    plt.scatter(time, sine, s=90, zorder=2)
+    
     plt.legend(["y=sin(x)", "Complete data set"])
     plt.savefig('figures/ML/pure.png')
 
