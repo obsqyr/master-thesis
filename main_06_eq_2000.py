@@ -9,7 +9,7 @@ if __name__ == "__main__":
     f = open('property_calculations/eq_2000/times.txt', 'w+')
     f.write('id\ttime[s]\n')
 
-    index = [1, 10, 100, 1000, 10000]
+    index = [1000]
     #index = [0,1,2,3,4,5,6,7,8,9]
     for i in index:
         #start_time = time.time()

@@ -4,6 +4,6 @@ import os
 
 if __name__ == "__main__":
     #index = [1, 10, 100, 1000, 10000]
-    index = [1]
+    index = [1000]
     for i in index:
-        id = md_qml.run_md('MTP', i, 'Al', '06', 0, offset=2000)
+        id = md_qml.run_md('MTP', i, 'Al', '06', 0, offset=0)

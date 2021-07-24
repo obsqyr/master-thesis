@@ -462,7 +462,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         if element == 'Al':
             j = '100'
         elif element == 'Si':
-            j = '1000'
+            j = '100'
         for i in range(0,10,1):
             MSD, Cv, E_tot = pr.get_averaged_properties(eq+'_iter_'+str(i)+'/properties_'+element+'_MTP_'+mtp+'_'+j+'_eq_'+str(eq_ts)+'_offset_'+str(offset)+'_ranfor_10000.txt')
             MSDs_100.append(MSD)
@@ -507,12 +507,12 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         for MSD in MSDs_100:
             #plt.scatter(timesteps, Cv[:-1])
             if element == 'Al':
-                plt.plot(timesteps[int(offset/100):], MSD, color='orange', alpha=0.3)
+                plt.plot(timesteps[int(offset/100):], MSD[:-1], color='green', alpha=0.3)
             elif element == 'Si':
                 if mtp == '10' and eq_ts == 2000:
                     plt.plot(timesteps, MSD[:-1], color='green', alpha=0.3)
                 else:
-                    plt.plot(timesteps, MSD[:-1], color='red', alpha=0.3)
+                    plt.plot(timesteps, MSD[:-1], color='green', alpha=0.3)
     
     #plt.grid(True)
     if final:
@@ -527,7 +527,10 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
             else:
                 plt.legend(legend)
                 
-        plt.savefig('figures/convergence/'+element+'_MSD_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        if variance:
+            plt.savefig('figures/convergence/'+element+'_MSD_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_variance.png')
+        else:
+            plt.savefig('figures/convergence/'+element+'_MSD_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_MSD_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -566,9 +569,9 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         for Cv in Cvs_100:
             #plt.scatter(timesteps, Cv[:-1])
             if element == 'Al':
-                plt.plot(timesteps[int(offset/100):], Cv, color='orange', alpha=0.3)
+                plt.plot(timesteps[int(offset/100):], Cv[:-1], color='green', alpha=0.3)
             elif element == 'Si':
-                plt.plot(timesteps, Cv[:-1], color='red', alpha=0.3)
+                plt.plot(timesteps, Cv[:-1], color='green', alpha=0.3)
     
     if final:
         if element == 'Al':
@@ -576,7 +579,10 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         elif element == 'Si':
             plt.legend(legend)
 
-        plt.savefig('figures/convergence/'+element+'_Cv_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        if variance:
+            plt.savefig('figures/convergence/'+element+'_Cv_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_variance.png')
+        else:
+            plt.savefig('figures/convergence/'+element+'_Cv_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Cv_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -610,9 +616,9 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         for E_tot in E_tots_100:
             #print('plotting E_tots_100', E_tot[:-1])
             if element == 'Al':
-                plt.plot(timesteps[int(offset/100):], E_tot, color='orange', alpha=0.3)
+                plt.plot(timesteps[int(offset/100):], E_tot[:-1], color='green', alpha=0.3)
             elif element == 'Si':
-                plt.plot(timesteps, E_tot[:-1], color='red', alpha=0.3)
+                plt.plot(timesteps, E_tot[:-1], color='green', alpha=0.3)
     
     if final:
         if element == 'Al':
@@ -620,7 +626,10 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
         elif element == 'Si':
             plt.legend(legend)
 
-        plt.savefig('figures/convergence/'+element+'_Etot_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
+        if variance:
+            plt.savefig('figures/convergence/'+element+'_Etot_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_variance.png')
+        else:
+            plt.savefig('figures/convergence/'+element+'_Etot_'+time_type.replace(" ", "_")+'_MTP_'+mtp+'_'+eq+'_offset_'+str(offset)+'_final.png')
     else:
         plt.legend(['DFT', '10', '20', '30', '40', '50', '60', '70', '80', '90'])
         plt.savefig('figures/convergence/'+element+'_Etot_convergence_MTP_'+mtp+'_'+eq+'.png')
@@ -639,7 +648,7 @@ if __name__ == "__main__":
         for eq in eqs:
             for offset in offsets:
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
-                plot_properties_convergence('Si', eq, mtp, True, offset, False, "Instantaneous")
+                plot_properties_convergence('Si', eq, mtp, True, offset, True, "Time averaged")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     
     #plot_forces('all')
