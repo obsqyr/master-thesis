@@ -117,7 +117,7 @@ def get_MTP_MAEs(size='big'):
             small.append([i for i in filename if i[23:26].isdecimal() and not i[23:27].isdecimal()])
             smaller.append([i for i in filename if i[23:25].isdecimal() and not i[23:26].isdecimal()])
             smallest.append([i for i in filename if i[23:24].isdecimal() and not i[23:25].isdecimal()])
-        print('smallest', smallest)
+        #print('smallest', smallest)
         for i, element in enumerate(big):
             l = [smallest[i], smaller[i], small[i], big[i]]
             l = [item for sublist in l for item in sublist]
@@ -140,7 +140,7 @@ def get_MTP_MAEs(size='big'):
             temp_si.append(l)
         filenames_si = temp_si
     
-    print('filenames_al', filenames_al)
+    #print('filenames_al', filenames_al)
     
     # Aluminum
     data_al = []
@@ -154,7 +154,7 @@ def get_MTP_MAEs(size='big'):
     MAEs_al = []
     for d in data_al:
         MAEs_al.append([extract_MAE(x) for x in d])
-    print(len(MAEs_al[0]))
+    #print(len(MAEs_al[0]))
     
     # Silicon
     data_si = []
@@ -168,7 +168,7 @@ def get_MTP_MAEs(size='big'):
     MAEs_si = []
     for d in data_si:
         MAEs_si.append([extract_MAE(x) for x in d])
-    print(len(MAEs_si[0]))
+    #print(len(MAEs_si[0]))
 
     return MAEs_al, MAEs_si
 
@@ -639,7 +639,19 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
 if __name__ == "__main__":
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
+    MAEs_al, MAEs_si = get_MTP_MAEs('all')
 
+    print(MAEs_al[-1])
+
+    
+    # energy
+    #for pot in MAEs_al:
+    #    MAE = [m[1] for m in pot]
+    #    print(MAE)
+        
+
+
+    '''
     mtps = ['06']
     eqs = ['eq_0']
     offsets = [0]
@@ -650,6 +662,8 @@ if __name__ == "__main__":
                 print('mtp: ', mtp, '. eq: ', eq, '. offset: ', offset) 
                 plot_properties_convergence('Si', eq, mtp, True, offset, True, "Time averaged")
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
+    '''
+
     
     #plot_forces('all')
     #plot_energies('all')
