@@ -641,15 +641,17 @@ if __name__ == "__main__":
     #plot_test('Al', 'eq_2000', '06', True)
     MAEs_al, MAEs_si = get_MTP_MAEs('all')
 
-    print(MAEs_al[-1])
-
+    # remove incomplete 14.mtp from both data sets
+    del MAEs_si[0]
+    del MAEs_al[0]
     
-    # energy
-    #for pot in MAEs_al:
-    #    MAE = [m[1] for m in pot]
-    #    print(MAE)
-        
+    for pot in MAEs_si:
+        MAE = [m[2] for m in pot]
+        print(MAE)
 
+    qml_MAEs_al = np.loadtxt('forces_MAEs/Si_all.txt')
+    print(qml_MAEs_al)
+        
 
     '''
     mtps = ['06']

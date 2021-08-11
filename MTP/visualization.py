@@ -907,7 +907,7 @@ def plot_mtp_training_and_validation_errors():
     print(len(MAEs_al))
     print(MAEs_al)
 
-    # ALUMINIUM
+    # ALUMINIUM 06 ENERGY
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy per atom average absolute difference, Al MTP 06 eq. at 0")
     plt.xlabel('Amount of time steps in training data')
@@ -958,7 +958,7 @@ def plot_mtp_training_and_validation_errors():
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Al_errors_06.png')
 
-    # ALUMINIUM 10
+    # ALUMINIUM 10 ENERGY
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy per atom average absolute difference, Al MTP 10 eq. at 0")
     plt.xlabel('Amount of time steps in training data')
@@ -974,6 +974,46 @@ def plot_mtp_training_and_validation_errors():
 
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Al_errors_10.png')
+
+    # ALUMINIUM 06 FORCES
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Forces average absolute difference, Al MTP 06 eq. at 0")
+    plt.xlabel('Amount of time steps in training data')
+    plt.ylabel('MAE [eV / Å]')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.grid(True)
+
+    al_06_tr_er_forces = [5.47064e-06, 0.00411245, 0.0261683, 0.0243954, 0.0248772]
+    al_06_val_er_forces = [0.419332, 0.101123, 0.0260069, 0.0250938, 0.0243471]
+
+    plt.scatter(timesteps, al_06_tr_er_forces, color='blue')
+    plt.scatter(timesteps, al_06_val_er_forces, color='orange')
+    plt.plot(timesteps, al_06_tr_er_forces, color='blue')
+    plt.plot(timesteps, al_06_val_er_forces, color='orange')
+
+    plt.legend(['training', 'testing'])
+    plt.savefig('figures/Al_errors_06_forces.png')
+
+    # ALUMINIUM 10 FORCES
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Forces average absolute difference, Al MTP 10 eq. at 0")
+    plt.xlabel('Amount of time steps in training data')
+    plt.ylabel('MAE [eV / Å]')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.grid(True)
+
+    al_10_tr_er_forces = [5.47064e-06, 0.00254974, 0.0213399, 0.020011, 0.0196604]
+    al_10_val_er_forces = [1.19473, 0.156861, 0.021532, 0.0201859, 0.0192104]
+
+    plt.scatter(timesteps, al_10_tr_er_forces, color='blue')
+    plt.scatter(timesteps, al_10_val_er_forces, color='orange')
+    plt.plot(timesteps, al_10_tr_er_forces, color='blue')
+    plt.plot(timesteps, al_10_val_er_forces, color='orange')
+
+    plt.legend(['training', 'testing'])
+    plt.savefig('figures/Al_errors_10_forces.png')
 
     # SILICON
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
@@ -1031,6 +1071,45 @@ def plot_mtp_training_and_validation_errors():
     plt.legend(['training', 'testing'])
     plt.savefig('figures/Si_errors_10.png')
 
+    # SILICON 06 FORCES
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Forces average absolute difference, Si MTP 06 eq. at 0")
+    plt.xlabel('Amount of time steps in training data')
+    plt.ylabel('MAE [eV / Å]')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.grid(True)
+
+    si_06_tr_er_forces = [1.23671e-05, 0.000393724, 0.00590755, 0.00414553, 0.00445666]
+    si_06_val_er_forces = [0.230608, 0.0229778, 0.00498909, 0.00369052, 0.00418933]
+
+    plt.scatter(timesteps, si_06_tr_er_forces, color='blue')
+    plt.scatter(timesteps, si_06_val_er_forces, color='orange')
+    plt.plot(timesteps, si_06_tr_er_forces, color='blue')
+    plt.plot(timesteps, si_06_val_er_forces, color='orange')
+
+    plt.legend(['training', 'testing'])
+    plt.savefig('figures/Si_errors_06_forces.png')
+
+    # SILICON 10 FORCES
+    figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
+    plt.title("Forces average absolute difference, Si MTP 10 eq. at 0")
+    plt.xlabel('Amount of time steps in training data')
+    plt.ylabel('MAE [eV / Å]')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.grid(True)
+
+    si_10_tr_er_forces = [1.23669e-05, 0.000310282, 0.00426001, 0.0036621, 0.00319329]
+    si_10_val_er_forces = [1.86353, 0.0262228, 0.00561941, 0.00301873, 0.00279783]
+
+    plt.scatter(timesteps, si_10_tr_er_forces, color='blue')
+    plt.scatter(timesteps, si_10_val_er_forces, color='orange')
+    plt.plot(timesteps, si_10_tr_er_forces, color='blue')
+    plt.plot(timesteps, si_10_val_er_forces, color='orange')
+
+    plt.legend(['training', 'testing'])
+    plt.savefig('figures/Si_errors_10_forces.png')
 
 if __name__ == "__main__":
     #plot_mtp_closer_to_zero()
