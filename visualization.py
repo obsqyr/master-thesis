@@ -268,7 +268,7 @@ def plot_energies(size='big'):
     #plt.scatter(timesteps, zero_MAEs_si)
     plt.plot(timesteps, zero_MAEs_si)
 
-    plt.legend(['06.mtp', '10.mtp', 'KRR', 'Predicting zero'], bbox_to_anchor=(1, 1), loc=1, borderaxespad=0)
+    plt.legend(['06.mtp', '10.mtp', 'KRR', 'Predicting zero'], loc=1)
 
     plt.savefig('figures/Si_energy_per_atom_MAE_all_' + size + '.png')
     #plt.show()
