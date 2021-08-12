@@ -156,11 +156,11 @@ def run_md(calculator, timesteps, element='Al', mtp='06', eq=0, dir="", offset=0
     pr.finalize_properties_file(atoms, id, decimals, monoatomic, False, dir, offset)
     #return temperatures, N, atoms, size
     positions = np.array(positions)
-    f = open('Si_analysis/'+element+'_MTP_'+mtp+'_eq_'+str(eq)+'_offset_'+str(offset)+'_trained_on_'+str(timesteps)+'.txt', 'w+')
-    print(positions[-1], file = f)
-    f.close()
-    #np.save('Si_analysis/'+str(timesteps)+'.txt', positions)
-    print(positions)
+    
+    #f = open('Si_analysis/'+element+'_MTP_'+mtp+'_eq_'+str(eq)+'_offset_'+str(offset)+'_trained_on_'+str(timesteps)+'.txt', 'w+')
+    #print(positions[-1], file = f)
+    #f.close()
+    np.save('Si_analysis/'+element+'_MTP_'+mtp+'_eq_'+str(eq)+'_offset_'+str(offset)+'_trained_on_'+str(timesteps), positions)
     print('id', id)
     return id
 

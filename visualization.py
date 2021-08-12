@@ -651,7 +651,8 @@ if __name__ == "__main__":
 
     qml_MAEs_al = np.loadtxt('forces_MAEs/Si_all.txt')
     print(qml_MAEs_al)
-        
+    print(len(qml_MAEs_al))
+
 
     '''
     mtps = ['06']

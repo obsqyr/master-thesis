@@ -429,7 +429,8 @@ def write_potentials_MAEs(X_pos, potentials):
         MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
 
     MAEs = [x / 8 for x in MAEs]
-    np.savetxt('potentials_MAEs/Si_smallest.txt', MAEs)
+    print('MAEs', MAEs)
+    #np.savetxt('potentials_MAEs/Si_smallest.txt', MAEs)
 
 def write_potential_alphas(X_pos, potentials):
     # train potentials machines
@@ -443,6 +444,33 @@ def write_potential_alphas(X_pos, potentials):
         alpha, sigma = train(X_pos_train, train_pot)
         np.savetxt("machines/KRR/potential/Si/alpha/"+str(i)+'.txt', X = alpha, header = "representation: sine, regressor: KRR")
         np.savetxt("machines/KRR/potential/Si/training_data/"+str(i)+".txt", X = X_pos_train)
+
+
+def write_zero_potentials_MAEs(potentials):
+    print(potentials)
+    print(len(potentials))
+    test_pot = potentials[9000:]
+    
+    MAE = np.mean(np.abs(Y_pred - Y_test))
+    print("MAE:", MAE)
+    return MA
+
+    indeces = range(0, 10, 1)
+    print(indeces)
+    MAEs = []
+    for i in indeces[1:]:
+        X_pos_train = X_pos[:i]
+        train_pot = potentials[:i]
+        print(len(X_pos_train), len(train_pot))
+        
+        alpha, sigma = train(X_pos_train, train_pot)
+        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+
+    MAEs = [x / 8 for x in MAEs]
+    print('MAEs', MAEs)
+    #np.savetxt('potentials_MAEs/Si_smallest.txt', MAEs)
+
+
 
 if __name__ == "__main__":
     # import data from infiles
@@ -463,13 +491,14 @@ if __name__ == "__main__":
     forces = divide_data(forces, num_atoms)
     positions = divide_data(positions, num_atoms)
 
-    pot_mean = np.mean(np.array(potentials[:10]))
-    print(potentials)
-    print(pot_mean)
-    print(pot_mean - potentials[9001])
-
+    #pot_mean = np.mean(np.array(potentials[:10]))
+    #print(potentials)
+    #print(pot_mean)
+    #print(pot_mean - potentials[9001])
+    
     #X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
+    write_zero_potentials_MAEs(potentials)
     #indeces = range(1, 10, 1)
     #write_potentials_MAEs(X_pos, potentials)
     #train_and_evaluate_forces(X_pos, forces, indeces)

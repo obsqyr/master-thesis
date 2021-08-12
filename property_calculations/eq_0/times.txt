@@ -1,2 +1,3 @@
 id	time[s]
-Si_MTP_06_10000_eq_0_offset_0_ranfor_10000	1257.2147166728973
+Si_MTP_06_100_eq_0_offset_0_ranfor_10000	1276.4647960662842
+Si_MTP_06_1000_eq_0_offset_0_ranfor_10000	1269.1968832015991
