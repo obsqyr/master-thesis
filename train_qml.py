@@ -447,30 +447,48 @@ def write_potential_alphas(X_pos, potentials):
 
 
 def write_zero_potentials_MAEs(potentials):
-    print(potentials)
-    print(len(potentials))
     test_pot = potentials[9000:]
-    
-    MAE = np.mean(np.abs(Y_pred - Y_test))
-    print("MAE:", MAE)
-    return MA
 
-    indeces = range(0, 10, 1)
-    print(indeces)
+    indeces = range(0, 36, 1)
     MAEs = []
-    for i in indeces[1:]:
-        X_pos_train = X_pos[:i]
-        train_pot = potentials[:i]
-        print(len(X_pos_train), len(train_pot))
-        
-        alpha, sigma = train(X_pos_train, train_pot)
-        MAEs.append(evaluate(alpha, sigma, X_pos_train, X_pos_test, test_pot))
+    for i in indeces:
+        pred = np.zeros(len(test_pot))
+        MAE = np.mean(np.abs(pred - test_pot))
+        MAEs.append(MAE)
 
-    MAEs = [x / 8 for x in MAEs]
+    MAEs = [x / 32 for x in MAEs]
     print('MAEs', MAEs)
-    #np.savetxt('potentials_MAEs/Si_smallest.txt', MAEs)
+    print(len(MAEs))
+    np.savetxt('potentials_MAEs/Al_zeros_all.txt', MAEs)
 
 
+def write_zero_forces_MAEs(forces):
+    test_forces = forces[:,9000:] 
+
+    component_MAEs = []
+    for i, atom in enumerate(test_forces):
+        print('atom', atom.shape)
+        y_test = []
+            
+        rs = []
+        thetas = []
+        phis = []
+        for vector in atom:
+            #print('vector', vector)
+            r = np.linalg.norm(vector)
+            rs.append(r)
+            thetas.append(math.atan2(vector[1], vector[0]))
+            phis.append(math.acos(vector[2] / r))
+
+        y_test = np.array([rs, thetas, phis])
+
+        MAE = np.mean(np.abs(np.zeros(y_test.shape) - y_test))
+        component_MAEs.append(MAE)
+
+    MAE = np.mean(component_MAEs)
+    MAEs = np.array([MAE] * 36)
+    print('MAE', MAE)
+    np.savetxt('forces_MAEs/Al_zeros_all.txt', MAEs)
 
 if __name__ == "__main__":
     # import data from infiles
@@ -499,6 +517,7 @@ if __name__ == "__main__":
     #X_pos = generate_representations(positions, timesteps, atoms, num_atoms, atomic_num, 'sine')
 
     write_zero_potentials_MAEs(potentials)
+    write_zero_forces_MAEs(forces)
     #indeces = range(1, 10, 1)
     #write_potentials_MAEs(X_pos, potentials)
     #train_and_evaluate_forces(X_pos, forces, indeces)

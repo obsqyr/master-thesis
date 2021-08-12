@@ -233,7 +233,11 @@ def plot_energies(size='big'):
     plt.scatter(timesteps, qml_MAEs_al)
     plt.plot(timesteps, qml_MAEs_al)
 
-    plt.legend(['06.mtp', '10.mtp', 'KRR'])
+    zero_MAEs_al = np.loadtxt('potentials_MAEs/Al_zeros_' + size + '.txt')
+    #plt.scatter(timesteps, zero_MAEs_al)
+    plt.plot(timesteps, zero_MAEs_al)
+    
+    plt.legend(['06.mtp', '10.mtp', 'KRR', 'Predicting zero'])
     #set_xscale('log')
     plt.savefig('figures/Al_energy_per_atom_MAE_all_' + size + '.png')
     plt.show()
@@ -260,7 +264,11 @@ def plot_energies(size='big'):
     plt.scatter(timesteps, qml_MAEs_si)
     plt.plot(timesteps, qml_MAEs_si)
 
-    plt.legend(['06.mtp', '10.mtp', 'KRR'])
+    zero_MAEs_si = np.loadtxt('potentials_MAEs/Si_zeros_' + size + '.txt')
+    #plt.scatter(timesteps, zero_MAEs_si)
+    plt.plot(timesteps, zero_MAEs_si)
+
+    plt.legend(['06.mtp', '10.mtp', 'KRR', 'Predicting zero'], bbox_to_anchor=(1, 1), loc=1, borderaxespad=0)
 
     plt.savefig('figures/Si_energy_per_atom_MAE_all_' + size + '.png')
     #plt.show()
@@ -314,7 +322,11 @@ def plot_forces(size='big'):
     plt.scatter(timesteps, qml_MAEs_al)
     plt.plot(timesteps, qml_MAEs_al)
 
-    plt.legend(['06.mtp', '10.mtp', 'KRR'])
+    zero_MAEs_al = np.loadtxt('forces_MAEs/Al_zeros_' + size + '.txt')
+    #plt.scatter(timesteps, zero_MAEs_al)
+    plt.plot(timesteps, zero_MAEs_al)
+    
+    plt.legend(['06.mtp', '10.mtp', 'KRR', 'Predicting zero'])
     #plt.grid(True)
     plt.savefig('figures/Al_mean_forces_lengths_MAE_all_' + size + '.png')
     plt.show()
@@ -341,7 +353,11 @@ def plot_forces(size='big'):
     plt.scatter(timesteps, qml_MAEs_si)
     plt.plot(timesteps, qml_MAEs_si)
 
-    plt.legend(['06.mtp', '10.mtp', 'KRR'])
+    zero_MAEs_si = np.loadtxt('forces_MAEs/Si_zeros_' + size + '.txt')
+    #plt.scatter(timesteps, zero_MAEs_si)
+    plt.plot(timesteps, zero_MAEs_si)
+
+    plt.legend(['06.mtp', '10.mtp', 'KRR', 'Predicting zero'])
 
     plt.savefig('figures/Si_mean_forces_lengths_MAE_all_' + size + '.png')
     #plt.show()
@@ -637,6 +653,7 @@ def plot_properties_convergence(element, eq, mtp, final=False, offset=0, varianc
     plt.close('all')
 
 if __name__ == "__main__":
+    '''
     #plot_properties_convergence('Si', 'eq_2000', '06', True)
     #plot_test('Al', 'eq_2000', '06', True)
     MAEs_al, MAEs_si = get_MTP_MAEs('all')
@@ -652,7 +669,7 @@ if __name__ == "__main__":
     qml_MAEs_al = np.loadtxt('forces_MAEs/Si_all.txt')
     print(qml_MAEs_al)
     print(len(qml_MAEs_al))
-
+    '''
 
     '''
     mtps = ['06']
@@ -667,9 +684,8 @@ if __name__ == "__main__":
                 #plot_properties_convergence('Si', eq, mtp, True, offset)
     '''
 
-    
-    #plot_forces('all')
-    #plot_energies('all')
+    plot_forces('all')
+    plot_energies('all')
 
     #sizes = ['big', 'small', 'smaller']
     #for s in sizes:
