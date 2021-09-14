@@ -456,10 +456,10 @@ def write_zero_potentials_MAEs(potentials):
         MAE = np.mean(np.abs(pred - test_pot))
         MAEs.append(MAE)
 
-    MAEs = [x / 32 for x in MAEs]
+    MAEs = [x / 8 for x in MAEs]
     print('MAEs', MAEs)
     print(len(MAEs))
-    np.savetxt('potentials_MAEs/Al_zeros_all.txt', MAEs)
+    np.savetxt('potentials_MAEs/Si_zeros_all.txt', MAEs)
 
 
 def write_zero_forces_MAEs(forces):
@@ -488,18 +488,18 @@ def write_zero_forces_MAEs(forces):
     MAE = np.mean(component_MAEs)
     MAEs = np.array([MAE] * 36)
     print('MAE', MAE)
-    np.savetxt('forces_MAEs/Al_zeros_all.txt', MAEs)
+    np.savetxt('forces_MAEs/Si_zeros_all.txt', MAEs)
 
 if __name__ == "__main__":
     # import data from infiles
-    forces, positions, potentials, atom_prop = vp.read_infiles('Al_300K/')
+    forces, positions, potentials, atom_prop = vp.read_infiles('Si_300K/')
     
     # convert np.arrays to ints
     num_atoms = int(atom_prop[0])
     atomic_num = int(atom_prop[1])
     
     # import atoms from trajectory file
-    traj = Trajectory('Al_300K_infiles/Al.traj')
+    traj = Trajectory('Si_300K_infiles/Si.traj')
     atoms = [atom for atom in traj]
     
     # amount of timesteps is equal to length of potentials

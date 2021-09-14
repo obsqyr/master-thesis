@@ -198,7 +198,7 @@ def plot_energies(size='big'):
     fig = figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Al")
     plt.xlabel('Amount of time steps in training data')
-    plt.ylabel('MAE [eV]')
+    plt.ylabel('MAE [eV / atom]')
     plt.xscale('log')
     plt.yscale('log')
     plt.grid(True)
@@ -224,8 +224,8 @@ def plot_energies(size='big'):
     # energy
     for pot in MAEs_al:
         MAE = [m[1] for m in pot]
-        print(MAE)
-        print(len(MAE), len(timesteps))
+        #print(MAE)
+        #print(len(MAE), len(timesteps))
         plt.scatter(timesteps, MAE)
         plt.plot(timesteps, MAE)
         
@@ -234,6 +234,7 @@ def plot_energies(size='big'):
     plt.plot(timesteps, qml_MAEs_al)
 
     zero_MAEs_al = np.loadtxt('potentials_MAEs/Al_zeros_' + size + '.txt')
+    print(zero_MAEs_al)
     #plt.scatter(timesteps, zero_MAEs_al)
     plt.plot(timesteps, zero_MAEs_al)
     
@@ -246,7 +247,7 @@ def plot_energies(size='big'):
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Energy / atom MAE, Si")
     plt.xlabel('Amount of time steps in training data')
-    plt.ylabel('MAE [eV]')
+    plt.ylabel('MAE [eV / atom]')
     #plt.ylim([0,0.16])
     plt.yscale('log')
     plt.xscale('log')
@@ -255,8 +256,8 @@ def plot_energies(size='big'):
     # energy
     for pot in MAEs_si:
         MAE = [m[1] for m in pot]
-        print(MAE)
-        print(len(MAE), len(timesteps))
+        #print(MAE)
+        #print(len(MAE), len(timesteps))
         plt.scatter(timesteps, MAE)
         plt.plot(timesteps, MAE)
 
@@ -265,6 +266,7 @@ def plot_energies(size='big'):
     plt.plot(timesteps, qml_MAEs_si)
 
     zero_MAEs_si = np.loadtxt('potentials_MAEs/Si_zeros_' + size + '.txt')
+    print(zero_MAEs_si)
     #plt.scatter(timesteps, zero_MAEs_si)
     plt.plot(timesteps, zero_MAEs_si)
 
@@ -285,7 +287,7 @@ def plot_forces(size='big'):
     figure(num=None, figsize=(8, 4.4), dpi=80, facecolor='w', edgecolor='k')
     plt.title("Average force length MAE, Al")
     plt.xlabel('Amount of time steps in training data')
-    plt.ylabel('MAE [eV/ Å]')
+    plt.ylabel('MAE [eV / Å]')
     plt.xscale('log')
     plt.yscale('log')
     #plt.ylim([0,3.2])
@@ -312,13 +314,13 @@ def plot_forces(size='big'):
     # forces
     for pot in MAEs_al:
         MAE = [m[2] for m in pot]
-        print(MAE)
-        print(len(MAE), len(timesteps))
+        #print(MAE)
+        #print(len(MAE), len(timesteps))
         plt.scatter(timesteps, MAE)
         plt.plot(timesteps, MAE)
     
     qml_MAEs_al = np.loadtxt('forces_MAEs/Al_' + size + '.txt')
-    print(len(qml_MAEs_al))
+    #print(len(qml_MAEs_al))
     plt.scatter(timesteps, qml_MAEs_al)
     plt.plot(timesteps, qml_MAEs_al)
 
@@ -344,8 +346,8 @@ def plot_forces(size='big'):
     # forces
     for pot in MAEs_si:
         MAE = [m[2] for m in pot]
-        print(MAE)
-        print(len(MAE), len(timesteps))
+        #print(MAE)
+        #print(len(MAE), len(timesteps))
         plt.scatter(timesteps, MAE)
         plt.plot(timesteps, MAE)
 
